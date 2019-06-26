@@ -24,6 +24,8 @@ import net.minecraft.world.biome.Biome;
 import java.util.Objects;
 
 /**
+ * Command to locate the nearest biome to the player that executed it
+ *
  * Thanks to Dinolek for porting this https://github.com/Dinolek/LocateBiome
  * Based off https://github.com/Glitchfiend/BiomesOPlenty/blob/4977b0100ca55f96de50337f46ed673512cf503a/src/main/java/biomesoplenty/common/util/biome/BiomeUtils.java
  */
