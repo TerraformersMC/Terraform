@@ -5,6 +5,9 @@ import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
 
+/**
+ * A simple wrapper around the parent LeavesBlock class allowing access to the constructor.
+ */
 public class TerraformLeavesBlock extends LeavesBlock {
 
     public TerraformLeavesBlock() {
