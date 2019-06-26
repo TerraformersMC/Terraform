@@ -1,0 +1,5 @@
+{
+  "commands.terraform.findbiome.fail": "Biome %s could not be found after %ss",
+  "commands.terraform.findbiome.scanning": "Scanning%s",
+  "commands.terraform.findbiome.found": "Found %s after %ss"
+}
