@@ -2,8 +2,6 @@ package io.github.terraformersmc.terraform.block;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.coderbot.terrestria.init.TerrestriaBlocks;
-import net.coderbot.terrestria.init.TerrestriaItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -12,6 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.BlockSoundGroup;
@@ -60,7 +59,9 @@ public class SmallLogBlock extends Block {
 	protected final VoxelShape[] boundingShapes;
 	private final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
-	public SmallLogBlock(Block.Settings settings) {
+	private final Block leaves;
+
+	public SmallLogBlock(Block leaves, Block.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateFactory.getDefaultState()
 				.with(UP, false)
@@ -75,6 +76,7 @@ public class SmallLogBlock extends Block {
 		
 		this.collisionShapes = this.createShapes(5);
 		this.boundingShapes = this.createShapes(5);
+		this.leaves = leaves;
 	}
 
 	private int getShapeIndex(BlockState requested) {
@@ -174,12 +176,12 @@ public class SmallLogBlock extends Block {
 	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
-		if (held.getAmount() >= 1 && held.getItem() == TerrestriaItems.SAKURA.leaves && !state.get(HAS_LEAVES)) {
+		if (held.getAmount() >= 1 && held.getItem() == Item.BLOCK_ITEM_MAP.get(leaves) && !state.get(HAS_LEAVES)) {
 			if (!player.isCreative()) {
 				held.subtractAmount(1);
 			}
 
-			BlockSoundGroup sounds = TerrestriaBlocks.SAKURA.leaves.getDefaultState().getSoundGroup();
+			BlockSoundGroup sounds = leaves.getDefaultState().getSoundGroup();
 			world.playSound(player, pos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F, sounds.getPitch() * 0.8F);
 
 			state = state.with(HAS_LEAVES, true);
