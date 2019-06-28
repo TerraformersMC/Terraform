@@ -1,5 +1,6 @@
 package io.github.terraformersmc.terraform.util;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -70,9 +71,7 @@ public class Shapes {
 	public static final int Z = 2;
 
 	public static void line(BlockPos.Mutable origin, int[] offset, Consumer<BlockPos.Mutable> consumer) {
-		if(offset.length != 3) {
-			throw new IllegalArgumentException("Shape::line: offset must be an array of 3 integers corresponding to the X, Y, and Z offsets");
-		}
+		Preconditions.checkArgument(offset.length == 3, "Shape::line: offset must be an array of 3 integers corresponding to the X, Y, and Z offsets");
 
 		int originX = origin.getX();
 		int originY = origin.getY();
