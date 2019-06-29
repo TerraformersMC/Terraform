@@ -1,4 +1,8 @@
 plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'idea'
+    id 'eclipse'
     id 'fabric-loom' version '0.2.2-SNAPSHOT'
 }
 
@@ -8,6 +12,9 @@ targetCompatibility = 1.8
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
+def ENV = System.getenv()
+version = version + "+" + (ENV.BUILD_NUMBER ? ("build." + ENV.BUILD_NUMBER) : "custom")
 
 minecraft {
 }
@@ -43,4 +50,29 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
     from "LICENSE"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(jar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+
+    repositories {
+        if (project.hasProperty('mavenPass')) {
+            maven {
+                url = "http://mavenupload.modmuss50.me/"
+                credentials {
+                    username = "buildslave"
+                    password = project.getProperty('mavenPass')
+                }
+            }
+        }
+    }
 }
