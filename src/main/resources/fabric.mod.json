@@ -27,5 +27,8 @@
   "description": "Base library for the Terraformers' mods",
   "custom": {
     "modmenu:api": true
-  }
+  },
+  "mixins": [
+    "mixins.terraform.json"
+  ]
 }

@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "io.github.terraformersmc.terraform.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [ "EaseBiomeEdgeLayerMixin" ],
+  "injectors": {
+	"defaultRequire": 1
+  }
+}
