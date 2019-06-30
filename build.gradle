@@ -21,6 +21,10 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    project.fabric_modules.split(", ").each {
+        String module -> include "net.fabricmc.fabric-api:${module}"
+    }
 }
 
 processResources {
