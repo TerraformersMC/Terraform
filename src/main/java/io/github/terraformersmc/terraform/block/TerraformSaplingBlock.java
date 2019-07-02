@@ -11,8 +11,8 @@ import net.minecraft.sound.BlockSoundGroup;
  */
 public class TerraformSaplingBlock extends SaplingBlock {
 
-    public TerraformSaplingBlock(SaplingGenerator generator) {
-        super(generator, FabricBlockSettings.of(Material.PLANT).collidable(false).ticksRandomly().hardness(0).sounds(BlockSoundGroup.GRASS).build());
-    }
+	public TerraformSaplingBlock(SaplingGenerator generator) {
+		super(generator, FabricBlockSettings.of(Material.PLANT).collidable(false).ticksRandomly().hardness(0).sounds(BlockSoundGroup.GRASS).build());
+	}
 
 }

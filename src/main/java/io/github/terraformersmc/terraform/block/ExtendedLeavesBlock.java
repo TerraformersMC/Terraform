@@ -2,7 +2,10 @@ package io.github.terraformersmc.terraform.block;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderLayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
@@ -26,7 +29,7 @@ public class ExtendedLeavesBlock extends Block {
 	public static final int MAX_DISTANCE = 14;
 	public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, MAX_DISTANCE);
-	
+
 	public ExtendedLeavesBlock(Block.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateFactory.getDefaultState().with(DISTANCE, MAX_DISTANCE).with(PERSISTENT, false));
@@ -76,7 +79,7 @@ public class ExtendedLeavesBlock extends Block {
 		Throwable caught = null;
 
 		try {
-			for(Direction direction: Direction.values()) {
+			for (Direction direction : Direction.values()) {
 				// .set(pos).move(direction)
 				checkPos.method_10114(pos).method_10118(direction);
 

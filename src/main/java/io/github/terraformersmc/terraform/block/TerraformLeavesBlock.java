@@ -10,8 +10,8 @@ import net.minecraft.sound.BlockSoundGroup;
  */
 public class TerraformLeavesBlock extends LeavesBlock {
 
-    public TerraformLeavesBlock() {
-        super(FabricBlockSettings.of(Material.LEAVES).hardness(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).build());
-    }
+	public TerraformLeavesBlock() {
+		super(FabricBlockSettings.of(Material.LEAVES).hardness(0.2F).ticksRandomly().sounds(BlockSoundGroup.GRASS).build());
+	}
 
 }

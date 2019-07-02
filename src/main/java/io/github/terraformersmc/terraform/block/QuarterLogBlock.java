@@ -1,8 +1,8 @@
 package io.github.terraformersmc.terraform.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LogBlock;
 import net.minecraft.block.MaterialColor;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
@@ -35,9 +35,9 @@ public class QuarterLogBlock extends LogBlock {
 		Vec3d pos = context.getPos();
 		BlockPos blockPos = context.getBlockPos();
 
-		float hitX = (float)(pos.getX() - blockPos.getX());
-		float hitY = (float)(pos.getY() - blockPos.getY());
-		float hitZ = (float)(pos.getZ() - blockPos.getZ());
+		float hitX = (float) (pos.getX() - blockPos.getX());
+		float hitY = (float) (pos.getY() - blockPos.getY());
+		float hitZ = (float) (pos.getZ() - blockPos.getZ());
 
 		BarkSide side = BarkSide.fromHit(context.getFacing().getAxis(), hitX, hitY, hitZ);
 
@@ -75,7 +75,7 @@ public class QuarterLogBlock extends LogBlock {
 			boolean hitEast;
 			boolean hitSouth;
 
-			switch(axis) {
+			switch (axis) {
 				case Y:
 					hitEast = hitX >= 0.5;
 					hitSouth = hitZ >= 0.5;

@@ -19,16 +19,16 @@ public class EaseBiomeEdgeLayerMixin {
 	@Inject(method = "sample", at = @At("HEAD"), cancellable = true)
 	public void onSample(LayerRandomnessSource rand, int neighbor1, int neighbor2, int neighbor3, int neighbor4, int center, CallbackInfoReturnable<Integer> info) {
 		boolean replaced =
-				tryReplace(center, neighbor1, info::setReturnValue) ||
+			tryReplace(center, neighbor1, info::setReturnValue) ||
 				tryReplace(center, neighbor2, info::setReturnValue) ||
 				tryReplace(center, neighbor3, info::setReturnValue) ||
 				tryReplace(center, neighbor4, info::setReturnValue);
 
-		if(replaced) {
+		if (replaced) {
 			return;
 		}
 
-		if(surrounded(neighbor1, neighbor2, neighbor3, neighbor4, center)) {
+		if (surrounded(neighbor1, neighbor2, neighbor3, neighbor4, center)) {
 			Optional<Biome> target = OverworldBiomesExt.getCenter(Registry.BIOME.get(center));
 
 			target.ifPresent(value -> info.setReturnValue(Registry.BIOME.getRawId(value)));
@@ -36,12 +36,12 @@ public class EaseBiomeEdgeLayerMixin {
 	}
 
 	private static boolean tryReplace(int center, int neighbor, IntConsumer consumer) {
-		if(center == neighbor) {
+		if (center == neighbor) {
 			return false;
 		}
 
 		Optional<Biome> border = OverworldBiomesExt.getBorder(Registry.BIOME.get(neighbor));
-		if(border.isPresent()) {
+		if (border.isPresent()) {
 			consumer.accept(Registry.BIOME.getRawId(border.get()));
 
 			return true;

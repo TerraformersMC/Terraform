@@ -10,6 +10,7 @@ public class Shapes {
 	/**
 	 * Iterates over the positions contained with in a circle defined by origin and radius. The circle is two dimensional,
 	 * perpendicular to the Y axis.
+	 *
 	 * @param origin The center block of the circle; this function clobbers the variable, and it must be reset afterwards
 	 * @param radius The radius of the circle
 	 * @param consumer The target of the positions; it passes the same BlockPos.Mutable object each time
@@ -19,15 +20,15 @@ public class Shapes {
 		int z = origin.getZ();
 
 		double radiusSq = radius * radius;
-		int radiusCeil = (int)Math.ceil(radius);
+		int radiusCeil = (int) Math.ceil(radius);
 
-		for(int dz = -radiusCeil; dz <= radiusCeil; dz++) {
-			int dzSq = dz*dz;
+		for (int dz = -radiusCeil; dz <= radiusCeil; dz++) {
+			int dzSq = dz * dz;
 
-			for(int dx = -radiusCeil; dx <= radiusCeil; dx++) {
+			for (int dx = -radiusCeil; dx <= radiusCeil; dx++) {
 				int dxSq = dx * dx;
 
-				if(dzSq + dxSq <= radiusSq) {
+				if (dzSq + dxSq <= radiusSq) {
 					origin.set(x + dx, origin.getY(), z + dz);
 					consumer.accept(origin);
 				}
@@ -39,6 +40,7 @@ public class Shapes {
 	 * Iterates over the positions contained with in a circle defined by origin and radius, but not within the circle with
 	 * a radius of two blocks less - effectively, this creates an open canopy shape when stacked. The circle is two
 	 * dimensional, perpendicular to the Y axis.
+	 *
 	 * @param origin The center block of the circle; this function clobbers the variable, and it must be reset afterwards
 	 * @param radius The radius of the circle
 	 * @param consumer The target of the positions; it passes the same BlockPos.Mutable object each time
@@ -47,18 +49,18 @@ public class Shapes {
 		int x = origin.getX();
 		int z = origin.getZ();
 
-		int radiusCeil = (int)Math.ceil(radius);
+		int radiusCeil = (int) Math.ceil(radius);
 		double maxDistSq = radius * radius;
 		double minDistSq = innerRadius * innerRadius;
 
-		for(int dz = -radiusCeil; dz <= radiusCeil; dz++) {
-			int dzSq = dz*dz;
+		for (int dz = -radiusCeil; dz <= radiusCeil; dz++) {
+			int dzSq = dz * dz;
 
-			for(int dx = -radiusCeil; dx <= radiusCeil; dx++) {
+			for (int dx = -radiusCeil; dx <= radiusCeil; dx++) {
 				int dxSq = dx * dx;
 				int distSq = dzSq + dxSq;
 
-				if(distSq <= maxDistSq && distSq >= minDistSq) {
+				if (distSq <= maxDistSq && distSq >= minDistSq) {
 					origin.set(x + dx, origin.getY(), z + dz);
 					consumer.accept(origin);
 				}
@@ -79,33 +81,33 @@ public class Shapes {
 
 		int maxLength = 0;
 
-		for(int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			maxLength = Math.max(maxLength, Math.abs(offset[i]));
 		}
 
-		if(maxLength == 0) {
+		if (maxLength == 0) {
 			// Avoid dividing by zero
 			return;
 		}
 
 		double[] position = new double[3];
 		double[] velocity = new double[] {
-				offset[X] / ((double)maxLength),
-				offset[Y] / ((double)maxLength),
-				offset[Z] / ((double)maxLength)
+			offset[X] / ((double) maxLength),
+			offset[Y] / ((double) maxLength),
+			offset[Z] / ((double) maxLength)
 		};
 
 		consumer.accept(origin);
 
-		for(int i = 0; i < maxLength - 1; i++) {
+		for (int i = 0; i < maxLength - 1; i++) {
 			position[X] += velocity[X];
 			position[Y] += velocity[Y];
 			position[Z] += velocity[Z];
 
-			origin.set (
-					originX + MathHelper.fastFloor(position[X]),
-					originY + MathHelper.fastFloor(position[Y]),
-					originZ + MathHelper.fastFloor(position[Z])
+			origin.set(
+				originX + MathHelper.fastFloor(position[X]),
+				originY + MathHelper.fastFloor(position[Y]),
+				originZ + MathHelper.fastFloor(position[Z])
 			);
 
 			consumer.accept(origin);

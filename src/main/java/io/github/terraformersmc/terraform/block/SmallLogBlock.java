@@ -64,16 +64,16 @@ public class SmallLogBlock extends Block {
 	public SmallLogBlock(Block leaves, Block.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateFactory.getDefaultState()
-				.with(UP, false)
-				.with(DOWN, false)
-				.with(WEST, false)
-				.with(EAST, false)
-				.with(NORTH, false)
-				.with(SOUTH, false)
-				.with(WATERLOGGED, false)
-				.with(HAS_LEAVES, false)
+			.with(UP, false)
+			.with(DOWN, false)
+			.with(WEST, false)
+			.with(EAST, false)
+			.with(NORTH, false)
+			.with(SOUTH, false)
+			.with(WATERLOGGED, false)
+			.with(HAS_LEAVES, false)
 		);
-		
+
 		this.collisionShapes = this.createShapes(5);
 		this.boundingShapes = this.createShapes(5);
 		this.leaves = leaves;
@@ -130,30 +130,30 @@ public class SmallLogBlock extends Block {
 
 		VoxelShape[] shapes = new VoxelShape[64];
 
-		for(int i = 0; i < 64; i++) {
+		for (int i = 0; i < 64; i++) {
 			VoxelShape shape = center;
 
-			if((i & DOWN_MASK) != 0) {
+			if ((i & DOWN_MASK) != 0) {
 				shape = VoxelShapes.union(shape, down);
 			}
 
-			if((i & UP_MASK) != 0) {
+			if ((i & UP_MASK) != 0) {
 				shape = VoxelShapes.union(shape, up);
 			}
 
-			if((i & NORTH_MASK) != 0) {
+			if ((i & NORTH_MASK) != 0) {
 				shape = VoxelShapes.union(shape, north);
 			}
 
-			if((i & SOUTH_MASK) != 0) {
+			if ((i & SOUTH_MASK) != 0) {
 				shape = VoxelShapes.union(shape, south);
 			}
 
-			if((i & WEST_MASK) != 0) {
+			if ((i & WEST_MASK) != 0) {
 				shape = VoxelShapes.union(shape, west);
 			}
 
-			if((i & EAST_MASK) != 0) {
+			if ((i & EAST_MASK) != 0) {
 				shape = VoxelShapes.union(shape, east);
 			}
 
@@ -166,7 +166,7 @@ public class SmallLogBlock extends Block {
 	@Environment(EnvType.CLIENT)
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		if(state.get(HAS_LEAVES)) {
+		if (state.get(HAS_LEAVES)) {
 			Blocks.OAK_LEAVES.randomDisplayTick(state, world, pos, random);
 		}
 	}
@@ -253,7 +253,7 @@ public class SmallLogBlock extends Block {
 
 		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof SmallLogBlock;
 	}
-	
+
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		ViewableWorld world = context.getWorld();
@@ -282,13 +282,13 @@ public class SmallLogBlock extends Block {
 		boolean west = this.shouldConnectTo(westState, Block.isSolidFullSquare(westState, world, westPos, Direction.EAST), false);
 
 		return this.getDefaultState()
-				.with(UP, up)
-				.with(DOWN, down)
-				.with(NORTH, north)
-				.with(EAST, east)
-				.with(SOUTH, south)
-				.with(WEST, west)
-				.with(WATERLOGGED, fluid.getFluid() == Fluids.WATER);
+			.with(UP, up)
+			.with(DOWN, down)
+			.with(NORTH, north)
+			.with(EAST, east)
+			.with(SOUTH, south)
+			.with(WEST, west)
+			.with(WATERLOGGED, fluid.getFluid() == Fluids.WATER);
 	}
 
 	@Override
@@ -309,7 +309,6 @@ public class SmallLogBlock extends Block {
 			default:
 				return state;
 		}
-
 
 	}
 
@@ -349,12 +348,12 @@ public class SmallLogBlock extends Block {
 		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
 
 		return state
-				.with(UP, up)
-				.with(DOWN, down)
-				.with(NORTH, north)
-				.with(EAST, east)
-				.with(SOUTH, south)
-				.with(WEST, west);
+			.with(UP, up)
+			.with(DOWN, down)
+			.with(NORTH, north)
+			.with(EAST, east)
+			.with(SOUTH, south)
+			.with(WEST, west);
 	}
 
 	@Override

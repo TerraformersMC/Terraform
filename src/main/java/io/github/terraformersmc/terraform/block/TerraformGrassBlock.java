@@ -25,7 +25,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	private static boolean canSurvive(BlockState state, ViewableWorld world, BlockPos pos) {
 		BlockPos above = pos.up();
 		BlockState aboveState = world.getBlockState(above);
-		
+
 		if (aboveState.getBlock() == Blocks.SNOW && aboveState.get(SnowBlock.LAYERS) == 1) {
 			return true;
 		} else {
@@ -47,7 +47,7 @@ public class TerraformGrassBlock extends GrassBlock {
 				if (world.getLightLevel(pos.up()) >= 9) {
 					BlockState defaultState = this.getDefaultState();
 
-					for(int int_1 = 0; int_1 < 4; ++int_1) {
+					for (int int_1 = 0; int_1 < 4; ++int_1) {
 						BlockPos blockPos_2 = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 
 						if (world.getBlockState(blockPos_2).getBlock() == dirt && canSpread(defaultState, world, blockPos_2)) {

@@ -31,7 +31,7 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	public boolean generate(IWorld world, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
 		int placed = 0;
 
-		for(int i = 0; i < config.count; ++i) {
+		for (int i = 0; i < config.count; ++i) {
 			int x = random.nextInt(8) - random.nextInt(8);
 			int z = random.nextInt(8) - random.nextInt(8);
 			int y = world.getTop(Heightmap.Type.OCEAN_FLOOR, origin.getX() + x, origin.getZ() + z);
