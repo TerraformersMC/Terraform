@@ -76,11 +76,11 @@ public class QuarterLogBlock extends LogBlock {
 			boolean hitSouth;
 
 			switch (axis) {
-				case field_11052:
+				case Y:
 					hitEast = hitX >= 0.5;
 					hitSouth = hitZ >= 0.5;
 					break;
-				case field_11048:
+				case X:
 					hitEast = hitY <= 0.5;
 					hitSouth = hitZ >= 0.5;
 					break;
