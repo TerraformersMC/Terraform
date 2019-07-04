@@ -17,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
  * Used for the mega variants of Redwood, Fir, etc
  */
 public class QuarterLogBlock extends LogBlock {
-	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.create("bark_side", BarkSide.class);
+	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 
 	public QuarterLogBlock(MaterialColor color, Block.Settings settings) {
 		super(color, settings);
@@ -32,14 +32,14 @@ public class QuarterLogBlock extends LogBlock {
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
-		Vec3d pos = context.getPos();
+		Vec3d pos = context.getHitPos();
 		BlockPos blockPos = context.getBlockPos();
 
 		float hitX = (float) (pos.getX() - blockPos.getX());
 		float hitY = (float) (pos.getY() - blockPos.getY());
 		float hitZ = (float) (pos.getZ() - blockPos.getZ());
 
-		BarkSide side = BarkSide.fromHit(context.getFacing().getAxis(), hitX, hitY, hitZ);
+		BarkSide side = BarkSide.fromHit(context.getSide().getAxis(), hitX, hitY, hitZ);
 
 		return super.getPlacementState(context).with(BARK_SIDE, side);
 	}
@@ -75,12 +75,12 @@ public class QuarterLogBlock extends LogBlock {
 			boolean hitEast;
 			boolean hitSouth;
 
-			switch (axis) {
-				case Y:
+			switch (axis.getName()) {
+				case "y":
 					hitEast = hitX >= 0.5;
 					hitSouth = hitZ >= 0.5;
 					break;
-				case X:
+				case "x":
 					hitEast = hitY <= 0.5;
 					hitSouth = hitZ >= 0.5;
 					break;

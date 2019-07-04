@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntegerProperty;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ import java.util.Random;
 public class ExtendedLeavesBlock extends Block {
 	public static final int MAX_DISTANCE = 14;
 	public static final BooleanProperty PERSISTENT = Properties.PERSISTENT;
-	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, MAX_DISTANCE);
+	public static final IntProperty DISTANCE = IntProperty.of("distance", 1, MAX_DISTANCE);
 
 	public ExtendedLeavesBlock(Block.Settings settings) {
 		super(settings);

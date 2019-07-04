@@ -39,14 +39,14 @@ import java.util.Random;
  * Used for things like the Sakura tree.
  */
 public class SmallLogBlock extends Block {
-	public static final BooleanProperty HAS_LEAVES = BooleanProperty.create("has_leaves");
-	public static final BooleanProperty UP = BooleanProperty.create("up");
-	public static final BooleanProperty DOWN = BooleanProperty.create("down");
-	public static final BooleanProperty NORTH = BooleanProperty.create("north");
-	public static final BooleanProperty EAST = BooleanProperty.create("east");
-	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
-	public static final BooleanProperty WEST = BooleanProperty.create("west");
-	public static final BooleanProperty WATERLOGGED = BooleanProperty.create("waterlogged");
+	public static final BooleanProperty HAS_LEAVES = BooleanProperty.of("has_leaves");
+	public static final BooleanProperty UP = BooleanProperty.of("up");
+	public static final BooleanProperty DOWN = BooleanProperty.of("down");
+	public static final BooleanProperty NORTH = BooleanProperty.of("north");
+	public static final BooleanProperty EAST = BooleanProperty.of("east");
+	public static final BooleanProperty SOUTH = BooleanProperty.of("south");
+	public static final BooleanProperty WEST = BooleanProperty.of("west");
+	public static final BooleanProperty WATERLOGGED = BooleanProperty.of("waterlogged");
 
 	private static final int UP_MASK = 1 << Direction.UP.ordinal();
 	private static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
@@ -176,9 +176,9 @@ public class SmallLogBlock extends Block {
 	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
-		if (held.getAmount() >= 1 && held.getItem() == Item.BLOCK_ITEM_MAP.get(leaves) && !state.get(HAS_LEAVES)) {
+		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
 			if (!player.isCreative()) {
-				held.subtractAmount(1);
+				held.decrement(1);
 			}
 
 			BlockSoundGroup sounds = leaves.getDefaultState().getSoundGroup();
