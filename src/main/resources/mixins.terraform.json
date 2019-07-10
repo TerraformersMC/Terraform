@@ -2,8 +2,14 @@
   "required": true,
   "package": "io.github.terraformersmc.terraform.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [ "EaseBiomeEdgeLayerMixin" ],
+  "mixins": [
+    "MixinBlockEntityType",
+    "MixinEaseBiomeEdgeLayer"
+  ],
+  "client": [
+    "MixinSignBlockEntityRenderer"
+  ],
   "injectors": {
-	"defaultRequire": 1
+    "defaultRequire": 1
   }
 }

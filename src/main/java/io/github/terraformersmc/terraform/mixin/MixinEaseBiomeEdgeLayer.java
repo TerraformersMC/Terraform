@@ -15,7 +15,7 @@ import java.util.function.IntConsumer;
 
 @Mixin(EaseBiomeEdgeLayer.class)
 @SuppressWarnings("unused") // it's a mixin
-public class EaseBiomeEdgeLayerMixin {
+public class MixinEaseBiomeEdgeLayer {
 	@Inject(method = "sample", at = @At("HEAD"), cancellable = true)
 	public void onSample(LayerRandomnessSource rand, int neighbor1, int neighbor2, int neighbor3, int neighbor4, int center, CallbackInfoReturnable<Integer> info) {
 		boolean replaced =
