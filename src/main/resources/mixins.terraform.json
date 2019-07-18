@@ -3,6 +3,7 @@
   "package": "io.github.terraformersmc.terraform.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinAxeItem",
     "MixinBlockEntityType",
     "MixinEaseBiomeEdgeLayer"
   ],
