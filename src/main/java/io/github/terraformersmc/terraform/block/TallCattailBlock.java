@@ -1,8 +1,11 @@
 package io.github.terraformersmc.terraform.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.TallSeagrassBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -10,6 +13,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 import java.util.function.Supplier;
 
@@ -38,5 +42,23 @@ public class TallCattailBlock extends TallSeagrassBlock {
 
 	public FluidState getFluidState(BlockState state) {
 		return state.get(HALF) == DoubleBlockHalf.UPPER ? Fluids.EMPTY.getDefaultState() : super.getFluidState(state);
+	}
+
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		DoubleBlockHalf half = state.get(HALF);
+		BlockPos other = half == DoubleBlockHalf.LOWER ? pos.up() : pos.down();
+		BlockState otherState = world.getBlockState(other);
+
+		if (half == DoubleBlockHalf.UPPER && otherState.getBlock() == this && otherState.get(HALF) == DoubleBlockHalf.LOWER) {
+			world.setBlockState(other, Blocks.WATER.getDefaultState(), 35);
+			world.playLevelEvent(player, 2001, other, Block.getRawIdFromState(otherState));
+
+			if (!world.isClient && !player.isCreative()) {
+				dropStacks(state, world, pos, null, player, player.getMainHandStack());
+				dropStacks(otherState, world, other, null, player, player.getMainHandStack());
+			}
+		}
+
+		super.onBreak(world, pos, state, player);
 	}
 }
