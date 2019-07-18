@@ -4,13 +4,25 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.MaterialColor;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+
+import java.util.function.Supplier;
 
 /**
  * A log block that has 4 different corners that combine together to form a huge and continuous 2x2 log.
@@ -18,9 +30,12 @@ import net.minecraft.util.math.Vec3d;
  */
 public class QuarterLogBlock extends LogBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
+	private final Supplier<Block> stripped;
 
-	public QuarterLogBlock(MaterialColor color, Block.Settings settings) {
+	public QuarterLogBlock(Supplier<Block> stripped, MaterialColor color, Block.Settings settings) {
 		super(color, settings);
+
+		this.stripped = stripped;
 	}
 
 	@Override
@@ -42,6 +57,43 @@ public class QuarterLogBlock extends LogBlock {
 		BarkSide side = BarkSide.fromHit(context.getSide().getAxis(), hitX, hitY, hitZ);
 
 		return super.getPlacementState(context).with(BARK_SIDE, side);
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		ItemStack heldStack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+
+		if(heldStack.isEmpty()) {
+			return false;
+		}
+
+		Item held = heldStack.getItem();
+		if(!(held instanceof MiningToolItem)) {
+			return false;
+		}
+
+		MiningToolItem tool = (MiningToolItem) held;
+
+		System.out.println(tool.isEffectiveOn(state) + " " + stripped + " " + world.isClient);
+
+		if(stripped != null && (tool.isEffectiveOn(state) || tool.getMiningSpeed(heldStack, state) > 1.0F)) {
+			world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+			if(!world.isClient) {
+				BlockState target = stripped.get().getDefaultState()
+						.with(QuarterLogBlock.AXIS, state.get(QuarterLogBlock.AXIS))
+						.with(QuarterLogBlock.BARK_SIDE, state.get(QuarterLogBlock.BARK_SIDE));
+
+				world.setBlockState(pos, target);
+
+				heldStack.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

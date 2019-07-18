@@ -13,8 +13,10 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateFactory;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.BlockMirror;
@@ -31,6 +33,7 @@ import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 // Rather complex: combine the function of leaves, logs, and cobblestone walls.
 
@@ -60,8 +63,9 @@ public class SmallLogBlock extends Block {
 	private final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
 	private final Block leaves;
+	private final Supplier<Block> stripped;
 
-	public SmallLogBlock(Block leaves, Block.Settings settings) {
+	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Block.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateFactory.getDefaultState()
 			.with(UP, false)
@@ -77,6 +81,7 @@ public class SmallLogBlock extends Block {
 		this.collisionShapes = this.createShapes(5);
 		this.boundingShapes = this.createShapes(5);
 		this.leaves = leaves;
+		this.stripped = stripped;
 	}
 
 	private int getShapeIndex(BlockState requested) {
@@ -176,6 +181,8 @@ public class SmallLogBlock extends Block {
 	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
+		System.out.println(stripped + " " + world.isClient);
+
 		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
 			if (!player.isCreative()) {
 				held.decrement(1);
@@ -213,6 +220,30 @@ public class SmallLogBlock extends Block {
 			world.setBlockState(pos, state);
 
 			return true;
+		} else if(stripped != null && held.getItem() instanceof MiningToolItem) {
+			MiningToolItem tool = (MiningToolItem) held.getItem();
+
+			if(tool.isEffectiveOn(state) || tool.getMiningSpeed(held, state) > 1.0F) {
+				world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+				if(!world.isClient) {
+					BlockState target = stripped.get().getDefaultState()
+							.with(SmallLogBlock.UP, state.get(SmallLogBlock.UP))
+							.with(SmallLogBlock.DOWN, state.get(SmallLogBlock.DOWN))
+							.with(SmallLogBlock.NORTH, state.get(SmallLogBlock.NORTH))
+							.with(SmallLogBlock.SOUTH, state.get(SmallLogBlock.SOUTH))
+							.with(SmallLogBlock.EAST, state.get(SmallLogBlock.EAST))
+							.with(SmallLogBlock.WEST, state.get(SmallLogBlock.WEST))
+							.with(SmallLogBlock.WATERLOGGED, state.get(SmallLogBlock.WATERLOGGED))
+							.with(SmallLogBlock.HAS_LEAVES, state.get(SmallLogBlock.HAS_LEAVES));
+
+					world.setBlockState(pos, target);
+
+					held.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
+				}
+
+				return true;
+			}
 		}
 
 		return false;
