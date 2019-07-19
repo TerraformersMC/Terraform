@@ -23,6 +23,8 @@ public class StrippableLogBlock extends LogBlock {
 
 	public StrippableLogBlock(Supplier<Block> stripped, MaterialColor top, Settings settings) {
 		super(top, settings);
+
+		this.stripped = stripped;
 	}
 
 	@Override
@@ -40,8 +42,6 @@ public class StrippableLogBlock extends LogBlock {
 		}
 
 		MiningToolItem tool = (MiningToolItem) held;
-
-		System.out.println(tool.isEffectiveOn(state) + " " + stripped + " " + world.isClient);
 
 		if(stripped != null && (tool.isEffectiveOn(state) || tool.getMiningSpeed(heldStack, state) > 1.0F)) {
 			world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);

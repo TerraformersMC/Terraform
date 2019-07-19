@@ -181,8 +181,6 @@ public class SmallLogBlock extends Block {
 	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
-		System.out.println(stripped + " " + world.isClient);
-
 		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
 			if (!player.isCreative()) {
 				held.decrement(1);
