@@ -99,17 +99,40 @@ public class Shapes {
 
 		consumer.accept(origin);
 
+		int lastX, lastY, lastZ;
+		int currentX, currentY, currentZ;
+
 		for (int i = 0; i < maxLength - 1; i++) {
 			position[X] += velocity[X];
 			position[Y] += velocity[Y];
 			position[Z] += velocity[Z];
 
-			origin.set(
-				originX + MathHelper.fastFloor(position[X]),
-				originY + MathHelper.fastFloor(position[Y]),
-				originZ + MathHelper.fastFloor(position[Z])
-			);
+			lastX = origin.getX();
+			lastY = origin.getY();
+			lastZ = origin.getZ();
 
+			currentX = originX + MathHelper.fastFloor(position[X]);
+			currentY = originY + MathHelper.fastFloor(position[Y]);
+			currentZ = originZ + MathHelper.fastFloor(position[Z]);
+
+			boolean cX = lastX != currentX, cY = lastY != currentY, cZ = lastZ != currentZ;
+
+			if(cY && (cX || cZ)) {
+				origin.set(lastX, currentY, lastZ);
+				consumer.accept(origin);
+			}
+
+			if(cX && cZ) {
+				if(Math.abs(velocity[X]) > Math.abs(velocity[Z])) {
+					origin.set(currentX, currentY, lastZ);
+					consumer.accept(origin);
+				} else {
+					origin.set(lastX, currentY, currentZ);
+					consumer.accept(origin);
+				}
+			}
+
+			origin.set(currentX, currentY, currentZ);
 			consumer.accept(origin);
 		}
 	}
