@@ -6,7 +6,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.terraformersmc.terraform.command.FindBiomeCommand::register"
+      "com.terraformersmc.terraform.command.FindBiomeCommand::register"
     ]
   },
   "license": "LGPL-3.0",

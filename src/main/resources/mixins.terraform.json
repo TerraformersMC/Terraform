@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.terraformersmc.terraform.mixin",
+  "package": "com.terraformersmc.terraform.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinBlockEntityType",
