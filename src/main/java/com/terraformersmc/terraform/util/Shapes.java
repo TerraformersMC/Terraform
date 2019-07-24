@@ -111,9 +111,9 @@ public class Shapes {
 			lastY = origin.getY();
 			lastZ = origin.getZ();
 
-			currentX = originX + MathHelper.fastFloor(position[X]);
-			currentY = originY + MathHelper.fastFloor(position[Y]);
-			currentZ = originZ + MathHelper.fastFloor(position[Z]);
+			currentX = originX + MathHelper.floor(position[X]);
+			currentY = originY + MathHelper.floor(position[Y]);
+			currentZ = originZ + MathHelper.floor(position[Z]);
 
 			boolean cX = lastX != currentX, cY = lastY != currentY, cZ = lastZ != currentZ;
 
