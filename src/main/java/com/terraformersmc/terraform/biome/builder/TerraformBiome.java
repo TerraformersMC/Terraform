@@ -35,12 +35,13 @@ public class TerraformBiome extends Biome {
 
 		private ArrayList<DefaultFeature> defaultFeatures = new ArrayList<>();
 		private ArrayList<FeatureEntry> features = new ArrayList<>();
-		private Map<StructureFeature, FeatureConfig> structureFeatures = new HashMap<>();
+		private Map<StructureFeature<FeatureConfig>, FeatureConfig> structureFeatures = new HashMap<>();
 		private Map<Feature<DefaultFeatureConfig>, Integer> treeFeatures = new HashMap<>();
 		private Map<Feature<DefaultFeatureConfig>, Integer> rareTreeFeatures = new HashMap<>();
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
 		private ArrayList<SpawnEntry> spawnEntries = new ArrayList<>();
+		private boolean template = false;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
 		Builder() {
@@ -49,12 +50,29 @@ public class TerraformBiome extends Biome {
 			parent(null);
 		}
 
+		Builder(Builder existing) {
+			super(existing);
+
+			this.defaultFeatures.addAll(existing.defaultFeatures);
+			this.features.addAll(existing.features);
+			this.structureFeatures.putAll(existing.structureFeatures);
+			this.treeFeatures.putAll(existing.treeFeatures);
+			this.rareTreeFeatures.putAll(existing.rareTreeFeatures);
+			this.plantFeatures.putAll(existing.plantFeatures);
+			this.doublePlantFeatures.putAll(existing.doublePlantFeatures);
+			this.spawnEntries.addAll(existing.spawnEntries);
+		}
+
 		public Biome build() {
+			if(template) {
+				throw new IllegalStateException("Tried to call build() on a frozen Builder instance!");
+			}
+
 			// Add SpawnEntries
 			TerraformBiome biome = new TerraformBiome(this, this.spawnEntries);
 
 			// Add structures
-			for (Map.Entry<StructureFeature, FeatureConfig> structure : structureFeatures.entrySet()) {
+			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
 				biome.addStructureFeature(structure.getKey(), structure.getValue());
 			}
 
@@ -244,19 +262,18 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
-		public TerraformBiome.Builder addStructureFeature(StructureFeature feature) {
-			this.addStructureFeature(feature, FeatureConfig.DEFAULT);
+		public TerraformBiome.Builder addStructureFeature(StructureFeature<DefaultFeatureConfig> feature) {
+			return this.addStructureFeature(feature, FeatureConfig.DEFAULT);
+		}
+
+		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(StructureFeature<FC> feature, FC config) {
+			this.structureFeatures.put((StructureFeature)feature, config);
 			return this;
 		}
 
-		public TerraformBiome.Builder addStructureFeature(StructureFeature feature, FeatureConfig config) {
-			this.structureFeatures.put(feature, config);
-			return this;
-		}
-
-		public TerraformBiome.Builder addStructureFeatures(StructureFeature... defaultStructureFeatures) {
-			for (StructureFeature feature : defaultStructureFeatures) {
-				this.structureFeatures.put(feature, FeatureConfig.DEFAULT);
+		public TerraformBiome.Builder addStructureFeatures(StructureFeature<DefaultFeatureConfig>... defaultStructureFeatures) {
+			for (StructureFeature<DefaultFeatureConfig> feature : defaultStructureFeatures) {
+				this.structureFeatures.put((StructureFeature) feature, FeatureConfig.DEFAULT);
 			}
 			return this;
 		}
@@ -292,8 +309,13 @@ public class TerraformBiome extends Biome {
 	public static final class Template {
 		private final Builder builder;
 
-		Template(Builder builder) {
+		public Template(Builder builder) {
 			this.builder = builder;
+			builder.template = true;
+		}
+
+		public Builder builder() {
+			return new Builder(this.builder);
 		}
 	}
 }
