@@ -41,7 +41,7 @@ public class TerraformBiome extends Biome {
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
 		private ArrayList<SpawnEntry> spawnEntries = new ArrayList<>();
-		// NOTE: Make sure to add any additional fields to the Frozen copy code down below!
+		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
 		Builder() {
 			super();
@@ -289,10 +289,10 @@ public class TerraformBiome extends Biome {
 		}
 	}
 
-	public static final class Frozen {
+	public static final class Template {
 		private final Builder builder;
 
-		Frozen(Builder builder) {
+		Template(Builder builder) {
 			this.builder = builder;
 		}
 	}
