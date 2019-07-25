@@ -8,69 +8,69 @@ import java.io.*;
 
 public class BiomeConfigHandler {
 
-    private String namespace;
-    private File file;
-    private BiomeConfig config;
+	private String namespace;
+	private File file;
+	private BiomeConfig config;
 
-    public BiomeConfigHandler(String namespace) {
-        this.namespace = namespace;
-    }
+	public BiomeConfigHandler(String namespace) {
+		this.namespace = namespace;
+	}
 
-    private void prepareBiomeConfigFile() {
-        if (file != null) {
-            return;
-        }
+	private void prepareBiomeConfigFile() {
+		if (file != null) {
+			return;
+		}
 
-        File configDirectory = new File(FabricLoader.getInstance().getConfigDirectory(), namespace);
-        file = new File(configDirectory, "biomes.json");
+		File configDirectory = new File(FabricLoader.getInstance().getConfigDirectory(), namespace);
+		file = new File(configDirectory, "biomes.json");
 
-        if (!configDirectory.exists()) {
-            configDirectory.mkdir();
-        }
-    }
+		if (!configDirectory.exists()) {
+			configDirectory.mkdir();
+		}
+	}
 
-    public BiomeConfig getBiomeConfig() {
-        return getBiomeConfig(false);
-    }
+	public BiomeConfig getBiomeConfig() {
+		return getBiomeConfig(false);
+	}
 
-    public BiomeConfig getBiomeConfig(boolean defaultFreeze) {
-        if (config != null) {
-            return config;
-        }
+	public BiomeConfig getBiomeConfig(boolean defaultFreeze) {
+		if (config != null) {
+			return config;
+		}
 
-        config = new BiomeConfig(defaultFreeze);
-        load();
+		config = new BiomeConfig(defaultFreeze);
+		load();
 
-        return config;
-    }
+		return config;
+	}
 
-    private void load() {
-        prepareBiomeConfigFile();
+	private void load() {
+		prepareBiomeConfigFile();
 
-        try {
-            if (file.exists()) {
-                Gson gson = new Gson();
-                BufferedReader br = new BufferedReader(new FileReader(file));
+		try {
+			if (file.exists()) {
+				Gson gson = new Gson();
+				BufferedReader br = new BufferedReader(new FileReader(file));
 
-                config = gson.fromJson(br, BiomeConfig.class);
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Couldn't load biome configuration file for " + namespace + ", reverting to defaults");
-            e.printStackTrace();
-        }
-    }
+				config = gson.fromJson(br, BiomeConfig.class);
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("Couldn't load biome configuration file for " + namespace + ", reverting to defaults");
+			e.printStackTrace();
+		}
+	}
 
-    public void save() {
-        prepareBiomeConfigFile();
+	public void save() {
+		prepareBiomeConfigFile();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String jsonString = gson.toJson(config);
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String jsonString = gson.toJson(config);
 
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(jsonString);
-        } catch (IOException e) {
-            System.err.println("Couldn't save biome configuration file for " + namespace);
-            e.printStackTrace();
-        }
-    }
+		try (FileWriter fileWriter = new FileWriter(file)) {
+			fileWriter.write(jsonString);
+		} catch (IOException e) {
+			System.err.println("Couldn't save biome configuration file for " + namespace);
+			e.printStackTrace();
+		}
+	}
 }
