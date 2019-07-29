@@ -9,4 +9,8 @@ public class TerraformPressurePlateBlock extends PressurePlateBlock {
 	public TerraformPressurePlateBlock(Settings settings) {
 		super(ActivationRule.EVERYTHING, settings);
 	}
+
+	public TerraformPressurePlateBlock(ActivationRule rule, Settings settings) {
+		super(rule, settings);
+	}
 }
