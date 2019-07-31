@@ -54,7 +54,7 @@ public class BiomeConfigHandler {
 
 				config = gson.fromJson(br, BiomeConfig.class);
 			}
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			System.err.println("Couldn't load biome configuration file for " + namespace + ", reverting to defaults");
 			e.printStackTrace();
 		}
