@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  * A very complex smaller log block that can connect on all 6 axes, can be waterlogged, and can have leaves embedded.
  * Used for things like the Sakura tree.
  */
-public class SmallLogBlock extends Block {
+public class SmallLogBlock extends Block implements Waterloggable {
 	public static final BooleanProperty HAS_LEAVES = BooleanProperty.of("has_leaves");
 	public static final BooleanProperty UP = BooleanProperty.of("up");
 	public static final BooleanProperty DOWN = BooleanProperty.of("down");
@@ -393,12 +393,12 @@ public class SmallLogBlock extends Block {
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
-		return this.boundingShapes[this.getShapeIndex(state)];
+		return state.get(HAS_LEAVES) ? VoxelShapes.fullCube() : this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
-		return this.collisionShapes[this.getShapeIndex(state)];
+		return state.get(HAS_LEAVES) ? VoxelShapes.fullCube() : this.collisionShapes[this.getShapeIndex(state)];
 	}
 }
