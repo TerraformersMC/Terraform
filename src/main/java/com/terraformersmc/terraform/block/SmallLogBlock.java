@@ -189,6 +189,8 @@ public class SmallLogBlock extends Block implements Waterloggable {
 			BlockSoundGroup sounds = leaves.getDefaultState().getSoundGroup();
 			world.playSound(player, pos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F, sounds.getPitch() * 0.8F);
 
+			BlockState previous = state;
+
 			state = state.with(HAS_LEAVES, true);
 
 			if (state.get(UP) && world.getBlockState(pos.up()).getBlock() instanceof LeavesBlock) {
@@ -215,7 +217,7 @@ public class SmallLogBlock extends Block implements Waterloggable {
 				state = state.with(SOUTH, false);
 			}
 
-			world.setBlockState(pos, state);
+			world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(previous, state, world, pos));
 
 			return true;
 		} else if(stripped != null && held.getItem() instanceof MiningToolItem) {
