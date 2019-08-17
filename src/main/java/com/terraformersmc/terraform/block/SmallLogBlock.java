@@ -307,7 +307,7 @@ public class SmallLogBlock extends Block implements Waterloggable {
 	public BlockState getPlacementState(ItemPlacementContext context) {
 
 		if (context.getPlayer() == null) {
-			return context.getWorld().getBlockState(context.getBlockPos());
+			return this.getDefaultState();
 		}
 
 		ViewableWorld world = context.getWorld();
