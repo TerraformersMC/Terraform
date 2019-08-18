@@ -306,13 +306,13 @@ public class SmallLogBlock extends Block implements Waterloggable {
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 
-		if (context.getPlayer() == null) {
-			return context.getWorld().getFluidState(context.getBlockPos()).equals(WATERLOGGED) ? this.getDefaultState().with(WATERLOGGED, true) : this.getDefaultState();
-		}
-
 		ViewableWorld world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
 		FluidState fluid = context.getWorld().getFluidState(context.getBlockPos());
+
+		if (context.getPlayer() == null) {
+			return fluid.getFluid().equals(Fluids.WATER) ? this.getDefaultState().with(WATERLOGGED, true) : this.getDefaultState();
+		}
 
 		BlockPos upPos = pos.up();
 		BlockPos downPos = pos.down();
