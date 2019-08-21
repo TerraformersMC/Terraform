@@ -12,7 +12,7 @@ public class TerraformDesertSaplingBlock extends TerraformSaplingBlock {
 	}
 
 	@Override
-	protected boolean canPlantOnTop(BlockState blockState, BlockView blockView, BlockPos pos) {
+	public boolean canPlantOnTop(BlockState blockState, BlockView blockView, BlockPos pos) {
 		if (BlockTags.SAND.contains(blockState.getBlock())) {
 			return true;
 		}

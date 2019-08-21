@@ -7,12 +7,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
 public class TerraformDesertPlantBlock extends PlantBlock {
-	protected TerraformDesertPlantBlock(Settings settings) {
+	public TerraformDesertPlantBlock(Settings settings) {
 		super(settings);
 	}
 
 	@Override
-	protected boolean canPlantOnTop(BlockState blockState, BlockView blockView, BlockPos pos) {
+	public boolean canPlantOnTop(BlockState blockState, BlockView blockView, BlockPos pos) {
 		if (BlockTags.SAND.contains(blockState.getBlock())) {
 			return true;
 		}
