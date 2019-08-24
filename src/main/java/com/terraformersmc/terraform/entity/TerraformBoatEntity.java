@@ -1,14 +1,20 @@
 package com.terraformersmc.terraform.entity;
 
+import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Packet;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
@@ -85,6 +91,22 @@ public class TerraformBoatEntity extends BoatEntity {
 
 			this.fallDistance = 0.0F;
 		}
+	}
+
+	@Override
+	public Packet<?> createSpawnPacket() {
+		final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+
+		buf.writeVarInt(this.getEntityId());
+		buf.writeUuid(this.uuid);
+		buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(this.getType()));
+		buf.writeDouble(this.x);
+		buf.writeDouble(this.y);
+		buf.writeDouble(this.z);
+		buf.writeByte(MathHelper.floor(this.pitch * 256.0F / 360.0F));
+		buf.writeByte(MathHelper.floor(this.yaw * 256.0F / 360.0F));
+
+		return ServerSidePacketRegistry.INSTANCE.toPacket(new Identifier("terraform", "spawn_boat"), buf);
 	}
 
 	@Override
