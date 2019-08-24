@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -286,10 +287,32 @@ public class SmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
+	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+		super.onPlaced(world, pos, state, entity, stack);
+
+		for (Direction direction : Direction.values()) {
+			if (world.getBlockState(pos.offset(direction)).getBlock() instanceof SmallLogBlock) {
+				world.setBlockState(pos.offset(direction),
+					getNeighborUpdateState(world.getBlockState(pos.offset(direction)),
+						direction.getOpposite(),
+						world.getBlockState(pos),
+						world,
+						pos.offset(direction),
+						pos));
+			}
+		}
+	}
+
+	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
+
 		ViewableWorld world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
 		FluidState fluid = context.getWorld().getFluidState(context.getBlockPos());
+
+		if (context.getPlayer() == null) {
+			return fluid.getFluid().equals(Fluids.WATER) ? this.getDefaultState().with(WATERLOGGED, true) : this.getDefaultState();
+		}
 
 		BlockPos upPos = pos.up();
 		BlockPos downPos = pos.down();
@@ -362,9 +385,7 @@ public class SmallLogBlock extends Block implements Waterloggable {
 		return false;
 	}
 
-	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction fromDirection, BlockState neighbor, IWorld world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, IWorld world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
