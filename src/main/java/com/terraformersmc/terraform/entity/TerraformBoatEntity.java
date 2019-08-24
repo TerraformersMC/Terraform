@@ -2,9 +2,6 @@ package com.terraformersmc.terraform.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -15,57 +12,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public abstract class TerraformBoatEntity extends BoatEntity {
-	private static final TrackedData<String> EXTENDED_BOAT_TYPE = DataTracker.registerData(TerraformBoatEntity.class, TrackedDataHandlerRegistry.STRING);
+public class TerraformBoatEntity extends BoatEntity {
+	private TerraformBoat boat;
 
-	public TerraformBoatEntity(EntityType<? extends TerraformBoatEntity> type, World world) {
+	public TerraformBoatEntity(EntityType<? extends TerraformBoatEntity> type, World world, TerraformBoat boat) {
 		super(type, world);
+
+		this.boat = boat;
 	}
-
-	/*public TerraformBoatEntity(World world, double x, double y, double z) {
-		this(getDefaultEntityType(), world);
-		this.setPosition(x, y, z);
-		this.setVelocity(Vec3d.ZERO);
-		this.prevX = x;
-		this.prevY = y;
-		this.prevZ = z;
-	}*/
-
-	/*public static TerraformBoatEntity create(EntityType<? extends TerraformBoatEntity> type, World world) {
-		return new TerraformBoatEntity(type, world);
-	}*/
-
-	protected abstract BoatTypeProvider getTypeProvider();
 
 	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
-
-		this.dataTracker.startTracking(EXTENDED_BOAT_TYPE, "");
 	}
 
 	@Override
 	public Item asItem() {
-		return getTypeProvider().asBoat(getExtendedBoatType());
+		return boat.asItem();
 	}
 
 	public Item asPlanks() {
-		return getTypeProvider().asPlanks(getExtendedBoatType());
+		return boat.asPlanks();
 	}
 
 	public Identifier getBoatSkin() {
-		return getTypeProvider().getSkin(getExtendedBoatType());
+		return boat.getSkin();
 	}
 
 	@Override
-	protected void writeCustomDataToTag(CompoundTag tag) {
-		tag.putString("Type", this.getExtendedBoatType());
-	}
+	protected void writeCustomDataToTag(CompoundTag tag) {}
 
 	@Override
-	protected void readCustomDataFromTag(CompoundTag tag) {
-		this.setExtendedBoatType(tag.getString("Type"));
-	}
+	protected void readCustomDataFromTag(CompoundTag tag) {}
 
 	private boolean isOnLand() {
 		// super hackish way of evaluating the condition (this.location == BoatEntity.Location.ON_LAND)
@@ -116,14 +94,6 @@ public abstract class TerraformBoatEntity extends BoatEntity {
 
 	@Override
 	public BoatEntity.Type getBoatType() {
-		return getTypeProvider().getVanillaType(getExtendedBoatType());
-	}
-
-	public void setExtendedBoatType(String type) {
-		this.dataTracker.set(EXTENDED_BOAT_TYPE, type);
-	}
-
-	public String getExtendedBoatType() {
-		return this.dataTracker.get(EXTENDED_BOAT_TYPE);
+		return boat.getVanillaType();
 	}
 }

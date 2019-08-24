@@ -20,14 +20,12 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TerraformBoatItem extends Item {
-	private static final Predicate<Entity> RIDERS;
-	private final String type;
+	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
 	private final BoatCreator boat;
 
-	public TerraformBoatItem(String type, BoatCreator boat, Item.Settings settings) {
+	public TerraformBoatItem(BoatCreator boat, Item.Settings settings) {
 		super(settings);
 
-		this.type = type;
 		this.boat = boat;
 	}
 
@@ -56,7 +54,6 @@ public class TerraformBoatItem extends Item {
 
 		TerraformBoatEntity boat = this.boat.create(world, hit.getPos().x, hit.getPos().y, hit.getPos().z);
 
-		boat.setExtendedBoatType(type);
 		boat.yaw = player.yaw;
 
 		if (!world.doesNotCollide(boat, boat.getBoundingBox().expand(-0.1D))) {
@@ -78,9 +75,5 @@ public class TerraformBoatItem extends Item {
 
 	public interface BoatCreator {
 		TerraformBoatEntity create(World world, double x, double y, double z);
-	}
-
-	static {
-		RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
 	}
 }
