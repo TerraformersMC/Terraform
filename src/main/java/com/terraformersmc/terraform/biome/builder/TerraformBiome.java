@@ -2,6 +2,7 @@ package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
@@ -19,12 +20,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TerraformBiome extends Biome {
+	private int grassColor;
+	private int foliageColor;
 
 	private TerraformBiome(Biome.Settings biomeSettings, ArrayList<SpawnEntry> spawns) {
 		super(biomeSettings);
 		for (SpawnEntry entry : spawns) {
 			this.addSpawn(entry.type.getCategory(), entry);
 		}
+	}
+
+	public void setGrassAndFoliageColors(int grassColor, int foliageColor) {
+		this.grassColor = grassColor;
+		this.foliageColor = foliageColor;
+	}
+
+	@Override
+	public int getGrassColorAt(BlockPos pos) {
+		if (grassColor == -1) {
+			return super.getGrassColorAt(pos);
+		}
+		return grassColor;
+	}
+
+	@Override
+	public int getFoliageColorAt(BlockPos pos) {
+		if (foliageColor == -1) {
+			return super.getFoliageColorAt(pos);
+		}
+		return foliageColor;
 	}
 
 	public static TerraformBiome.Builder builder() {
@@ -41,6 +65,8 @@ public class TerraformBiome extends Biome {
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
 		private ArrayList<SpawnEntry> spawnEntries = new ArrayList<>();
+		private int grassColor = -1;
+		private int foliageColor = -1;
 		private boolean template = false;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
@@ -50,7 +76,7 @@ public class TerraformBiome extends Biome {
 			parent(null);
 		}
 
-		Builder(Builder existing) {
+		Builder(Builder existing) { // Template copy code
 			super(existing);
 
 			this.defaultFeatures.addAll(existing.defaultFeatures);
@@ -61,6 +87,9 @@ public class TerraformBiome extends Biome {
 			this.plantFeatures.putAll(existing.plantFeatures);
 			this.doublePlantFeatures.putAll(existing.doublePlantFeatures);
 			this.spawnEntries.addAll(existing.spawnEntries);
+
+			this.grassColor = existing.grassColor;
+			this.foliageColor = existing.foliageColor;
 		}
 
 		public Biome build() {
@@ -70,6 +99,9 @@ public class TerraformBiome extends Biome {
 
 			// Add SpawnEntries
 			TerraformBiome biome = new TerraformBiome(this, this.spawnEntries);
+
+			// Set grass and foliage colors
+			biome.setGrassAndFoliageColors(this.grassColor, this.foliageColor);
 
 			// Add structures
 			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
@@ -285,6 +317,16 @@ public class TerraformBiome extends Biome {
 
 		public TerraformBiome.Builder addDefaultFeatures(DefaultFeature... features) {
 			defaultFeatures.addAll(Arrays.asList(features));
+			return this;
+		}
+
+		public TerraformBiome.Builder grassColor(int color) {
+			grassColor = color;
+			return this;
+		}
+
+		public TerraformBiome.Builder foliageColor(int color) {
+			foliageColor = color;
 			return this;
 		}
 
