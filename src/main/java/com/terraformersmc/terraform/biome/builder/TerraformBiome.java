@@ -40,6 +40,7 @@ public class TerraformBiome extends Biome {
 		if (grassColor == -1) {
 			return super.getGrassColorAt(pos);
 		}
+
 		return grassColor;
 	}
 
@@ -48,6 +49,7 @@ public class TerraformBiome extends Biome {
 		if (foliageColor == -1) {
 			return super.getFoliageColorAt(pos);
 		}
+
 		return foliageColor;
 	}
 
