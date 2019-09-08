@@ -42,15 +42,9 @@ import java.util.function.Supplier;
  * A very complex smaller log block that can connect on all 6 axes, can be waterlogged, and can have leaves embedded.
  * Used for things like the Sakura tree.
  */
-public class SmallLogBlock extends Block implements Waterloggable {
+public class SmallLogBlock extends BareSmallLogBlock {
+
 	public static final BooleanProperty HAS_LEAVES = BooleanProperty.of("has_leaves");
-	public static final BooleanProperty UP = BooleanProperty.of("up");
-	public static final BooleanProperty DOWN = BooleanProperty.of("down");
-	public static final BooleanProperty NORTH = BooleanProperty.of("north");
-	public static final BooleanProperty EAST = BooleanProperty.of("east");
-	public static final BooleanProperty SOUTH = BooleanProperty.of("south");
-	public static final BooleanProperty WEST = BooleanProperty.of("west");
-	public static final BooleanProperty WATERLOGGED = BooleanProperty.of("waterlogged");
 
 	private static final int UP_MASK = 1 << Direction.UP.ordinal();
 	private static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
@@ -66,8 +60,8 @@ public class SmallLogBlock extends Block implements Waterloggable {
 	private final Block leaves;
 	private final Supplier<Block> stripped;
 
-	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Block.Settings settings) {
-		super(settings);
+	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Settings settings) {
+		super(stripped, settings);
 		this.setDefaultState(this.stateFactory.getDefaultState()
 			.with(UP, false)
 			.with(DOWN, false)
@@ -82,91 +76,7 @@ public class SmallLogBlock extends Block implements Waterloggable {
 		this.collisionShapes = this.createShapes(5);
 		this.boundingShapes = this.createShapes(5);
 		this.leaves = leaves;
-		this.stripped = stripped;
-	}
-
-	private int getShapeIndex(BlockState requested) {
-		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
-			int mask = 0;
-
-			if (state.get(UP)) {
-				mask |= UP_MASK;
-			}
-
-			if (state.get(DOWN)) {
-				mask |= DOWN_MASK;
-			}
-
-			if (state.get(NORTH)) {
-				mask |= NORTH_MASK;
-			}
-
-			if (state.get(EAST)) {
-				mask |= EAST_MASK;
-			}
-
-			if (state.get(SOUTH)) {
-				mask |= SOUTH_MASK;
-			}
-
-			if (state.get(WEST)) {
-				mask |= WEST_MASK;
-			}
-
-			return mask;
-		});
-	}
-
-	public VoxelShape[] createShapes(double radius) {
-		double lower = 8.0 - radius;
-		double upper = 8.0 + radius;
-
-		VoxelShape center = Block.createCuboidShape(lower, lower, lower, upper, upper, upper);
-
-		VoxelShape down = Block.createCuboidShape(lower, 0.0, lower, upper, lower, upper);
-		VoxelShape up = Block.createCuboidShape(lower, upper, lower, upper, 16.0, upper);
-
-		// Minus Z: North
-		VoxelShape north = Block.createCuboidShape(lower, lower, 0.0, upper, upper, lower);
-		VoxelShape south = Block.createCuboidShape(lower, lower, upper, upper, upper, 16.0);
-
-		// Minus X: West
-		VoxelShape west = Block.createCuboidShape(0.0, lower, lower, lower, upper, upper);
-		VoxelShape east = Block.createCuboidShape(upper, lower, lower, 16.0, upper, upper);
-
-		VoxelShape[] shapes = new VoxelShape[64];
-
-		for (int i = 0; i < 64; i++) {
-			VoxelShape shape = center;
-
-			if ((i & DOWN_MASK) != 0) {
-				shape = VoxelShapes.union(shape, down);
-			}
-
-			if ((i & UP_MASK) != 0) {
-				shape = VoxelShapes.union(shape, up);
-			}
-
-			if ((i & NORTH_MASK) != 0) {
-				shape = VoxelShapes.union(shape, north);
-			}
-
-			if ((i & SOUTH_MASK) != 0) {
-				shape = VoxelShapes.union(shape, south);
-			}
-
-			if ((i & WEST_MASK) != 0) {
-				shape = VoxelShapes.union(shape, west);
-			}
-
-			if ((i & EAST_MASK) != 0) {
-				shape = VoxelShapes.union(shape, east);
-			}
-
-			shapes[i] = shape;
-		}
-
-		return shapes;
+		this.stripped= stripped;
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -229,14 +139,14 @@ public class SmallLogBlock extends Block implements Waterloggable {
 
 				if(!world.isClient) {
 					BlockState target = stripped.get().getDefaultState()
-							.with(SmallLogBlock.UP, state.get(SmallLogBlock.UP))
-							.with(SmallLogBlock.DOWN, state.get(SmallLogBlock.DOWN))
-							.with(SmallLogBlock.NORTH, state.get(SmallLogBlock.NORTH))
-							.with(SmallLogBlock.SOUTH, state.get(SmallLogBlock.SOUTH))
-							.with(SmallLogBlock.EAST, state.get(SmallLogBlock.EAST))
-							.with(SmallLogBlock.WEST, state.get(SmallLogBlock.WEST))
-							.with(SmallLogBlock.WATERLOGGED, state.get(SmallLogBlock.WATERLOGGED))
-							.with(SmallLogBlock.HAS_LEAVES, state.get(SmallLogBlock.HAS_LEAVES));
+						.with(BareSmallLogBlock.UP, state.get(BareSmallLogBlock.UP))
+						.with(BareSmallLogBlock.DOWN, state.get(BareSmallLogBlock.DOWN))
+						.with(BareSmallLogBlock.NORTH, state.get(BareSmallLogBlock.NORTH))
+						.with(BareSmallLogBlock.SOUTH, state.get(BareSmallLogBlock.SOUTH))
+						.with(BareSmallLogBlock.EAST, state.get(BareSmallLogBlock.EAST))
+						.with(BareSmallLogBlock.WEST, state.get(BareSmallLogBlock.WEST))
+						.with(BareSmallLogBlock.WATERLOGGED, state.get(BareSmallLogBlock.WATERLOGGED))
+						.with(SmallLogBlock.HAS_LEAVES, state.get(SmallLogBlock.HAS_LEAVES));
 
 					world.setBlockState(pos, target);
 
@@ -250,139 +160,17 @@ public class SmallLogBlock extends Block implements Waterloggable {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaque(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return Blocks.OAK_LEAVES.getRenderLayer();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean canSuffocate(BlockState state, BlockView view, BlockPos pos) {
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean allowsSpawning(BlockState state, BlockView view, BlockPos pos, EntityType<?> entityType) {
-		return Blocks.OAK_LEAVES.allowsSpawning(state, view, pos, entityType);
-	}
-
 	@Override
 	protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
 		super.appendProperties(builder);
 
-		builder.add(HAS_LEAVES, UP, DOWN, NORTH, SOUTH, EAST, WEST, WATERLOGGED);
+		builder.add(HAS_LEAVES);
 	}
 
 	private boolean shouldConnectTo(BlockState state, boolean solid, boolean leaves) {
 		Block block = state.getBlock();
 
-		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof SmallLogBlock;
-	}
-
-	@Override
-	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
-		super.onPlaced(world, pos, state, entity, stack);
-
-		for (Direction direction : Direction.values()) {
-			if (world.getBlockState(pos.offset(direction)).getBlock() instanceof SmallLogBlock) {
-				world.setBlockState(pos.offset(direction),
-					getNeighborUpdateState(world.getBlockState(pos.offset(direction)),
-						direction.getOpposite(),
-						world.getBlockState(pos),
-						world,
-						pos.offset(direction),
-						pos));
-			}
-		}
-	}
-
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) {
-
-		ViewableWorld world = context.getWorld();
-		BlockPos pos = context.getBlockPos();
-		FluidState fluid = context.getWorld().getFluidState(context.getBlockPos());
-
-		if (context.getPlayer() == null) {
-			return fluid.getFluid().equals(Fluids.WATER) ? this.getDefaultState().with(WATERLOGGED, true) : this.getDefaultState();
-		}
-
-		BlockPos upPos = pos.up();
-		BlockPos downPos = pos.down();
-		BlockPos northPos = pos.north();
-		BlockPos eastPos = pos.east();
-		BlockPos southPos = pos.south();
-		BlockPos westPos = pos.west();
-
-		BlockState upState = world.getBlockState(upPos);
-		BlockState downState = world.getBlockState(downPos);
-		BlockState northState = world.getBlockState(northPos);
-		BlockState eastState = world.getBlockState(eastPos);
-		BlockState southState = world.getBlockState(southPos);
-		BlockState westState = world.getBlockState(westPos);
-
-		boolean up = this.shouldConnectTo(upState, Block.isSolidFullSquare(upState, world, upPos, Direction.UP), false);
-		boolean down = this.shouldConnectTo(downState, Block.isSolidFullSquare(downState, world, downPos, Direction.DOWN), false);
-		boolean north = this.shouldConnectTo(northState, Block.isSolidFullSquare(northState, world, northPos, Direction.SOUTH), false);
-		boolean east = this.shouldConnectTo(eastState, Block.isSolidFullSquare(eastState, world, eastPos, Direction.WEST), false);
-		boolean south = this.shouldConnectTo(southState, Block.isSolidFullSquare(southState, world, southPos, Direction.NORTH), false);
-		boolean west = this.shouldConnectTo(westState, Block.isSolidFullSquare(westState, world, westPos, Direction.EAST), false);
-
-		return this.getDefaultState()
-			.with(UP, up)
-			.with(DOWN, down)
-			.with(NORTH, north)
-			.with(EAST, east)
-			.with(SOUTH, south)
-			.with(WEST, west)
-			.with(WATERLOGGED, fluid.getFluid() == Fluids.WATER);
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-	}
-
-	@Override
-	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		switch (rotation) {
-			case CLOCKWISE_180:
-				return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
-			case COUNTERCLOCKWISE_90:
-				return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
-			case CLOCKWISE_90:
-				return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
-			default:
-				return state;
-		}
-
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState state, BlockMirror mirror) {
-		switch (mirror) {
-			case LEFT_RIGHT:
-				return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
-			case FRONT_BACK:
-				return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
-			default:
-				return super.mirror(state, mirror);
-		}
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canPlaceAtSide(BlockState state, BlockView view, BlockPos pos, BlockPlacementEnvironment blockPlacementEnvironment_1) {
-		return false;
+		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof BareSmallLogBlock;
 	}
 
 	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, IWorld world, BlockPos pos, BlockPos neighborPos) {
@@ -408,9 +196,36 @@ public class SmallLogBlock extends Block implements Waterloggable {
 			.with(WEST, west);
 	}
 
-	@Override
-	public boolean isTranslucent(BlockState state, BlockView view, BlockPos pos) {
-		return !state.get(WATERLOGGED);
+	private int getShapeIndex(BlockState requested) {
+		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
+			int mask = 0;
+
+			if (state.get(UP)) {
+				mask |= UP_MASK;
+			}
+
+			if (state.get(DOWN)) {
+				mask |= DOWN_MASK;
+			}
+
+			if (state.get(NORTH)) {
+				mask |= NORTH_MASK;
+			}
+
+			if (state.get(EAST)) {
+				mask |= EAST_MASK;
+			}
+
+			if (state.get(SOUTH)) {
+				mask |= SOUTH_MASK;
+			}
+
+			if (state.get(WEST)) {
+				mask |= WEST_MASK;
+			}
+
+			return mask;
+		});
 	}
 
 	@Override
