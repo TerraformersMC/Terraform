@@ -26,104 +26,60 @@ import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
 
 /**
- * A custom farmland block for new farmland. Mixins are required to make hoes plant these blocks and to allow seeds to be planted.
+ * A custom farmland block for new farmland. Mixins are required to make hoes make these blocks and to allow seeds to be planted.
  * */
-public class TerraformFarmlandBlock extends Block {
-	public static final IntProperty MOISTURE;
-	protected static final VoxelShape SHAPE;
+public class TerraformFarmlandBlock extends FarmlandBlock {
 	private static Block trampled; //sets the block to revert to when trampled
 
-	public TerraformFarmlandBlock(Settings block$Settings_1, Block trampled) {
-		super(block$Settings_1);
-		this.setDefaultState((BlockState)((BlockState)this.stateFactory.getDefaultState()).with(MOISTURE, 0));
+	public TerraformFarmlandBlock(Settings settings, Block trampled) {
+		super(settings);
+		this.setDefaultState(this.stateFactory.getDefaultState().with(MOISTURE, 0));
 		this.trampled = trampled;
 	}
 
-	public BlockState getStateForNeighborUpdate(BlockState blockState_1, Direction direction_1, BlockState blockState_2, IWorld iWorld_1, BlockPos blockPos_1, BlockPos blockPos_2) {
-		if (direction_1 == Direction.UP && !blockState_1.canPlaceAt(iWorld_1, blockPos_1)) {
-			iWorld_1.getBlockTickScheduler().schedule(blockPos_1, this, 1);
-		}
-
-		return super.getStateForNeighborUpdate(blockState_1, direction_1, blockState_2, iWorld_1, blockPos_1, blockPos_2);
+	public BlockState getPlacementState(ItemPlacementContext context) {
+		return !this.getDefaultState().canPlaceAt(context.getWorld(), context.getBlockPos()) ? trampled.getDefaultState() : super.getPlacementState(context);
 	}
 
-	public boolean canPlaceAt(BlockState blockState_1, ViewableWorld viewableWorld_1, BlockPos blockPos_1) {
-		BlockState blockState_2 = viewableWorld_1.getBlockState(blockPos_1.up());
-		return !blockState_2.getMaterial().isSolid() || blockState_2.getBlock() instanceof FenceGateBlock;
-	}
-
-	public BlockState getPlacementState(ItemPlacementContext itemPlacementContext_1) {
-		return !this.getDefaultState().canPlaceAt(itemPlacementContext_1.getWorld(), itemPlacementContext_1.getBlockPos()) ? trampled.getDefaultState() : super.getPlacementState(itemPlacementContext_1);
-	}
-
-	public boolean hasSidedTransparency(BlockState blockState_1) {
-		return true;
-	}
-
-	public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext entityContext_1) {
-		return SHAPE;
-	}
-
-	public void onScheduledTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1) {
-		if (!blockState_1.canPlaceAt(world_1, blockPos_1)) {
-			setToDirt(blockState_1, world_1, blockPos_1);
+	public void onScheduledTick(BlockState state, World world, BlockPos pos, Random rand) {
+		if (!state.canPlaceAt(world, pos)) {
+			setToDirt(state, world, pos);
 		} else {
-			int int_1 = (Integer)blockState_1.get(MOISTURE);
-			if (!isWaterNearby(world_1, blockPos_1) && !world_1.hasRain(blockPos_1.up())) {
-				if (int_1 > 0) {
-					world_1.setBlockState(blockPos_1, (BlockState)blockState_1.with(MOISTURE, int_1 - 1), 2);
-				} else if (!hasCrop(world_1, blockPos_1)) {
-					setToDirt(blockState_1, world_1, blockPos_1);
+			int i = state.get(MOISTURE);
+			if (!isWaterNearby(world, pos) && !world.hasRain(pos.up())) {
+				if (i > 0) {
+					world.setBlockState(pos, state.with(MOISTURE, i - 1), 2);
+				} else if (!hasCrop(world, pos)) {
+					setToDirt(state, world, pos);
 				}
-			} else if (int_1 < 7) {
-				world_1.setBlockState(blockPos_1, (BlockState)blockState_1.with(MOISTURE, 7), 2);
+			} else if (i < 7) {
+				world.setBlockState(pos, state.with(MOISTURE, 7), 2);
 			}
 
 		}
 	}
 
-	public void onLandedUpon(World world_1, BlockPos blockPos_1, Entity entity_1, float float_1) {
-		if (!world_1.isClient && world_1.random.nextFloat() < float_1 - 0.5F && entity_1 instanceof LivingEntity && (entity_1 instanceof PlayerEntity || world_1.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity_1.getWidth() * entity_1.getWidth() * entity_1.getHeight() > 0.512F) {
-			setToDirt(world_1.getBlockState(blockPos_1), world_1, blockPos_1);
-		}
-
-		super.onLandedUpon(world_1, blockPos_1, entity_1, float_1);
+	public static void setToDirt(BlockState state, World world, BlockPos pos) {
+		world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(state, trampled.getDefaultState(), world, pos));
 	}
 
-	public static void setToDirt(BlockState blockState_1, World world_1, BlockPos blockPos_1) {
-		world_1.setBlockState(blockPos_1, pushEntitiesUpBeforeBlockChange(blockState_1, trampled.getDefaultState(), world_1, blockPos_1));
+	private static boolean hasCrop(BlockView view, BlockPos pos) {
+		Block block = view.getBlockState(pos.up()).getBlock();
+		return block instanceof CropBlock || block instanceof StemBlock || block instanceof AttachedStemBlock;
 	}
 
-	private static boolean hasCrop(BlockView blockView_1, BlockPos blockPos_1) {
-		Block block_1 = blockView_1.getBlockState(blockPos_1.up()).getBlock();
-		return block_1 instanceof CropBlock || block_1 instanceof StemBlock || block_1 instanceof AttachedStemBlock;
-	}
-
-	private static boolean isWaterNearby(ViewableWorld viewableWorld_1, BlockPos blockPos_1) {
-		Iterator var2 = BlockPos.iterate(blockPos_1.add(-4, 0, -4), blockPos_1.add(4, 1, 4)).iterator();
+	private static boolean isWaterNearby(ViewableWorld world, BlockPos pos) {
+		Iterator it = BlockPos.iterate(pos.add(-4, 0, -4), pos.add(4, 1, 4)).iterator();
 
 		BlockPos blockPos_2;
 		do {
-			if (!var2.hasNext()) {
+			if (!it.hasNext()) {
 				return false;
 			}
 
-			blockPos_2 = (BlockPos)var2.next();
-		} while(!viewableWorld_1.getFluidState(blockPos_2).matches(FluidTags.WATER));
+			blockPos_2 = (BlockPos)it.next();
+		} while(!world.getFluidState(blockPos_2).matches(FluidTags.WATER));
 
 		return true;
-	}
-
-	protected void appendProperties(Builder<Block, BlockState> stateFactory$Builder_1) {
-		stateFactory$Builder_1.add(new Property[]{MOISTURE});
-	}
-
-	public boolean canPlaceAtSide(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, BlockPlacementEnvironment blockPlacementEnvironment_1) {
-		return false;
-	}
-
-	static {
-		MOISTURE = Properties.MOISTURE;
-		SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 	}
 }
