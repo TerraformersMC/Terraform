@@ -24,9 +24,10 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Overwrite;
 
 /**
- * A custom farmland block for new farmland. Mixins are required to make hoes make these blocks and to allow seeds to be planted.
+ * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
  * */
 public class TerraformFarmlandBlock extends FarmlandBlock {
 	private static Block trampled; //sets the block to revert to when trampled
@@ -38,28 +39,28 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext context) {
-		return !this.getDefaultState().canPlaceAt(context.getWorld(), context.getBlockPos()) ? trampled.getDefaultState() : super.getPlacementState(context);
+		return !this.getDefaultState().canPlaceAt(context.getWorld(), context.getBlockPos()) ? trampled.getDefaultState() : this.getDefaultState();
 	}
 
 	public void onScheduledTick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (!state.canPlaceAt(world, pos)) {
-			setToDirt(state, world, pos);
+			setToCustomDirt(state, world, pos);
 		} else {
-			int i = state.get(MOISTURE);
+			int moisture = state.get(MOISTURE);
 			if (!isWaterNearby(world, pos) && !world.hasRain(pos.up())) {
-				if (i > 0) {
-					world.setBlockState(pos, state.with(MOISTURE, i - 1), 2);
+				if (moisture > 0) {
+					world.setBlockState(pos, state.with(MOISTURE, moisture - 1), 2);
 				} else if (!hasCrop(world, pos)) {
-					setToDirt(state, world, pos);
+					setToCustomDirt(state, world, pos);
 				}
-			} else if (i < 7) {
+			} else if (moisture < 7) {
 				world.setBlockState(pos, state.with(MOISTURE, 7), 2);
 			}
 
 		}
 	}
 
-	public static void setToDirt(BlockState state, World world, BlockPos pos) {
+	public static void setToCustomDirt(BlockState state, World world, BlockPos pos) {
 		world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(state, trampled.getDefaultState(), world, pos));
 	}
 
@@ -68,17 +69,26 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 		return block instanceof CropBlock || block instanceof StemBlock || block instanceof AttachedStemBlock;
 	}
 
-	private static boolean isWaterNearby(ViewableWorld world, BlockPos pos) {
-		Iterator it = BlockPos.iterate(pos.add(-4, 0, -4), pos.add(4, 1, 4)).iterator();
+	@Override
+	public void onLandedUpon(World world, BlockPos pos, Entity entity, float height) {
+		if (!world.isClient && world.random.nextFloat() < height - 0.5F && entity instanceof LivingEntity && (entity instanceof PlayerEntity || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+			this.setToCustomDirt(world.getBlockState(pos), world, pos);
+		}
 
-		BlockPos blockPos_2;
+		entity.handleFallDamage(height, 1.0F);
+	}
+
+	private static boolean isWaterNearby(ViewableWorld world, BlockPos pos) {
+		Iterator iterator = BlockPos.iterate(pos.add(-4, 0, -4), pos.add(4, 1, 4)).iterator();
+
+		BlockPos checkPos;
 		do {
-			if (!it.hasNext()) {
+			if (!iterator.hasNext()) {
 				return false;
 			}
 
-			blockPos_2 = (BlockPos)it.next();
-		} while(!world.getFluidState(blockPos_2).matches(FluidTags.WATER));
+			checkPos = (BlockPos)iterator.next();
+		} while(!world.getFluidState(checkPos).matches(FluidTags.WATER));
 
 		return true;
 	}
