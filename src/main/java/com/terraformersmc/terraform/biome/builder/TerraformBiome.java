@@ -22,12 +22,15 @@ import java.util.Map;
 public class TerraformBiome extends Biome {
 	private int grassColor;
 	private int foliageColor;
+	private float spawnChance;
 
-	private TerraformBiome(Biome.Settings biomeSettings, ArrayList<SpawnEntry> spawns) {
+	private TerraformBiome(Biome.Settings biomeSettings, ArrayList<SpawnEntry> spawns, float spawnChance) {
 		super(biomeSettings);
 		for (SpawnEntry entry : spawns) {
 			this.addSpawn(entry.type.getCategory(), entry);
 		}
+		
+		this.spawnChance = spawnChance;
 	}
 
 	public void setGrassAndFoliageColors(int grassColor, int foliageColor) {
@@ -52,6 +55,11 @@ public class TerraformBiome extends Biome {
 
 		return foliageColor;
 	}
+	
+	@Override
+	public float getMaxSpawnLimit() {
+		return spawnChance;
+	}
 
 	public static TerraformBiome.Builder builder() {
 		return new Builder();
@@ -70,6 +78,7 @@ public class TerraformBiome extends Biome {
 		private int grassColor = -1;
 		private int foliageColor = -1;
 		private boolean template = false;
+		private float spawnChance = 0.1F;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
 		Builder() {
@@ -92,6 +101,7 @@ public class TerraformBiome extends Biome {
 
 			this.grassColor = existing.grassColor;
 			this.foliageColor = existing.foliageColor;
+			this.spawnChance = existing.spawnChance;
 		}
 
 		public Biome build() {
@@ -100,7 +110,7 @@ public class TerraformBiome extends Biome {
 			}
 
 			// Add SpawnEntries
-			TerraformBiome biome = new TerraformBiome(this, this.spawnEntries);
+			TerraformBiome biome = new TerraformBiome(this, this.spawnEntries, this.spawnChance);
 
 			// Set grass and foliage colors
 			biome.setGrassAndFoliageColors(this.grassColor, this.foliageColor);
@@ -329,6 +339,11 @@ public class TerraformBiome extends Biome {
 
 		public TerraformBiome.Builder foliageColor(int color) {
 			foliageColor = color;
+			return this;
+		}
+		
+		public TerraformBiome.Builder spawnChance(int chance) {
+			spawnChance = chance;
 			return this;
 		}
 
