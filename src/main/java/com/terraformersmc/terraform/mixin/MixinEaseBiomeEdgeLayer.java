@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.IntConsumer;
 
@@ -32,6 +33,22 @@ public class MixinEaseBiomeEdgeLayer {
 			Optional<Biome> target = OverworldBiomesExt.getCenter(Registry.BIOME.get(center));
 
 			target.ifPresent(value -> info.setReturnValue(Registry.BIOME.getRawId(value)));
+		} else {
+			Biome centre = Registry.BIOME.get(center); // :tiny_potato:
+			List<OverworldBiomesExt.PredicatedBiomeEntry> largeEdges = OverworldBiomesExt.getLargeEdges(centre);
+
+			if (!largeEdges.isEmpty()) {
+				Biome neighbour1 = Registry.BIOME.get(neighbor1);
+				Biome neighbour2 = Registry.BIOME.get(neighbor2);
+				Biome neighbour3 = Registry.BIOME.get(neighbor3);
+				Biome neighbour4 = Registry.BIOME.get(neighbor4);
+				
+				for (OverworldBiomesExt.PredicatedBiomeEntry entry : largeEdges) {
+					if (entry.predicate.test(neighbour1) || entry.predicate.test(neighbour2) || entry.predicate.test(neighbour3) || entry.predicate.test(neighbour4)) {
+						info.setReturnValue(Registry.BIOME.getRawId(entry.biome));
+					}
+				}
+			}
 		}
 	}
 
