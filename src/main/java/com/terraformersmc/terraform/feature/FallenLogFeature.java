@@ -36,7 +36,7 @@ public class FallenLogFeature extends AbstractTreeFeature<DefaultFeatureConfig> 
         int length = rand.nextInt(variance) + minLength;
 
         // Axis
-        Direction.Axis axis = rand.nextBoolean() ? Direction.Axis.field_11048 : Direction.Axis.field_11051;
+        Direction.Axis axis = rand.nextBoolean() ? Direction.Axis.X : Direction.Axis.Z;
         Direction direction = Direction.from(axis, rand.nextBoolean() ? Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE);
 
         BlockPos below = origin.down();
