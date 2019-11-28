@@ -34,7 +34,7 @@ public class TerraformBoatItem extends Item {
 		HitResult hit = rayTrace(world, player, RayTraceContext.FluidHandling.ANY);
 
 		if (hit.getType() != HitResult.Type.BLOCK) {
-			return new TypedActionResult<>(ActionResult.PASS, stack);
+			return new TypedActionResult<>(ActionResult.PASS, stack, true);
 		}
 
 		Vec3d rotation = player.getRotationVec(1.0F);
@@ -47,7 +47,7 @@ public class TerraformBoatItem extends Item {
 			for(Entity entity: entities) {
 				Box box = entity.getBoundingBox().expand(entity.getTargetingMargin());
 				if (box.contains(playerCameraPos)) {
-					return new TypedActionResult<>(ActionResult.PASS, stack);
+					return new TypedActionResult<>(ActionResult.PASS, stack, true);
 				}
 			}
 		}
@@ -57,7 +57,7 @@ public class TerraformBoatItem extends Item {
 		boat.yaw = player.yaw;
 
 		if (!world.doesNotCollide(boat, boat.getBoundingBox().expand(-0.1D))) {
-			return new TypedActionResult<>(ActionResult.FAIL, stack);
+			return new TypedActionResult<>(ActionResult.FAIL, stack, true);
 		}
 
 		if (!world.isClient) {
@@ -70,7 +70,7 @@ public class TerraformBoatItem extends Item {
 
 		player.incrementStat(Stats.USED.getOrCreateStat(this));
 
-		return new TypedActionResult<>(ActionResult.SUCCESS, stack);
+		return new TypedActionResult<>(ActionResult.SUCCESS, stack, true);
 	}
 
 	public interface BoatCreator {

@@ -3,12 +3,12 @@ package com.terraformersmc.terraform.block;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateFactory;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
@@ -32,7 +32,7 @@ public class ExtendedLeavesBlock extends Block {
 
 	public ExtendedLeavesBlock(Block.Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateFactory.getDefaultState().with(DISTANCE, MAX_DISTANCE).with(PERSISTENT, false));
+		this.setDefaultState(this.getStateManager().getDefaultState().with(DISTANCE, MAX_DISTANCE).with(PERSISTENT, false));
 	}
 
 	@Override
@@ -42,23 +42,25 @@ public class ExtendedLeavesBlock extends Block {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRandomTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!state.get(PERSISTENT) && state.get(DISTANCE) == MAX_DISTANCE) {
 			dropStacks(state, world, pos);
-			world.clearBlockState(pos, false);
+			world.removeBlock(pos, false);
 		}
 
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), 3);
 	}
 
+
+
 	@Override
 	@SuppressWarnings("deprecation")
-	public int getLightSubtracted(BlockState state, BlockView view, BlockPos pos) {
+	public int getOpacity(BlockState state, BlockView view, BlockPos pos) {
 		return 0;
 	}
 
@@ -81,7 +83,7 @@ public class ExtendedLeavesBlock extends Block {
 		try {
 			for (Direction direction : Direction.values()) {
 				// .set(pos).move(direction)
-				checkPos.method_10114(pos).method_10118(direction);
+				checkPos.set(pos).setOffset(direction);
 
 				distance = Math.min(distance, getDistanceFromLog(world.getBlockState(checkPos)) + 1);
 				if (distance == 1) {
@@ -131,17 +133,6 @@ public class ExtendedLeavesBlock extends Block {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean isOpaque(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return Blocks.OAK_LEAVES.getRenderLayer();
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
 	public boolean canSuffocate(BlockState state, BlockView view, BlockPos pos) {
 		return false;
 	}
@@ -153,7 +144,7 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(DISTANCE, PERSISTENT);
 	}
 

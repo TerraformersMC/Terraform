@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateFactory;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Hand;
@@ -26,7 +27,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
 
 import java.util.function.Supplier;
@@ -61,7 +62,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 
 	public BareSmallLogBlock(Supplier<Block> stripped, Block.Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateFactory.getDefaultState()
+		this.setDefaultState(this.getStateManager().getDefaultState()
 			.with(UP, false)
 			.with(DOWN, false)
 			.with(WEST, false)
@@ -160,9 +161,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		return shapes;
 	}
 
+
+
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
 		if(stripped != null && held.getItem() instanceof MiningToolItem) {
@@ -186,22 +189,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 					held.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
 				}
 
-				return true;
+				return ActionResult.SUCCESS;
 			}
 		}
 
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean isOpaque(BlockState state) {
-		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return Blocks.OAK_LEAVES.getRenderLayer();
+		return ActionResult.FAIL;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -217,7 +209,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		super.appendProperties(builder);
 
 		builder.add(UP, DOWN, NORTH, SOUTH, EAST, WEST, WATERLOGGED);
@@ -249,7 +241,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 
-		ViewableWorld world = context.getWorld();
+		WorldView world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
 		FluidState fluid = context.getWorld().getFluidState(context.getBlockPos());
 
@@ -271,12 +263,12 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		BlockState southState = world.getBlockState(southPos);
 		BlockState westState = world.getBlockState(westPos);
 
-		boolean up = this.shouldConnectTo(upState, Block.isSolidFullSquare(upState, world, upPos, Direction.UP));
-		boolean down = this.shouldConnectTo(downState, Block.isSolidFullSquare(downState, world, downPos, Direction.DOWN));
-		boolean north = this.shouldConnectTo(northState, Block.isSolidFullSquare(northState, world, northPos, Direction.SOUTH));
-		boolean east = this.shouldConnectTo(eastState, Block.isSolidFullSquare(eastState, world, eastPos, Direction.WEST));
-		boolean south = this.shouldConnectTo(southState, Block.isSolidFullSquare(southState, world, southPos, Direction.NORTH));
-		boolean west = this.shouldConnectTo(westState, Block.isSolidFullSquare(westState, world, westPos, Direction.EAST));
+		boolean up = this.shouldConnectTo(upState, Block.isSideSolidFullSquare(upState, world, upPos, Direction.UP));
+		boolean down = this.shouldConnectTo(downState, Block.isSideSolidFullSquare(downState, world, downPos, Direction.DOWN));
+		boolean north = this.shouldConnectTo(northState, Block.isSideSolidFullSquare(northState, world, northPos, Direction.SOUTH));
+		boolean east = this.shouldConnectTo(eastState, Block.isSideSolidFullSquare(eastState, world, eastPos, Direction.WEST));
+		boolean south = this.shouldConnectTo(southState, Block.isSideSolidFullSquare(southState, world, southPos, Direction.NORTH));
+		boolean west = this.shouldConnectTo(westState, Block.isSideSolidFullSquare(westState, world, westPos, Direction.EAST));
 
 		return this.getDefaultState()
 			.with(UP, up)
@@ -333,12 +325,12 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.DOWN)) || state.get(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.UP)) || state.get(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.SOUTH)) || state.get(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.WEST)) || state.get(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.NORTH)) || state.get(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.EAST)) || state.get(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.DOWN)) || state.get(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.UP)) || state.get(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.SOUTH)) || state.get(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.WEST)) || state.get(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.NORTH)) || state.get(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.EAST)) || state.get(WEST);
 
 		return state
 			.with(UP, up)

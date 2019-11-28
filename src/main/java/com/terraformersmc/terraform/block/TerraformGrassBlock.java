@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ShovelItem;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.FluidTags;
@@ -14,7 +15,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.LightType;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 
@@ -35,7 +37,7 @@ public class TerraformGrassBlock extends GrassBlock {
 		this.path = path;
 	}
 
-	private static boolean canSurvive(BlockState state, ViewableWorld world, BlockPos pos) {
+	private static boolean canSurvive(BlockState state, WorldView world, BlockPos pos) {
 		BlockPos above = pos.up();
 		BlockState aboveState = world.getBlockState(above);
 
@@ -47,18 +49,18 @@ public class TerraformGrassBlock extends GrassBlock {
 		}
 	}
 
-	private static boolean canSpread(BlockState state, ViewableWorld world, BlockPos pos) {
+	private static boolean canSpread(BlockState state, WorldView world, BlockPos pos) {
 		BlockPos above = pos.up();
 		return canSurvive(state, world, pos) && !world.getFluidState(above).matches(FluidTags.WATER);
 	}
 
 	@Override
-	public void onScheduledTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void onScheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!world.isClient) {
 			if (!canSurvive(state, world, pos)) {
 				world.setBlockState(pos, dirt.getDefaultState());
-			} else if (world.getLightLevel(pos.up()) >= 4) {
-				if (world.getLightLevel(pos.up()) >= 9) {
+			} else if (world.getLightLevel(LightType.SKY, pos.up()) >= 4) {
+				if (world.getLightLevel(LightType.SKY, pos.up()) >= 9) {
 					BlockState defaultState = this.getDefaultState();
 
 					for (int int_1 = 0; int_1 < 4; ++int_1) {

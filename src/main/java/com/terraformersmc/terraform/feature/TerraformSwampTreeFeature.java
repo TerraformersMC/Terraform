@@ -7,17 +7,18 @@ import net.minecraft.block.VineBlock;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableIntBoundingBox;
+import net.minecraft.util.math.BlockBox;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.ModifiableTestableWorld;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
 
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class TerraformSwampTreeFeature extends AbstractTreeFeature<DefaultFeatureConfig> {
+public class TerraformSwampTreeFeature extends AbstractTreeFeature<TreeFeatureConfig> {
 
 	public static final BlockState OAK_LOG = Blocks.OAK_LOG.getDefaultState();
 	public static final BlockState OAK_LEAVES = Blocks.OAK_LEAVES.getDefaultState().with(Properties.PERSISTENT, false);
@@ -25,23 +26,23 @@ public class TerraformSwampTreeFeature extends AbstractTreeFeature<DefaultFeatur
 	private BlockState log;
 	private BlockState leaves;
 
-	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> configFactory, boolean emitNeighborBlockUpdates) {
+	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> configFactory, boolean emitNeighborBlockUpdates) {
 		this(configFactory, emitNeighborBlockUpdates, 5);
 	}
 
-	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> configFactory, boolean emitNeighborBlockUpdates, int minHeight) {
+	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> configFactory, boolean emitNeighborBlockUpdates, int minHeight) {
 		this(configFactory, emitNeighborBlockUpdates, minHeight, OAK_LOG, OAK_LEAVES);
 	}
 
-	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> configFactory, boolean emitNeighborBlockUpdates, int minHeight, BlockState log, BlockState leaves) {
-		super(configFactory, emitNeighborBlockUpdates);
+	public TerraformSwampTreeFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> configFactory, boolean emitNeighborBlockUpdates, int minHeight, BlockState log, BlockState leaves) {
+		super(configFactory);
 		this.minHeight = minHeight;
 		this.log = log;
 		this.leaves = leaves;
 	}
 
 	@Override
-	public boolean generate(Set<BlockPos> blocks, ModifiableTestableWorld world, Random random, BlockPos pos, MutableIntBoundingBox boundingBox) {
+	public boolean generate(ModifiableTestableWorld world, Random random, BlockPos pos, Set<BlockPos> set1, Set<BlockPos> set2, BlockBox boundingBox, TreeFeatureConfig config) {
 		int height = random.nextInt(4) + minHeight;
 		pos = world.getTopPosition(Heightmap.Type.OCEAN_FLOOR, pos);
 		boolean generate = true;
@@ -112,7 +113,7 @@ public class TerraformSwampTreeFeature extends AbstractTreeFeature<DefaultFeatur
 				for (y = 0; y < height; ++y) {
 					BlockPos logPos = pos.up(y);
 					if (isAirOrLeaves(world, logPos) || isWater(world, logPos)) {
-						this.setBlockState(blocks, world, logPos, log, boundingBox);
+						this.setBlockState(world, logPos, log, boundingBox);
 					}
 				}
 

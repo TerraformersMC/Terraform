@@ -34,7 +34,7 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 		for (int i = 0; i < config.count; ++i) {
 			int x = random.nextInt(8) - random.nextInt(8);
 			int z = random.nextInt(8) - random.nextInt(8);
-			int y = world.getTop(Heightmap.Type.OCEAN_FLOOR, origin.getX() + x, origin.getZ() + z);
+			int y = world.getTopPosition(Heightmap.Type.OCEAN_FLOOR, new BlockPos(origin.getX() + x, 0, origin.getZ() + z)).getY();
 
 			BlockPos candidate = new BlockPos(origin.getX() + x, y, origin.getZ() + z);
 

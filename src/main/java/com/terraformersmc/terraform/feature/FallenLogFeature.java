@@ -6,32 +6,33 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MutableIntBoundingBox;
+import net.minecraft.util.math.BlockBox;
 import net.minecraft.world.ModifiableTestableWorld;
 import net.minecraft.world.gen.feature.AbstractTreeFeature;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
 
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class FallenLogFeature extends AbstractTreeFeature<DefaultFeatureConfig> {
+public class FallenLogFeature extends AbstractTreeFeature<TreeFeatureConfig> {
     private final BlockState log;
     private final int minLength, variance;
 
-    public FallenLogFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> function, boolean notify, BlockState log) {
+    public FallenLogFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> function, boolean notify, BlockState log) {
         this(function, notify, log, 5, 8);
     }
 
-    public FallenLogFeature(Function<Dynamic<?>, ? extends DefaultFeatureConfig> function, boolean notify, BlockState log, int minLength, int variance) {
-        super(function, notify);
+    public FallenLogFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> function, boolean notify, BlockState log, int minLength, int variance) {
+        super(function);
         this.log = log;
         this.minLength = minLength;
         this.variance = variance;
     }
 
     @Override
-    public boolean generate(Set<BlockPos> blocks, ModifiableTestableWorld world, Random rand, BlockPos origin, MutableIntBoundingBox boundingBox) {
+    public boolean generate(ModifiableTestableWorld world, Random rand, BlockPos origin,Set<BlockPos> set1, Set<BlockPos> set2, BlockBox boundingBox, TreeFeatureConfig config) {
         // Total log length
         int length = rand.nextInt(variance) + minLength;
 
@@ -68,12 +69,12 @@ public class FallenLogFeature extends AbstractTreeFeature<DefaultFeatureConfig> 
         for (int i = 0; i < length; i++) {
             pos.setOffset(direction);
 
-            setBlockState(blocks, world, pos, log.with(LogBlock.AXIS, axis), boundingBox);
+            setBlockState(world, pos, log.with(LogBlock.AXIS, axis), boundingBox);
 
             pos.setOffset(Direction.DOWN);
 
             if (isNaturalDirtOrGrass(world, pos)) {
-                setBlockState(blocks, world, pos, Blocks.DIRT.getDefaultState(), boundingBox);
+                setBlockState(world, pos, Blocks.DIRT.getDefaultState(), boundingBox);
             }
 
             pos.setOffset(Direction.UP);

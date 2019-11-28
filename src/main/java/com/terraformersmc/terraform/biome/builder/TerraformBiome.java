@@ -1,15 +1,21 @@
 package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
+import net.minecraft.world.gen.decorator.LakeDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountExtraChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placer.DoublePlantPlacer;
+import net.minecraft.world.gen.placer.SimpleBlockPlacer;
+import net.minecraft.world.gen.stateprovider.SimpleStateProvider;
+import net.minecraft.world.gen.stateprovider.WeightedStateProvider;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
@@ -36,18 +42,18 @@ public class TerraformBiome extends Biome {
 	}
 
 	@Override
-	public int getGrassColorAt(BlockPos pos) {
+	public int getGrassColorAt(double x, double y) {
 		if (grassColor == -1) {
-			return super.getGrassColorAt(pos);
+			return super.getGrassColorAt(x, y);
 		}
 
 		return grassColor;
 	}
 
 	@Override
-	public int getFoliageColorAt(BlockPos pos) {
+	public int getFoliageColorAt() {
 		if (foliageColor == -1) {
-			return super.getFoliageColorAt(pos);
+			return super.getFoliageColorAt();
 		}
 
 		return foliageColor;
@@ -107,7 +113,7 @@ public class TerraformBiome extends Biome {
 
 			// Add structures
 			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
-				biome.addStructureFeature(structure.getKey(), structure.getValue());
+				biome.addStructureFeature(structure.getKey().configure(structure.getValue()));
 			}
 
 			// Tree Feature stuff
@@ -129,13 +135,9 @@ public class TerraformBiome extends Biome {
 					float weight = (float) count / totalTreesPerChunk;
 
 					biome.addFeature(
-							GenerationStep.Feature.VEGETAL_DECORATION,
-							Biome.configureFeature(
-									feature,
-									FeatureConfig.DEFAULT,
-									Decorator.COUNT_EXTRA_HEIGHTMAP,
-									new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)
-							)
+						GenerationStep.Feature.VEGETAL_DECORATION,
+						feature.configure(FeatureConfig.DEFAULT).createDecoratedFeature(
+							Decorator.COUNT_EXTRA_HEIGHTMAP.configure(new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)))
 					);
 				}
 			}
@@ -147,13 +149,8 @@ public class TerraformBiome extends Biome {
 				int chance = tree.getValue();
 
 				biome.addFeature(
-						GenerationStep.Feature.VEGETAL_DECORATION,
-						Biome.configureFeature(
-								feature,
-								FeatureConfig.DEFAULT,
-								Decorator.CHANCE_HEIGHTMAP,
-								new ChanceDecoratorConfig(chance)
-						)
+					GenerationStep.Feature.VEGETAL_DECORATION,
+					feature.configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new LakeDecoratorConfig(chance)))
 				);
 			}
 
@@ -171,19 +168,36 @@ public class TerraformBiome extends Biome {
 
 			// Add Plant decoration features
 
+			WeightedStateProvider weightedStateProvider = new WeightedStateProvider();
+			int chanceTotal = 0;
 			for (Map.Entry<BlockState, Integer> plant : plantFeatures.entrySet()) {
-				biome.addFeature(
-						GenerationStep.Feature.VEGETAL_DECORATION,
-						Biome.configureFeature(Feature.GRASS, new GrassFeatureConfig(plant.getKey()), Decorator.COUNT_HEIGHTMAP_DOUBLE, new CountDecoratorConfig(plant.getValue())));
+				weightedStateProvider.addState(plant.getKey(), plant.getValue());
+				chanceTotal+=plant.getValue();
 			}
+			biome.addFeature(
+				GenerationStep.Feature.VEGETAL_DECORATION,
+				Feature.RANDOM_PATCH.configure(
+					new FlowerFeatureConfig.Builder(weightedStateProvider,  new SimpleBlockPlacer())
+						.method_23417(32)
+						.method_23424())
+					.createDecoratedFeature(
+						Decorator.COUNT_HEIGHTMAP_DOUBLE.configure(new CountDecoratorConfig(chanceTotal))));
 
 			// Add Double Plant decoration features
 
 			for (Map.Entry<BlockState, Integer> doublePlant : doublePlantFeatures.entrySet()) {
 				biome.addFeature(
-						GenerationStep.Feature.VEGETAL_DECORATION,
-						Biome.configureFeature(Feature.DOUBLE_PLANT, new DoublePlantFeatureConfig(doublePlant.getKey()), Decorator.COUNT_HEIGHTMAP_32, new CountDecoratorConfig(doublePlant.getValue())));
+					GenerationStep.Feature.VEGETAL_DECORATION,
+					Feature.RANDOM_PATCH.configure(
+						new FlowerFeatureConfig.Builder(new SimpleStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
+							.method_23417(64)
+							.method_23419()
+							.method_23424())
+						.createDecoratedFeature(
+							Decorator.COUNT_HEIGHTMAP_32.configure(new CountDecoratorConfig(doublePlant.getValue()))));
 			}
+			//
+			//new DoublePlantFeatureConfig(doublePlant.getKey())
 
 
 			return biome;

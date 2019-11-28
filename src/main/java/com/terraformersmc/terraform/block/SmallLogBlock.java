@@ -18,8 +18,9 @@ import net.minecraft.item.MiningToolItem;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateFactory;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Hand;
@@ -30,7 +31,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -62,7 +63,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 
 	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Settings settings) {
 		super(stripped, settings);
-		this.setDefaultState(this.stateFactory.getDefaultState()
+		this.setDefaultState(this.getStateManager().getDefaultState()
 			.with(UP, false)
 			.with(DOWN, false)
 			.with(WEST, false)
@@ -89,7 +90,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
 		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
@@ -130,7 +131,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 
 			world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(previous, state, world, pos));
 
-			return true;
+			return ActionResult.SUCCESS;
 		} else if(stripped != null && held.getItem() instanceof MiningToolItem) {
 			MiningToolItem tool = (MiningToolItem) held.getItem();
 
@@ -153,15 +154,15 @@ public class SmallLogBlock extends BareSmallLogBlock {
 					held.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
 				}
 
-				return true;
+				return ActionResult.SUCCESS;
 			}
 		}
 
-		return false;
+		return ActionResult.FAIL;
 	}
 
 	@Override
-	protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		super.appendProperties(builder);
 
 		builder.add(HAS_LEAVES);
@@ -180,12 +181,12 @@ public class SmallLogBlock extends BareSmallLogBlock {
 
 		boolean leaves = state.get(HAS_LEAVES);
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.DOWN), leaves) || state.get(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.UP), leaves) || state.get(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.SOUTH), leaves) || state.get(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.WEST), leaves) || state.get(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.NORTH), leaves) || state.get(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSolidFullSquare(neighbor, world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.DOWN), leaves) || state.get(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.UP), leaves) || state.get(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.SOUTH), leaves) || state.get(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.WEST), leaves) || state.get(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.NORTH), leaves) || state.get(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
 
 		return state
 			.with(UP, up)

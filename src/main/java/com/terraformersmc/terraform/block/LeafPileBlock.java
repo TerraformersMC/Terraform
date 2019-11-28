@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderLayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityContext;
@@ -11,7 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.WorldView;
 
 /**
  * A very thin block that is intended to be used like a carpet block, but for leaves.
@@ -34,14 +33,9 @@ public class LeafPileBlock extends Block {
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean canPlaceAt(BlockState state, ViewableWorld world, BlockPos pos) {
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		BlockState down = world.getBlockState(pos.down());
 
 		return down.isOpaque() || down.getFluidState().getFluid().matches(FluidTags.WATER);
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return Blocks.OAK_LEAVES.getRenderLayer();
 	}
 }

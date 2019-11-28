@@ -12,8 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateFactory;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
@@ -39,7 +40,7 @@ public class QuarterLogBlock extends LogBlock {
 	}
 
 	@Override
-	protected void appendProperties(StateFactory.Builder<Block, BlockState> builder) {
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		super.appendProperties(builder);
 
 		builder.add(BARK_SIDE);
@@ -61,16 +62,16 @@ public class QuarterLogBlock extends LogBlock {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack heldStack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
 		if(heldStack.isEmpty()) {
-			return false;
+			return ActionResult.FAIL;
 		}
 
 		Item held = heldStack.getItem();
 		if(!(held instanceof MiningToolItem)) {
-			return false;
+			return ActionResult.FAIL;
 		}
 
 		MiningToolItem tool = (MiningToolItem) held;
@@ -88,10 +89,10 @@ public class QuarterLogBlock extends LogBlock {
 				heldStack.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
 			}
 
-			return true;
+			return ActionResult.SUCCESS;
 		}
 
-		return false;
+		return ActionResult.SUCCESS;
 	}
 
 	/**

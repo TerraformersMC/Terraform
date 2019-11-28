@@ -11,7 +11,6 @@ import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateFactory.Builder;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
@@ -22,7 +21,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -34,7 +33,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 
 	public TerraformFarmlandBlock(Settings settings, Block trampled) {
 		super(settings);
-		this.setDefaultState(this.stateFactory.getDefaultState().with(MOISTURE, 0));
+		this.setDefaultState(this.getStateManager().getDefaultState().with(MOISTURE, 0));
 		this.trampled = trampled;
 	}
 
@@ -78,7 +77,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 		entity.handleFallDamage(height, 1.0F);
 	}
 
-	private static boolean isWaterNearby(ViewableWorld world, BlockPos pos) {
+	private static boolean isWaterNearby(WorldView world, BlockPos pos) {
 		Iterator iterator = BlockPos.iterate(pos.add(-4, 0, -4), pos.add(4, 1, 4)).iterator();
 
 		BlockPos checkPos;
