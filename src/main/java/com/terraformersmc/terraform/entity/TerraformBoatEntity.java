@@ -100,9 +100,9 @@ public class TerraformBoatEntity extends BoatEntity {
 		buf.writeVarInt(this.getEntityId());
 		buf.writeUuid(this.uuid);
 		buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(this.getType()));
-		buf.writeDouble(this.x);
-		buf.writeDouble(this.y);
-		buf.writeDouble(this.z);
+		buf.writeDouble(this.getX());
+		buf.writeDouble(this.getY());
+		buf.writeDouble(this.getZ());
 		buf.writeByte(MathHelper.floor(this.pitch * 256.0F / 360.0F));
 		buf.writeByte(MathHelper.floor(this.yaw * 256.0F / 360.0F));
 

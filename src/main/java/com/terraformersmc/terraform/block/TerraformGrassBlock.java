@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -44,7 +45,7 @@ public class TerraformGrassBlock extends GrassBlock {
 		if (aboveState.getBlock() == Blocks.SNOW && aboveState.get(SnowBlock.LAYERS) == 1) {
 			return true;
 		} else {
-			int lightingAt = ChunkLightProvider.method_20049(world, state, pos, aboveState, above, Direction.UP, aboveState.getLightSubtracted(world, above));
+			int lightingAt = ChunkLightProvider.getRealisticOpacity(world, state, pos, aboveState, above, Direction.UP, aboveState.getOpacity(world, above));
 			return lightingAt < world.getMaxLightLevel();
 		}
 	}
@@ -55,7 +56,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	}
 
 	@Override
-	public void onScheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!world.isClient) {
 			if (!canSurvive(state, world, pos)) {
 				world.setBlockState(pos, dirt.getDefaultState());
@@ -78,22 +79,22 @@ public class TerraformGrassBlock extends GrassBlock {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean activate(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack heldStack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
 		if(heldStack.isEmpty()) {
-			return false;
+			return ActionResult.FAIL;
 		}
 
 		Item held = heldStack.getItem();
 		if(!(held instanceof MiningToolItem)) {
-			return false;
+			return ActionResult.FAIL;
 		}
 
 		MiningToolItem tool = (MiningToolItem) held;
 
 		if(hit.getSide() == Direction.DOWN || !world.getBlockState(pos.up()).isAir()) {
-			return false;
+			return ActionResult.FAIL;
 		}
 
 		if(path != null && (tool.isEffectiveOn(state) || tool.getMiningSpeed(heldStack, state) > 1.0F || tool instanceof ShovelItem)) {
@@ -105,9 +106,9 @@ public class TerraformGrassBlock extends GrassBlock {
 				heldStack.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
 			}
 
-			return true;
+			return ActionResult.SUCCESS;
 		}
 
-		return false;
+		return ActionResult.FAIL;
 	}
 }

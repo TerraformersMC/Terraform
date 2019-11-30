@@ -15,7 +15,7 @@ public class TransparentLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public int getLightSubtracted(BlockState state, BlockView view, BlockPos pos) {
+	public int getOpacity(BlockState state, BlockView view, BlockPos pos) {
 		return 0;
 	}
 }

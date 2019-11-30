@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BoatEntityRenderer.class)
 public class MixinBoatEntityRenderer {
-    @Inject(method = "method_3891", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     private void getModelTexture(BoatEntity boat, CallbackInfoReturnable<Identifier> info) {
 		if(boat instanceof TerraformBoatEntity) {
 			info.setReturnValue(((TerraformBoatEntity) boat).getBoatSkin());
