@@ -68,8 +68,8 @@ public class TerraformBiome extends Biome {
 		private ArrayList<DefaultFeature> defaultFeatures = new ArrayList<>();
 		private ArrayList<FeatureEntry> features = new ArrayList<>();
 		private Map<StructureFeature<FeatureConfig>, FeatureConfig> structureFeatures = new HashMap<>();
-		private Map<Feature<DefaultFeatureConfig>, Integer> treeFeatures = new HashMap<>();
-		private Map<Feature<DefaultFeatureConfig>, Integer> rareTreeFeatures = new HashMap<>();
+		private Map<ConfiguredFeature, Integer> treeFeatures = new HashMap<>();
+		private Map<ConfiguredFeature, Integer> rareTreeFeatures = new HashMap<>();
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
 		private ArrayList<SpawnEntry> spawnEntries = new ArrayList<>();
@@ -100,6 +100,7 @@ public class TerraformBiome extends Biome {
 			this.foliageColor = existing.foliageColor;
 		}
 
+		@SuppressWarnings("unchecked")
 		public Biome build() {
 			if(template) {
 				throw new IllegalStateException("Tried to call build() on a frozen Builder instance!");
@@ -128,15 +129,15 @@ public class TerraformBiome extends Biome {
 
 				// Add each tree
 
-				for (Map.Entry<Feature<DefaultFeatureConfig>, Integer> tree : treeFeatures.entrySet()) {
-					Feature<DefaultFeatureConfig> feature = tree.getKey();
+				for (Map.Entry<ConfiguredFeature, Integer> tree : treeFeatures.entrySet()) {
+					ConfiguredFeature feature = tree.getKey();
 					int count = tree.getValue();
 
 					float weight = (float) count / totalTreesPerChunk;
 
 					biome.addFeature(
 						GenerationStep.Feature.VEGETAL_DECORATION,
-						feature.configure(FeatureConfig.DEFAULT).createDecoratedFeature(
+						feature.createDecoratedFeature(
 							Decorator.COUNT_EXTRA_HEIGHTMAP.configure(new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)))
 					);
 				}
@@ -144,13 +145,13 @@ public class TerraformBiome extends Biome {
 
 			// Rare tree features
 
-			for (Map.Entry<Feature<DefaultFeatureConfig>, Integer> tree : rareTreeFeatures.entrySet()) {
-				Feature<DefaultFeatureConfig> feature = tree.getKey();
+			for (Map.Entry<ConfiguredFeature, Integer> tree : rareTreeFeatures.entrySet()) {
+				ConfiguredFeature feature = tree.getKey();
 				int chance = tree.getValue();
 
 				biome.addFeature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
-					feature.configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new LakeDecoratorConfig(chance)))
+					feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new LakeDecoratorConfig(chance)))
 				);
 			}
 
@@ -196,9 +197,6 @@ public class TerraformBiome extends Biome {
 						.createDecoratedFeature(
 							Decorator.COUNT_HEIGHTMAP_32.configure(new CountDecoratorConfig(doublePlant.getValue()))));
 			}
-			//
-			//new DoublePlantFeatureConfig(doublePlant.getKey())
-
 
 			return biome;
 		}
@@ -280,12 +278,12 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
-		public TerraformBiome.Builder addTreeFeature(Feature<DefaultFeatureConfig> feature, int numPerChunk) {
+		public TerraformBiome.Builder addTreeFeature(ConfiguredFeature feature, int numPerChunk) {
 			this.treeFeatures.put(feature, numPerChunk);
 			return this;
 		}
 
-		public TerraformBiome.Builder addRareTreeFeature(Feature<DefaultFeatureConfig> feature, int chance) {
+		public TerraformBiome.Builder addRareTreeFeature(ConfiguredFeature feature, int chance) {
 			this.rareTreeFeatures.put(feature, chance);
 			return this;
 		}
