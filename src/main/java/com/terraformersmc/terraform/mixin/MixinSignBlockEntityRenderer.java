@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SignBlockEntityRenderer.class)
 public class MixinSignBlockEntityRenderer {
     @Inject(method = "getModelTexture", at = @At("HEAD"), cancellable = true)
-    private void getModelTexture(Block block, CallbackInfoReturnable<SpriteIdentifier> info) {
+    private static void getModelTexture(Block block, CallbackInfoReturnable<SpriteIdentifier> info) {
         if (block instanceof TerraformSign) {
 			Identifier texture = ((TerraformSign) block).getTexture();
 
