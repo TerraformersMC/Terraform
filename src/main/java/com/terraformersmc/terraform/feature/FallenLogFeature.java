@@ -16,25 +16,15 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class FallenLogFeature extends AbstractTreeFeature<TreeFeatureConfig> {
-    private final BlockState log;
-    private final int minLength, variance;
-
-    public FallenLogFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> function, boolean notify, BlockState log) {
-        this(function, notify, log, 5, 8);
-    }
-
-    public FallenLogFeature(Function<Dynamic<?>, ? extends TreeFeatureConfig> function, boolean notify, BlockState log, int minLength, int variance) {
+public class FallenLogFeature extends AbstractTreeFeature<FallenLogFeatureConfig> {
+    public FallenLogFeature(Function<Dynamic<?>, ? extends FallenLogFeatureConfig> function) {
         super(function);
-        this.log = log;
-        this.minLength = minLength;
-        this.variance = variance;
     }
 
     @Override
-    public boolean generate(ModifiableTestableWorld world, Random rand, BlockPos origin,Set<BlockPos> set1, Set<BlockPos> set2, BlockBox boundingBox, TreeFeatureConfig config) {
+    public boolean generate(ModifiableTestableWorld world, Random rand, BlockPos origin, Set<BlockPos> logs, Set<BlockPos> leaves, BlockBox box, FallenLogFeatureConfig config) {
         // Total log length
-        int length = rand.nextInt(variance) + minLength;
+        int length = rand.nextInt(config.lengthRandom) + config.baseHeight;
 
         // Axis
         Direction.Axis axis = rand.nextBoolean() ? Direction.Axis.X : Direction.Axis.Z;
@@ -69,12 +59,19 @@ public class FallenLogFeature extends AbstractTreeFeature<TreeFeatureConfig> {
         for (int i = 0; i < length; i++) {
             pos.setOffset(direction);
 
-            setBlockState(world, pos, log.with(LogBlock.AXIS, axis), boundingBox);
+            BlockState log = config.trunkProvider.getBlockState(rand, pos);
+
+			if (isAirOrLeaves(world, pos) || isReplaceablePlant(world, pos) || isWater(world, pos)) {
+				this.setBlockState(world, pos, log.with(LogBlock.AXIS, axis), box);
+				logs.add(pos.toImmutable());
+
+				return true;
+			}
 
             pos.setOffset(Direction.DOWN);
 
             if (isNaturalDirtOrGrass(world, pos)) {
-                setBlockState(world, pos, Blocks.DIRT.getDefaultState(), boundingBox);
+            	setToDirt(world, pos);
             }
 
             pos.setOffset(Direction.UP);

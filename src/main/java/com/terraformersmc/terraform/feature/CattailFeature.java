@@ -21,6 +21,7 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	private Block normal;
 	private Block tall;
 
+	// TODO: Migrate to feature config
 	public CattailFeature(Function<Dynamic<?>, ? extends SeagrassFeatureConfig> function, Block normal, Block tall) {
 		super(function);
 
