@@ -178,9 +178,9 @@ public class TerraformBiome extends Biome {
 			biome.addFeature(
 				GenerationStep.Feature.VEGETAL_DECORATION,
 				Feature.RANDOM_PATCH.configure(
-					new FlowerFeatureConfig.Builder(weightedStateProvider,  new SimpleBlockPlacer())
-						.method_23417(32)
-						.method_23424())
+					new RandomPatchFeatureConfig.Builder(weightedStateProvider,  new SimpleBlockPlacer())
+						.tries(32)
+						.build())
 					.createDecoratedFeature(
 						Decorator.COUNT_HEIGHTMAP_DOUBLE.configure(new CountDecoratorConfig(chanceTotal))));
 
@@ -190,10 +190,10 @@ public class TerraformBiome extends Biome {
 				biome.addFeature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
 					Feature.RANDOM_PATCH.configure(
-						new FlowerFeatureConfig.Builder(new SimpleStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
-							.method_23417(64)
-							.method_23419()
-							.method_23424())
+						new RandomPatchFeatureConfig.Builder(new SimpleStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
+							.tries(64)
+							.cannotProject()
+							.build())
 						.createDecoratedFeature(
 							Decorator.COUNT_HEIGHTMAP_32.configure(new CountDecoratorConfig(doublePlant.getValue()))));
 			}
