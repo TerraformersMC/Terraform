@@ -61,12 +61,12 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 			super(trunk, leaves);
 		}
 
-		public TreeFeatureConfig.Builder baseLength(int length) {
+		public Builder baseLength(int length) {
 			this.baseLength = length;
 			return this;
 		}
 
-		public TreeFeatureConfig.Builder lengthRandom(int variance) {
+		public Builder lengthRandom(int variance) {
 			this.lengthRandom = variance;
 			return this;
 		}
