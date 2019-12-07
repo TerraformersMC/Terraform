@@ -64,8 +64,6 @@ public class FallenLogFeature extends AbstractTreeFeature<FallenLogFeatureConfig
 			if (isAirOrLeaves(world, pos) || isReplaceablePlant(world, pos) || isWater(world, pos)) {
 				this.setBlockState(world, pos, log.with(LogBlock.AXIS, axis), box);
 				logs.add(pos.toImmutable());
-
-				return true;
 			}
 
             pos.setOffset(Direction.DOWN);
