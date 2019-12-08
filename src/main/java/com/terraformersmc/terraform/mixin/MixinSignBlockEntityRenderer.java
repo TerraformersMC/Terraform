@@ -17,11 +17,6 @@ public class MixinSignBlockEntityRenderer {
     private static void getModelTexture(Block block, CallbackInfoReturnable<SpriteIdentifier> info) {
         if (block instanceof TerraformSign) {
 			Identifier texture = ((TerraformSign) block).getTexture();
-
-			if(texture.getPath().startsWith("textures/")) {
-				throw new IllegalArgumentException("getTexture() should no longer prefix the path with 'textures/'");
-			}
-
         	info.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, texture));
         }
     }

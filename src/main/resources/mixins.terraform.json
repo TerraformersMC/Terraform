@@ -9,7 +9,8 @@
   "client": [
     "MixinBoatEntityRenderer",
     "MixinRenderLayers",
-    "MixinSignBlockEntityRenderer"
+    "MixinSignBlockEntityRenderer",
+    "MixinTexturedRenderLayers"
   ],
   "injectors": {
     "defaultRequire": 1
