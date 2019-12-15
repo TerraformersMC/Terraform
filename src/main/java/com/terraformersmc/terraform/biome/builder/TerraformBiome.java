@@ -1,13 +1,10 @@
 package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.decorator.LakeDecoratorConfig;
+import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountExtraChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
@@ -51,9 +48,9 @@ public class TerraformBiome extends Biome {
 	}
 
 	@Override
-	public int getFoliageColorAt() {
+	public int getFoliageColor() {
 		if (foliageColor == -1) {
-			return super.getFoliageColorAt();
+			return super.getFoliageColor();
 		}
 
 		return foliageColor;
@@ -102,7 +99,7 @@ public class TerraformBiome extends Biome {
 
 		@SuppressWarnings("unchecked")
 		public Biome build() {
-			if(template) {
+			if (template) {
 				throw new IllegalStateException("Tried to call build() on a frozen Builder instance!");
 			}
 
@@ -151,7 +148,7 @@ public class TerraformBiome extends Biome {
 
 				biome.addFeature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
-					feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new LakeDecoratorConfig(chance)))
+					feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new ChanceDecoratorConfig(chance)))
 				);
 			}
 
@@ -173,12 +170,12 @@ public class TerraformBiome extends Biome {
 			int chanceTotal = 0;
 			for (Map.Entry<BlockState, Integer> plant : plantFeatures.entrySet()) {
 				weightedStateProvider.addState(plant.getKey(), plant.getValue());
-				chanceTotal+=plant.getValue();
+				chanceTotal += plant.getValue();
 			}
 			biome.addFeature(
 				GenerationStep.Feature.VEGETAL_DECORATION,
 				Feature.RANDOM_PATCH.configure(
-					new RandomPatchFeatureConfig.Builder(weightedStateProvider,  new SimpleBlockPlacer())
+					new RandomPatchFeatureConfig.Builder(weightedStateProvider, new SimpleBlockPlacer())
 						.tries(32)
 						.build())
 					.createDecoratedFeature(
@@ -313,7 +310,7 @@ public class TerraformBiome extends Biome {
 		}
 
 		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(StructureFeature<FC> feature, FC config) {
-			this.structureFeatures.put((StructureFeature)feature, config);
+			this.structureFeatures.put((StructureFeature) feature, config);
 			return this;
 		}
 
@@ -346,18 +343,18 @@ public class TerraformBiome extends Biome {
 
 		public TerraformBiome.Builder addDefaultSpawnEntries() {
 			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
+				.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
 			return this;
 		}
 	}
