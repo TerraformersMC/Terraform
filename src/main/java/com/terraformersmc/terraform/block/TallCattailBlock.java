@@ -1,10 +1,12 @@
 package com.terraformersmc.terraform.block;
 
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallSeagrassBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -27,6 +29,7 @@ public class TallCattailBlock extends TallSeagrassBlock {
 		super(settings);
 
 		this.pickItem = pickItem;
+		BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout());
 	}
 
 	@Override

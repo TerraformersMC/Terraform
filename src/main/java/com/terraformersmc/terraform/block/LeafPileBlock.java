@@ -1,8 +1,10 @@
 package com.terraformersmc.terraform.block;
 
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +22,7 @@ public class LeafPileBlock extends Block {
 
 	public LeafPileBlock(Settings settings) {
 		super(settings);
+		BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout());
 	}
 
 	@SuppressWarnings("deprecation")
