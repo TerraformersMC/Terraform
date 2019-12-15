@@ -1,9 +1,7 @@
 package com.terraformersmc.terraform.block;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,7 +17,6 @@ public class TerraformSeagrassBlock extends SeagrassBlock {
 		super(settings);
 
 		this.tall = tall;
-		BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout());
 	}
 
 	@Override
