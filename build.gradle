@@ -21,6 +21,8 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
 
 processResources {
