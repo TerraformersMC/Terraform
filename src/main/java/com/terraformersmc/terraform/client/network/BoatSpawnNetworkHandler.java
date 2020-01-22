@@ -40,7 +40,7 @@ public class BoatSpawnNetworkHandler {
 		
 		entity.setEntityId(id);
 		entity.setUuid(uuid);
-		entity.setPosition(x, y, z);
+		entity.setPos(x, y, z);
 		entity.updateTrackedPosition(x, y, z);
 		entity.pitch = pitch * 360 / 256F;
 		entity.yaw = yaw * 360 / 256F;

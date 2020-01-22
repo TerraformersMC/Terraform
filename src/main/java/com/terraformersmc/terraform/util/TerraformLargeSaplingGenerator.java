@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.util;
 import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
 import net.minecraft.world.gen.feature.*;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -20,8 +21,9 @@ public class TerraformLargeSaplingGenerator extends LargeTreeSaplingGenerator {
 		this.largeConfigSupplier = largeConfigSupplier;
 	}
 
+	@Nullable
 	@Override
-	protected ConfiguredFeature<BranchedTreeFeatureConfig, ?> createTreeFeature(Random random) {
+	protected ConfiguredFeature<BranchedTreeFeatureConfig, ?> createTreeFeature(Random random, boolean bl) {
 		return featureSupplier.get().configure(configSupplier.get());
 	}
 
