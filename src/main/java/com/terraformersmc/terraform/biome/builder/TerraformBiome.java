@@ -298,6 +298,11 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
+		public Builder setSpawnChance(float spawnChance) {
+			this.spawnChance = spawnChance;
+			return this;
+		}
+
 		public TerraformBiome.Builder addTreeFeature(ConfiguredFeature feature, int numPerChunk) {
 			this.treeFeatures.put(feature, numPerChunk);
 			return this;
