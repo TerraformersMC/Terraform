@@ -144,7 +144,7 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 
 	@Deprecated
 	private void updateSpecialEffects() {
-		if (waterColor != null && waterFogColor !=null) {
+		if (waterColor != null && waterFogColor != null) {
 			class_4763.class_4764 builder = new class_4763.class_4764();
 			builder.method_24395(waterColor); // water color
 			builder.method_24397(waterFogColor); // water fog color

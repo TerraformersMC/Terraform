@@ -5,9 +5,6 @@
   "version": "$version",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.terraformersmc.terraform.command.FindBiomeCommand::register"
-    ],
     "client": [
       "com.terraformersmc.terraform.client.network.BoatSpawnNetworkHandler::register"
     ]
