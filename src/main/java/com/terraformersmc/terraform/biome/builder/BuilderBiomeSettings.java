@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.biome.builder;
 
+import net.minecraft.class_4763;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
@@ -22,43 +23,43 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	}
 
 	public BuilderBiomeSettings(BuilderBiomeSettings existing) {
-		if(existing.surfaceBuilder != null) {
+		if (existing.surfaceBuilder != null) {
 			this.surfaceBuilder(existing.surfaceBuilder);
 		}
 
-		if(existing.precipitation != null) {
+		if (existing.precipitation != null) {
 			this.precipitation(existing.precipitation);
 		}
 
-		if(existing.category != null) {
+		if (existing.category != null) {
 			this.category(existing.category);
 		}
 
-		if(existing.depth != null) {
+		if (existing.depth != null) {
 			this.depth(existing.depth);
 		}
 
-		if(existing.scale != null) {
+		if (existing.scale != null) {
 			this.scale(existing.scale);
 		}
 
-		if(existing.temperature != null) {
+		if (existing.temperature != null) {
 			this.temperature(existing.temperature);
 		}
 
-		if(existing.downfall != null) {
+		if (existing.downfall != null) {
 			this.downfall(existing.downfall);
 		}
 
-		if(existing.waterColor != null) {
+		if (existing.waterColor != null) {
 			this.waterColor(existing.waterColor);
 		}
 
-		if(existing.waterFogColor != null) {
+		if (existing.waterFogColor != null) {
 			this.waterFogColor(existing.waterFogColor);
 		}
 
-		if(existing.parent != null) {
+		if (existing.parent != null) {
 			this.parent(existing.parent);
 		}
 	}
@@ -127,20 +128,29 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 		return this;
 	}
 
-	@Override
+	@Deprecated
 	public BuilderBiomeSettings waterColor(int color) {
 		this.waterColor = color;
-		super.waterColor(waterColor);
-
+		updateSpecialEffects();
 		return this;
 	}
 
-	@Override
+	@Deprecated
 	public BuilderBiomeSettings waterFogColor(int color) {
 		this.waterFogColor = color;
-		super.waterFogColor(waterFogColor);
-
+		updateSpecialEffects();
 		return this;
+	}
+
+	@Deprecated
+	private void updateSpecialEffects() {
+		if (waterColor != null && waterFogColor !=null) {
+			class_4763.class_4764 builder = new class_4763.class_4764();
+			builder.method_24395(waterColor); // water color
+			builder.method_24397(waterFogColor); // water fog color
+			builder.method_24392(0xC0D8FF); // fog color
+			method_24379(builder.method_24391()); // build & apply
+		}
 	}
 
 	@Override
