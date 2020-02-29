@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import net.minecraft.class_4763;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
@@ -145,11 +145,11 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	@Deprecated
 	private void updateSpecialEffects() {
 		if (waterColor != null && waterFogColor != null) {
-			class_4763.class_4764 builder = new class_4763.class_4764();
-			builder.method_24395(waterColor); // water color
-			builder.method_24397(waterFogColor); // water fog color
-			builder.method_24392(0xC0D8FF); // fog color
-			method_24379(builder.method_24391()); // build & apply
+			BiomeEffects.Builder builder = new BiomeEffects.Builder();
+			builder.waterColor(waterColor);
+			builder.waterFogColor(waterFogColor);
+			builder.fogColor(0xC0D8FF);
+			effects(builder.build());
 		}
 	}
 
