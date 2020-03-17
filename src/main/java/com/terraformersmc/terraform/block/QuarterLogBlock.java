@@ -76,7 +76,7 @@ public class QuarterLogBlock extends LogBlock {
 
 		MiningToolItem tool = (MiningToolItem) held;
 
-		if(stripped != null && (tool.isEffectiveOn(state) || tool.getMiningSpeed(heldStack, state) > 1.0F)) {
+		if(stripped != null && (tool.isEffectiveOn(state) || tool.getMiningSpeedMultiplier(heldStack, state) > 1.0F)) {
 			world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 			if(!world.isClient) {

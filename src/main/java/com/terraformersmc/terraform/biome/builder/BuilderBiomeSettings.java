@@ -185,7 +185,9 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 			builder.waterColor(waterColor); // water color
 			builder.waterFogColor(waterFogColor); // water fog color
 			builder.fogColor(fogColor); // fog color
-			builder.particleConfig(particleConfig); // particle effects
+			if (particleConfig != null) {
+				builder.particleConfig(particleConfig); // particle effects
+			}
 			effects(builder.build()); // build & apply
 		}
 	}

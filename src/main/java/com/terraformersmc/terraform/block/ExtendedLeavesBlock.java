@@ -77,33 +77,13 @@ public class ExtendedLeavesBlock extends Block {
 
 	private static BlockState updateDistanceFromLogs(BlockState state, IWorld world, BlockPos pos) {
 		int distance = MAX_DISTANCE;
-		BlockPos.PooledMutable checkPos = BlockPos.PooledMutable.get();
-		Throwable caught = null;
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
-		try {
-			for (Direction direction : Direction.values()) {
-				// .set(pos).move(direction)
-				checkPos.set(pos).setOffset(direction);
-
-				distance = Math.min(distance, getDistanceFromLog(world.getBlockState(checkPos)) + 1);
-				if (distance == 1) {
-					break;
-				}
-			}
-		} catch (Throwable throwable) {
-			caught = throwable;
-			throw throwable;
-		} finally {
-			if (checkPos != null) {
-				if (caught != null) {
-					try {
-						checkPos.close();
-					} catch (Throwable second) {
-						caught.addSuppressed(second);
-					}
-				} else {
-					checkPos.close();
-				}
+		for (Direction direction : Direction.values()) {
+			mutable.move(pos, direction);
+			distance = Math.min(distance, getDistanceFromLog(world.getBlockState(mutable)) + 1);
+			if (distance == 1) {
+				break;
 			}
 		}
 
