@@ -26,11 +26,11 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 		ImmutableMap.Builder<T, T> builder = ImmutableMap.builder();
 
 		builder
-			.put(ops.createString("trunk_provider"), this.trunkProvider.serialize(ops))
-			.put(ops.createString("leaves_provider"), this.leavesProvider.serialize(ops))
-			.put(ops.createString("decorators"), ops.createList(this.decorators.stream().map(treeDecorator -> treeDecorator.serialize(ops))))
-			.put(ops.createString("base_length"), ops.createInt(this.baseHeight))
-			.put(ops.createString("length_random"), ops.createInt(this.lengthRandom));
+				.put(ops.createString("trunk_provider"), this.trunkProvider.serialize(ops))
+				.put(ops.createString("leaves_provider"), this.leavesProvider.serialize(ops))
+				.put(ops.createString("decorators"), ops.createList(this.decorators.stream().map(treeDecorator -> treeDecorator.serialize(ops))))
+				.put(ops.createString("base_length"), ops.createInt(this.baseHeight))
+				.put(ops.createString("length_random"), ops.createInt(this.lengthRandom));
 
 		return new Dynamic<>(ops, ops.createMap(builder.build()));
 	}
@@ -40,15 +40,15 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 		BlockStateProviderType<?> leaves = Registry.BLOCK_STATE_PROVIDER_TYPE.get(new Identifier(dynamic.get("leaves_provider").get("type").asString().orElseThrow(RuntimeException::new)));
 
 		return new FallenLogFeatureConfig(
-			trunk.deserialize(dynamic.get("trunk_provider").orElseEmptyMap()),
-			leaves.deserialize(dynamic.get("leaves_provider").orElseEmptyMap()),
-			dynamic.get("decorators").asList(
-				dynamicx -> Registry.TREE_DECORATOR_TYPE.get(
-					new Identifier(dynamicx.get("type").asString().orElseThrow(RuntimeException::new))
-				).method_23472(dynamicx)
-			),
-			dynamic.get("base_length").asInt(0),
-			dynamic.get("length_random").asInt(0)
+				trunk.deserialize(dynamic.get("trunk_provider").orElseEmptyMap()),
+				leaves.deserialize(dynamic.get("leaves_provider").orElseEmptyMap()),
+				dynamic.get("decorators").asList(
+						dynamicx -> Registry.TREE_DECORATOR_TYPE.get(
+								new Identifier(dynamicx.get("type").asString().orElseThrow(RuntimeException::new))
+						).method_23472(dynamicx)
+				),
+				dynamic.get("base_length").asInt(0),
+				dynamic.get("length_random").asInt(0)
 		);
 	}
 

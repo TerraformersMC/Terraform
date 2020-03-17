@@ -20,7 +20,7 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	private Float downfall;
 	private Integer waterColor;
 	private Integer waterFogColor;
-	private Integer fogColor;
+	private Integer fogColor = 0xC0D8FF;
 	private BiomeParticleConfig particleConfig;
 	private List<Biome.MixedNoisePoint> noisePoints = new ArrayList<>();
 	private String parent;

@@ -1,10 +1,5 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
@@ -13,12 +8,7 @@ import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountExtraChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placer.DoublePlantPlacer;
 import net.minecraft.world.gen.placer.SimpleBlockPlacer;
 import net.minecraft.world.gen.stateprovider.SimpleBlockStateProvider;
@@ -26,6 +16,11 @@ import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TerraformBiome extends Biome {
 	private int grassColor;
@@ -156,9 +151,9 @@ public class TerraformBiome extends Biome {
 					float weight = (float) count / totalTreesPerChunk;
 
 					biome.addFeature(
-						GenerationStep.Feature.VEGETAL_DECORATION,
-						feature.createDecoratedFeature(
-							Decorator.COUNT_EXTRA_HEIGHTMAP.configure(new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)))
+							GenerationStep.Feature.VEGETAL_DECORATION,
+							feature.createDecoratedFeature(
+									Decorator.COUNT_EXTRA_HEIGHTMAP.configure(new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)))
 					);
 				}
 			}
@@ -170,8 +165,8 @@ public class TerraformBiome extends Biome {
 				int chance = tree.getValue();
 
 				biome.addFeature(
-					GenerationStep.Feature.VEGETAL_DECORATION,
-					feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new ChanceDecoratorConfig(chance)))
+						GenerationStep.Feature.VEGETAL_DECORATION,
+						feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new ChanceDecoratorConfig(chance)))
 				);
 			}
 
@@ -189,20 +184,20 @@ public class TerraformBiome extends Biome {
 
 			// Add Plant decoration features
 
-			WeightedBlockStateProvider weightedStateProvider = new WeightedBlockStateProvider();
+			WeightedBlockStateProvider weightedBlockStateProvider = new WeightedBlockStateProvider();
 			int chanceTotal = 0;
 			for (Map.Entry<BlockState, Integer> plant : plantFeatures.entrySet()) {
-				weightedStateProvider.addState(plant.getKey(), plant.getValue());
+				weightedBlockStateProvider.addState(plant.getKey(), plant.getValue());
 				chanceTotal += plant.getValue();
 			}
 			biome.addFeature(
-				GenerationStep.Feature.VEGETAL_DECORATION,
-				Feature.RANDOM_PATCH.configure(
-					new RandomPatchFeatureConfig.Builder(weightedStateProvider, new SimpleBlockPlacer())
-						.tries(32)
-						.build())
-					.createDecoratedFeature(
-						Decorator.COUNT_HEIGHTMAP_DOUBLE.configure(new CountDecoratorConfig(chanceTotal))));
+					GenerationStep.Feature.VEGETAL_DECORATION,
+					Feature.RANDOM_PATCH.configure(
+							new RandomPatchFeatureConfig.Builder(weightedBlockStateProvider, new SimpleBlockPlacer())
+									.tries(32)
+									.build())
+							.createDecoratedFeature(
+									Decorator.COUNT_HEIGHTMAP_DOUBLE.configure(new CountDecoratorConfig(chanceTotal))));
 
 			// Add Double Plant decoration features
 
@@ -371,18 +366,18 @@ public class TerraformBiome extends Biome {
 
 		public TerraformBiome.Builder addDefaultSpawnEntries() {
 			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
-				.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
 			return this;
 		}
 	}
