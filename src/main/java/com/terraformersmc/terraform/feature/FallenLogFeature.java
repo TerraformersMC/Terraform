@@ -35,7 +35,7 @@ public class FallenLogFeature extends AbstractTreeFeature<FallenLogFeatureConfig
             return false;
         }
 
-        BlockPos.Mutable pos = new BlockPos.Mutable(origin);
+        BlockPos.Mutable pos = origin.mutableCopy();
 
         int air = 0;
         for (int i = 0; i < length; i++) {

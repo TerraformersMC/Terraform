@@ -21,8 +21,8 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.placer.DoublePlantPlacer;
 import net.minecraft.world.gen.placer.SimpleBlockPlacer;
-import net.minecraft.world.gen.stateprovider.SimpleStateProvider;
-import net.minecraft.world.gen.stateprovider.WeightedStateProvider;
+import net.minecraft.world.gen.stateprovider.SimpleBlockStateProvider;
+import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
@@ -189,7 +189,7 @@ public class TerraformBiome extends Biome {
 
 			// Add Plant decoration features
 
-			WeightedStateProvider weightedStateProvider = new WeightedStateProvider();
+			WeightedBlockStateProvider weightedStateProvider = new WeightedBlockStateProvider();
 			int chanceTotal = 0;
 			for (Map.Entry<BlockState, Integer> plant : plantFeatures.entrySet()) {
 				weightedStateProvider.addState(plant.getKey(), plant.getValue());
@@ -210,7 +210,7 @@ public class TerraformBiome extends Biome {
 				biome.addFeature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
 					Feature.RANDOM_PATCH.configure(
-						new RandomPatchFeatureConfig.Builder(new SimpleStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
+						new RandomPatchFeatureConfig.Builder(new SimpleBlockStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
 							.tries(64)
 							.cannotProject()
 							.build())

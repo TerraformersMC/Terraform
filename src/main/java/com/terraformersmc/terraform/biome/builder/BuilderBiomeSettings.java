@@ -1,7 +1,11 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import net.minecraft.class_4763;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
+import net.minecraft.world.biome.BiomeParticleConfig;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
@@ -16,6 +20,9 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	private Float downfall;
 	private Integer waterColor;
 	private Integer waterFogColor;
+	private Integer fogColor;
+	private BiomeParticleConfig particleConfig;
+	private List<Biome.MixedNoisePoint> noisePoints = new ArrayList<>();
 	private String parent;
 
 	public BuilderBiomeSettings() {
@@ -59,6 +66,14 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 			this.waterFogColor(existing.waterFogColor);
 		}
 
+		if (existing.fogColor != null) {
+			this.fogColor(existing.fogColor);
+		}
+
+		if (existing.noisePoints != null) {
+			existing.noisePoints.forEach(this::noisePoint);
+		}
+
 		if (existing.parent != null) {
 			this.parent(existing.parent);
 		}
@@ -66,7 +81,7 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 
 	@Override
 	public <SC extends SurfaceConfig> BuilderBiomeSettings configureSurfaceBuilder(SurfaceBuilder<SC> builder, SC config) {
-		this.surfaceBuilder = new ConfiguredSurfaceBuilder(builder, config);
+		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(builder, config);
 		super.configureSurfaceBuilder(builder, config);
 
 		return this;
@@ -143,13 +158,35 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	}
 
 	@Deprecated
+	public BuilderBiomeSettings fogColor(int color) {
+		this.fogColor = color;
+		updateSpecialEffects();
+		return this;
+	}
+
+	@Deprecated
+	public BuilderBiomeSettings particleConfig(BiomeParticleConfig config) {
+		this.particleConfig = config;
+		updateSpecialEffects();
+		return this;
+	}
+
+	@Deprecated
+	public BuilderBiomeSettings noisePoint(Biome.MixedNoisePoint point) {
+		this.noisePoints.add(point);
+		super.noises(noisePoints);
+		return this;
+	}
+
+	@Deprecated
 	private void updateSpecialEffects() {
 		if (waterColor != null && waterFogColor != null) {
-			class_4763.class_4764 builder = new class_4763.class_4764();
-			builder.method_24395(waterColor); // water color
-			builder.method_24397(waterFogColor); // water fog color
-			builder.method_24392(0xC0D8FF); // fog color
-			method_24379(builder.method_24391()); // build & apply
+			BiomeEffects.Builder builder = new BiomeEffects.Builder();
+			builder.waterColor(waterColor); // water color
+			builder.waterFogColor(waterFogColor); // water fog color
+			builder.fogColor(fogColor); // fog color
+			builder.particleConfig(particleConfig); // particle effects
+			effects(builder.build()); // build & apply
 		}
 	}
 

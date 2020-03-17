@@ -8,15 +8,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.decorator.TreeDecorator;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.stateprovider.StateProvider;
-import net.minecraft.world.gen.stateprovider.StateProviderType;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.gen.stateprovider.BlockStateProviderType;
 
 import java.util.List;
 
 public class FallenLogFeatureConfig extends TreeFeatureConfig {
 	public final int lengthRandom;
 
-	protected FallenLogFeatureConfig(StateProvider trunk, StateProvider leaves, List<TreeDecorator> decorators, int baseLength, int lengthRandom) {
+	protected FallenLogFeatureConfig(BlockStateProvider trunk, BlockStateProvider leaves, List<TreeDecorator> decorators, int baseLength, int lengthRandom) {
 		super(trunk, leaves, decorators, baseLength);
 
 		this.lengthRandom = lengthRandom;
@@ -36,8 +36,8 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 	}
 
 	public static <T> FallenLogFeatureConfig deserialize(Dynamic<T> dynamic) {
-		StateProviderType<?> trunk = Registry.BLOCK_STATE_PROVIDER_TYPE.get(new Identifier(dynamic.get("trunk_provider").get("type").asString().orElseThrow(RuntimeException::new)));
-		StateProviderType<?> leaves = Registry.BLOCK_STATE_PROVIDER_TYPE.get(new Identifier(dynamic.get("leaves_provider").get("type").asString().orElseThrow(RuntimeException::new)));
+		BlockStateProviderType<?> trunk = Registry.BLOCK_STATE_PROVIDER_TYPE.get(new Identifier(dynamic.get("trunk_provider").get("type").asString().orElseThrow(RuntimeException::new)));
+		BlockStateProviderType<?> leaves = Registry.BLOCK_STATE_PROVIDER_TYPE.get(new Identifier(dynamic.get("leaves_provider").get("type").asString().orElseThrow(RuntimeException::new)));
 
 		return new FallenLogFeatureConfig(
 			trunk.deserialize(dynamic.get("trunk_provider").orElseEmptyMap()),
@@ -57,7 +57,7 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 		private int baseLength;
 		private int lengthRandom;
 
-		public Builder(StateProvider trunk, StateProvider leaves) {
+		public Builder(BlockStateProvider trunk, BlockStateProvider leaves) {
 			super(trunk, leaves);
 		}
 
