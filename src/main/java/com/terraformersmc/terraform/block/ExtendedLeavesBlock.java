@@ -80,7 +80,7 @@ public class ExtendedLeavesBlock extends Block {
 		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
 		for (Direction direction : Direction.values()) {
-			mutable.move(pos, direction);
+			mutable.set(pos, direction);
 			distance = Math.min(distance, getDistanceFromLog(world.getBlockState(mutable)) + 1);
 			if (distance == 1) {
 				break;
@@ -109,18 +109,6 @@ public class ExtendedLeavesBlock extends Block {
 	public boolean isSideInvisible(BlockState state, BlockState neighborState, Direction offset) {
 		// OptiLeaves optimization: Cull faces with leaf block neighbors to reduce geometry in redwood forests
 		return neighborState.getBlock() instanceof ExtendedLeavesBlock;
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canSuffocate(BlockState state, BlockView view, BlockPos pos) {
-		return false;
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean allowsSpawning(BlockState state, BlockView view, BlockPos pos, EntityType<?> entity) {
-		return entity == EntityType.OCELOT || entity == EntityType.PARROT;
 	}
 
 	@Override

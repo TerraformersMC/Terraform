@@ -3,9 +3,10 @@ package com.terraformersmc.terraform.block;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.*;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -196,18 +197,6 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		return ActionResult.FAIL;
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean canSuffocate(BlockState state, BlockView view, BlockPos pos) {
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean allowsSpawning(BlockState state, BlockView view, BlockPos pos, EntityType<?> entityType) {
-		return Blocks.OAK_FENCE.allowsSpawning(state, view, pos, entityType);
-	}
-
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		super.appendProperties(builder);
@@ -316,7 +305,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean canPlaceAtSide(BlockState state, BlockView view, BlockPos pos, BlockPlacementEnvironment blockPlacementEnvironment_1) {
+	public boolean canPathfindThrough(BlockState state, BlockView view, BlockPos pos, NavigationType blockPlacementEnvironment_1) {
 		return false;
 	}
 
@@ -348,13 +337,13 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 }

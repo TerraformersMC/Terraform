@@ -2,8 +2,8 @@ package com.terraformersmc.terraform.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.MaterialColor;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,12 +29,12 @@ import java.util.function.Supplier;
  * A log block that has 4 different corners that combine together to form a huge and continuous 2x2 log.
  * Used for the mega variants of Redwood, Fir, etc
  */
-public class QuarterLogBlock extends LogBlock {
+public class QuarterLogBlock extends PillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 	private final Supplier<Block> stripped;
 
 	public QuarterLogBlock(Supplier<Block> stripped, MaterialColor color, Block.Settings settings) {
-		super(color, settings);
+		super(settings);
 
 		this.stripped = stripped;
 	}

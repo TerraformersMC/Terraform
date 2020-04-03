@@ -3,7 +3,7 @@ package com.terraformersmc.terraform.feature;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.BlockBox;
@@ -39,13 +39,13 @@ public class FallenLogFeature extends AbstractTreeFeature<FallenLogFeatureConfig
 
         int air = 0;
         for (int i = 0; i < length; i++) {
-            pos.setOffset(direction);
+            pos.offset(direction);
 
-            if (!world.testBlockState(pos.setOffset(Direction.DOWN), BlockState::isOpaque)) {
+            if (!world.testBlockState(pos.offset(Direction.DOWN), BlockState::isOpaque)) {
                 air++;
             }
 
-            if (!isAirOrLeaves(world, pos.setOffset(Direction.UP))) {
+            if (!isAirOrLeaves(world, pos.offset(Direction.UP))) {
                 return false;
             }
         }
@@ -57,22 +57,22 @@ public class FallenLogFeature extends AbstractTreeFeature<FallenLogFeatureConfig
 
         pos.set(origin);
         for (int i = 0; i < length; i++) {
-            pos.setOffset(direction);
+            pos.offset(direction);
 
             BlockState log = config.trunkProvider.getBlockState(rand, pos);
 
 			if (isAirOrLeaves(world, pos) || isReplaceablePlant(world, pos) || isWater(world, pos)) {
-				this.setBlockState(world, pos, log.with(LogBlock.AXIS, axis), box);
+				this.setBlockState(world, pos, log.with(PillarBlock.AXIS, axis), box);
 				logs.add(pos.toImmutable());
 			}
 
-            pos.setOffset(Direction.DOWN);
+            pos.offset(Direction.DOWN);
 
             if (isNaturalDirtOrGrass(world, pos)) {
             	setToDirt(world, pos);
             }
 
-            pos.setOffset(Direction.UP);
+            pos.offset(Direction.UP);
         }
 
         return true;

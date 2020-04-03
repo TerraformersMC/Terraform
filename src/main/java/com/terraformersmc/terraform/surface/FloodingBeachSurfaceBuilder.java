@@ -26,7 +26,7 @@ public class FloodingBeachSurfaceBuilder extends BeachSurfaceBuilder {
 				chunk.setBlockState(pos, WATER, false);
 			}
 
-			pos.setOffset(Direction.DOWN);
+			pos.offset(Direction.DOWN);
 		}
 
 		super.generate(rand, chunk, biome, x, z, height, noiseVal, var9, var10, var11, seed, config);

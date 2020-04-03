@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallSeagrassBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.class_5138;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
@@ -29,7 +30,8 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 		this.tall = tall;
 	}
 
-	public boolean generate(IWorld world, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
+	@Override
+	public boolean generate(IWorld world, class_5138 arg, ChunkGenerator<? extends ChunkGeneratorConfig> chunkGenerator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
 		int placed = 0;
 
 		for (int i = 0; i < config.count; ++i) {

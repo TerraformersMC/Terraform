@@ -2,8 +2,8 @@ package com.terraformersmc.terraform.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.MaterialColor;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -19,11 +19,11 @@ import net.minecraft.world.World;
 
 import java.util.function.Supplier;
 
-public class StrippableLogBlock extends LogBlock {
+public class StrippableLogBlock extends PillarBlock {
 	private Supplier<Block> stripped;
 
 	public StrippableLogBlock(Supplier<Block> stripped, MaterialColor top, Settings settings) {
-		super(top, settings);
+		super(settings);
 
 		this.stripped = stripped;
 	}
@@ -48,7 +48,7 @@ public class StrippableLogBlock extends LogBlock {
 			world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 			if(!world.isClient) {
-				BlockState target = stripped.get().getDefaultState().with(LogBlock.AXIS, state.get(LogBlock.AXIS));
+				BlockState target = stripped.get().getDefaultState().with(PillarBlock.AXIS, state.get(PillarBlock.AXIS));
 
 				world.setBlockState(pos, target);
 

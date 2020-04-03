@@ -5,9 +5,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import net.minecraft.block.*;
-import net.minecraft.block.Block.Settings;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
