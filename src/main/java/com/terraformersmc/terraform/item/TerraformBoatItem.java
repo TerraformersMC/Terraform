@@ -1,6 +1,11 @@
 package com.terraformersmc.terraform.item;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
 import com.terraformersmc.terraform.entity.TerraformBoatEntity;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,10 +21,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class TerraformBoatItem extends Item {
 	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);

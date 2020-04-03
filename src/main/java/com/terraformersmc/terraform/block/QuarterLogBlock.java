@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.block;
 
+import java.util.function.Supplier;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MaterialColor;
@@ -22,8 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import java.util.function.Supplier;
 
 /**
  * A log block that has 4 different corners that combine together to form a huge and continuous 2x2 log.

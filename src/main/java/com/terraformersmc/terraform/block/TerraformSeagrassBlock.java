@@ -1,11 +1,15 @@
 package com.terraformersmc.terraform.block;
 
-import net.minecraft.block.*;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SeagrassBlock;
+import net.minecraft.block.TallSeagrassBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Random;
 
 /**
  * A custom seagrass block that allows the specification of a custom tall variant.

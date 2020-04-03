@@ -1,8 +1,8 @@
 package com.terraformersmc.terraform.noise;
 
-import net.minecraft.util.math.MathHelper;
-
 import java.util.Random;
+
+import net.minecraft.util.math.MathHelper;
 
 /**
  * Simple noise function that proceeds in a circular fashion.

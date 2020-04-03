@@ -1,6 +1,7 @@
 package com.terraformersmc.terraform.surface;
 
 import com.mojang.datafixers.Dynamic;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;

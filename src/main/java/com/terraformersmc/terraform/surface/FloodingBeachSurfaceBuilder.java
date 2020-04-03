@@ -1,16 +1,17 @@
 package com.terraformersmc.terraform.surface;
 
+import java.util.Random;
+import java.util.function.DoubleFunction;
+import java.util.function.Function;
+
 import com.mojang.datafixers.Dynamic;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
-
-import java.util.Random;
-import java.util.function.DoubleFunction;
-import java.util.function.Function;
 
 public class FloodingBeachSurfaceBuilder extends BeachSurfaceBuilder {
 	public FloodingBeachSurfaceBuilder(Function<Dynamic<?>, ? extends TernarySurfaceConfig> function, int seaLevel, DoubleFunction<BlockState> sand) {

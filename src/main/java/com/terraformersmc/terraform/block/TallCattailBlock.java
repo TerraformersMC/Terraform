@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.block;
 
+import java.util.function.Supplier;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,8 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.function.Supplier;
 
 /**
  * A custom tall seagrass block where the lower half is underwater, and the upper half is above water.

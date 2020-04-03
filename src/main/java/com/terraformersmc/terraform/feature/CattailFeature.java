@@ -1,6 +1,10 @@
 package com.terraformersmc.terraform.feature;
 
+import java.util.Random;
+import java.util.function.Function;
+
 import com.mojang.datafixers.Dynamic;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,9 +18,6 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.SeagrassFeatureConfig;
-
-import java.util.Random;
-import java.util.function.Function;
 
 public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	private Block normal;

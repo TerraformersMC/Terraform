@@ -1,8 +1,9 @@
 package com.terraformersmc.terraform.block;
 
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+
+import net.fabricmc.fabric.api.block.FabricBlockSettings;
 
 /**
  * A simple wrapper around the parent LeavesBlock class allowing access to the constructor.

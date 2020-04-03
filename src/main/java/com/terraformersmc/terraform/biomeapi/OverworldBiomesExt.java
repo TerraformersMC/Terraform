@@ -1,11 +1,11 @@
 package com.terraformersmc.terraform.biomeapi;
 
-import net.minecraft.world.biome.Biome;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import net.minecraft.world.biome.Biome;
 
 public class OverworldBiomesExt {
 	private static Map<Biome, Biome> OVERWORLD_BORDER_MAP = new HashMap<>();

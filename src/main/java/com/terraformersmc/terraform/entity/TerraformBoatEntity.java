@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.entity;
 
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -17,6 +17,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 
 public class TerraformBoatEntity extends BoatEntity {
 	private TerraformBoat boat;

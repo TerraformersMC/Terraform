@@ -1,11 +1,15 @@
 package com.terraformersmc.terraform.util;
 
-import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
-import net.minecraft.world.gen.feature.*;
-
-import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
+import net.minecraft.world.gen.feature.AbstractTreeFeature;
+import net.minecraft.world.gen.feature.BranchedTreeFeatureConfig;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.MegaTreeFeatureConfig;
 
 public class TerraformLargeSaplingGenerator extends LargeTreeSaplingGenerator {
 

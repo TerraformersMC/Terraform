@@ -4,24 +4,22 @@ package com.terraformersmc.terraform.block;
 import java.util.Iterator;
 import java.util.Random;
 
-import net.minecraft.block.*;
+import net.minecraft.block.AttachedStemBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CropBlock;
+import net.minecraft.block.FarmlandBlock;
+import net.minecraft.block.StemBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Overwrite;
+import net.minecraft.world.WorldView;
 
 /**
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.

@@ -1,6 +1,7 @@
 package com.terraformersmc.terraform.block;
 
 import com.terraformersmc.terraform.util.TerraformSign;
+
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.SignType;

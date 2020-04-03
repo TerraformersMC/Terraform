@@ -3,7 +3,14 @@ package com.terraformersmc.terraform.util;
 import com.terraformersmc.terraform.block.ExtendedLeavesBlock;
 import com.terraformersmc.terraform.block.LeafPileBlock;
 import com.terraformersmc.terraform.block.TallCattailBlock;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.ComposterBlock;
+import net.minecraft.block.FernBlock;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.SaplingBlock;
+import net.minecraft.block.SeagrassBlock;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 

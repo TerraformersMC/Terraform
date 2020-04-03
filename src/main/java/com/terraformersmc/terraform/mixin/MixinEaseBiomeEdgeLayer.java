@@ -1,17 +1,18 @@
 package com.terraformersmc.terraform.mixin;
 
+import java.util.Optional;
+import java.util.function.IntConsumer;
+
 import com.terraformersmc.terraform.biomeapi.OverworldBiomesExt;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.EaseBiomeEdgeLayer;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-import java.util.function.IntConsumer;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.layer.EaseBiomeEdgeLayer;
+import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
 
 @Mixin(EaseBiomeEdgeLayer.class)
 @SuppressWarnings("unused") // it's a mixin

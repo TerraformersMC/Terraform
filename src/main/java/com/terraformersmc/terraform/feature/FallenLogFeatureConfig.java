@@ -1,17 +1,18 @@
 package com.terraformersmc.terraform.feature;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
+
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.decorator.TreeDecorator;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.stateprovider.BlockStateProviderType;
-
-import java.util.List;
 
 public class FallenLogFeatureConfig extends TreeFeatureConfig {
 	public final int lengthRandom;

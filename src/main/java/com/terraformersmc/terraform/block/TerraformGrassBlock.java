@@ -1,6 +1,13 @@
 package com.terraformersmc.terraform.block;
 
-import net.minecraft.block.*;
+import java.util.Random;
+import java.util.function.Supplier;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.GrassBlock;
+import net.minecraft.block.SnowBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,12 +24,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.LightType;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
-
-import java.util.Random;
-import java.util.function.Supplier;
 
 /**
  * A custom grass block that allows one to define their own soil types, used for things like basalt grass.

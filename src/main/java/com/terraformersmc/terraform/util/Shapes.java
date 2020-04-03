@@ -1,10 +1,11 @@
 package com.terraformersmc.terraform.util;
 
+import java.util.function.Consumer;
+
 import com.google.common.base.Preconditions;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.function.Consumer;
 
 public class Shapes {
 	/**
