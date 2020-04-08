@@ -54,12 +54,12 @@ public class CliffSurfaceBuilder extends SurfaceBuilder<CliffSurfaceConfig> {
 
 			for (int i = 0; i < basaltLayers; i++) {
 				chunk.setBlockState(pos, config.getCliffMaterial(), false);
-				pos.offset(Direction.UP);
+				pos.move(Direction.UP);
 			}
 
 			for (int i = 0; i < 3; i++) {
 				chunk.setBlockState(pos, config.getUnderMaterial(), false);
-				pos.offset(Direction.UP);
+				pos.move(Direction.UP);
 			}
 
 			chunk.setBlockState(pos, config.getTopMaterial(), false);

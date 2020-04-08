@@ -1,23 +1,22 @@
 package com.terraformersmc.terraform.feature;
 
-import java.util.Random;
-import java.util.function.Function;
-
 import com.mojang.datafixers.Dynamic;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallSeagrassBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.class_5138;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.SeagrassFeatureConfig;
+
+import java.util.Random;
+import java.util.function.Function;
 
 public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	private Block normal;
@@ -32,7 +31,7 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(IWorld world, class_5138 arg, ChunkGenerator<? extends ChunkGeneratorConfig> chunkGenerator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
+	public boolean generate(IWorld world, StructureAccessor accessor, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
 		int placed = 0;
 
 		for (int i = 0; i < config.count; ++i) {
@@ -58,12 +57,10 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 					} else {
 						world.setBlockState(candidate, grass, 2);
 					}
-
 					placed++;
 				}
 			}
 		}
-
 		return placed > 0;
 	}
 }
