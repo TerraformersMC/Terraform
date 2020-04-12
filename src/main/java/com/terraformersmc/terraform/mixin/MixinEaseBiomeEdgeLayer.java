@@ -18,6 +18,16 @@ import java.util.function.IntConsumer;
 public class MixinEaseBiomeEdgeLayer {
 	@Inject(method = "sample", at = @At("HEAD"), cancellable = true)
 	public void onSample(LayerRandomnessSource rand, int neighbor1, int neighbor2, int neighbor3, int neighbor4, int center, CallbackInfoReturnable<Integer> info) {
+		//predicated borders
+		Biome biome = Registry.BIOME.get(center);
+
+		for (OverworldBiomesExt.PredicatedBiomeEntry entry : OverworldBiomesExt.getPredicatedBorders(biome)) {
+			if (entry.predicate.test(Registry.BIOME.get(neighbor1)) || entry.predicate.test(Registry.BIOME.get(neighbor2)) || entry.predicate.test(Registry.BIOME.get(neighbor3)) || entry.predicate.test(Registry.BIOME.get(neighbor4))) {
+				info.setReturnValue(Registry.BIOME.getRawId(entry.biome));
+			}
+		}
+
+		//border biomes
 		boolean replaced =
 			tryReplace(center, neighbor1, info::setReturnValue) ||
 				tryReplace(center, neighbor2, info::setReturnValue) ||
@@ -28,6 +38,7 @@ public class MixinEaseBiomeEdgeLayer {
 			return;
 		}
 
+		//center biomes
 		if (surrounded(neighbor1, neighbor2, neighbor3, neighbor4, center)) {
 			Optional<Biome> target = OverworldBiomesExt.getCenter(Registry.BIOME.get(center));
 
