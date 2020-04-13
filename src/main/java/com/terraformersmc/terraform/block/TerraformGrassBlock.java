@@ -86,8 +86,8 @@ public class TerraformGrassBlock extends GrassBlock {
 						if (spreadTarget == dirt && canSpread(defaultState, world, spreadingPos)) {
 							world.setBlockState(spreadingPos, defaultState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW));
 						}
-						if (spreadsTo.containsKey(spreadTarget) && canSpread(defaultState, world, spreadingPos)) {
-							Block spreadedBlock = spreadsTo.get(spreadTarget);
+						Block spreadedBlock = spreadsTo.get(spreadTarget);
+						if (spreadedBlock != null && canSpread(defaultState, world, spreadingPos)) {
 							BlockState spreadedState = spreadedBlock.getDefaultState();
 							if (spreadedBlock instanceof SnowyBlock) {
 								spreadedState = spreadedState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW);
