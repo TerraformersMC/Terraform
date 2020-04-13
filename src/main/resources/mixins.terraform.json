@@ -4,7 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinBlockEntityType",
-    "MixinEaseBiomeEdgeLayer"
+    "MixinCropBlock",
+    "MixinEaseBiomeEdgeLayer",
+    "MixinPlantingOnFarmland",
+    "MixinRabbitEntity"
   ],
   "client": [
     "MixinBoatEntityRenderer",

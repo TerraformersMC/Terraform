@@ -174,6 +174,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof BareSmallLogBlock;
 	}
 
+	@Override
 	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, IWorld world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));

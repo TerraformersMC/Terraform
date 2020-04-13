@@ -22,6 +22,7 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 		this.lengthRandom = lengthRandom;
 	}
 
+	@Override
 	public <T> Dynamic<T> serialize(DynamicOps<T> ops) {
 		ImmutableMap.Builder<T, T> builder = ImmutableMap.builder();
 
@@ -71,6 +72,7 @@ public class FallenLogFeatureConfig extends TreeFeatureConfig {
 			return this;
 		}
 
+		@Override
 		public FallenLogFeatureConfig build() {
 			return new FallenLogFeatureConfig(this.trunkProvider, this.leavesProvider, this.decorators, this.baseLength, this.lengthRandom);
 		}

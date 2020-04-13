@@ -1,33 +1,25 @@
 package com.terraformersmc.terraform.block;
 
 
-import java.util.Iterator;
-import java.util.Random;
-
 import net.minecraft.block.*;
-import net.minecraft.block.Block.Settings;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Overwrite;
+import net.minecraft.world.WorldView;
+
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
- * */
+ */
 public class TerraformFarmlandBlock extends FarmlandBlock {
 	private static Block trampled; //sets the block to revert to when trampled
 
@@ -37,11 +29,13 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 		this.trampled = trampled;
 	}
 
+	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		return !this.getDefaultState().canPlaceAt(context.getWorld(), context.getBlockPos()) ? trampled.getDefaultState() : this.getDefaultState();
 	}
 
-	public void onScheduledTick(BlockState state, World world, BlockPos pos, Random rand) {
+	@Override
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!state.canPlaceAt(world, pos)) {
 			setToCustomDirt(state, world, pos);
 		} else {
@@ -55,7 +49,6 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 			} else if (moisture < 7) {
 				world.setBlockState(pos, state.with(MOISTURE, 7), 2);
 			}
-
 		}
 	}
 
@@ -71,7 +64,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 	@Override
 	public void onLandedUpon(World world, BlockPos pos, Entity entity, float height) {
 		if (!world.isClient && world.random.nextFloat() < height - 0.5F && entity instanceof LivingEntity && (entity instanceof PlayerEntity || world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
-			this.setToCustomDirt(world.getBlockState(pos), world, pos);
+			setToCustomDirt(world.getBlockState(pos), world, pos);
 		}
 
 		entity.handleFallDamage(height, 1.0F);
@@ -86,8 +79,8 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 				return false;
 			}
 
-			checkPos = (BlockPos)iterator.next();
-		} while(!world.getFluidState(checkPos).matches(FluidTags.WATER));
+			checkPos = (BlockPos) iterator.next();
+		} while (!world.getFluidState(checkPos).matches(FluidTags.WATER));
 
 		return true;
 	}

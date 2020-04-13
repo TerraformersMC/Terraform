@@ -35,16 +35,19 @@ public class TallCattailBlock extends TallSeagrassBlock {
 		return new ItemStack(pickItem.get());
 	}
 
+	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		BlockPos pos = context.getBlockPos();
 
 		return pos.getY() < 255 && context.getWorld().getBlockState(pos.up()).canReplace(context) ? this.getDefaultState() : null;
 	}
 
+	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(HALF) == DoubleBlockHalf.UPPER ? Fluids.EMPTY.getDefaultState() : super.getFluidState(state);
 	}
 
+	@Override
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		DoubleBlockHalf half = state.get(HALF);
 		BlockPos other = half == DoubleBlockHalf.LOWER ? pos.up() : pos.down();

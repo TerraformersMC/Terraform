@@ -29,6 +29,7 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 		this.tall = tall;
 	}
 
+	@Override
 	public boolean generate(IWorld world, ChunkGenerator<? extends ChunkGeneratorConfig> generator, Random random, BlockPos origin, SeagrassFeatureConfig config) {
 		int placed = 0;
 
