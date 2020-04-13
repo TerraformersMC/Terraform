@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -33,13 +34,10 @@ public class TerraformGrassBlock extends GrassBlock {
 	private final Block dirt;
 	private final Map<Block, Block> spreadsTo;
 	private final Supplier<Block> path;
+	public static final Map<Block, Block> GRASS_SPREADS_TO = new HashMap<>();
 
 	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings) {
-		super(settings);
-
-		this.dirt = dirt;
-		this.spreadsTo = ImmutableMap.of();
-		this.path = path;
+		this(dirt, path, settings, ImmutableMap.of(Blocks.DIRT, Blocks.GRASS_BLOCK));
 	}
 
 	/**
@@ -47,10 +45,22 @@ public class TerraformGrassBlock extends GrassBlock {
 	 * @param spreadsTo Maps dirt blocks to the grass they turn into when spreaded to.
 	 */
 	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings, Map<Block, Block> spreadsTo) {
+		this(dirt, path, settings, spreadsTo, true);
+	}
+
+	/**
+	 * @param dirt           The dirt block that this block turns back to when it loses its grass
+	 * @param spreadsTo      Maps dirt blocks to the grass they turn into when spreaded to.
+	 * @param grassSpreadsTo If true, grass will spread to the block specified in the 'dirt' parameter, turning into this block
+	 */
+	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings, Map<Block, Block> spreadsTo, boolean grassSpreadsTo) {
 		super(settings);
 		this.dirt = dirt;
 		this.spreadsTo = spreadsTo;
 		this.path = path;
+		if (grassSpreadsTo) {
+			GRASS_SPREADS_TO.put(dirt, this);
+		}
 	}
 
 	private static boolean canSurvive(BlockState state, WorldView world, BlockPos pos) {
