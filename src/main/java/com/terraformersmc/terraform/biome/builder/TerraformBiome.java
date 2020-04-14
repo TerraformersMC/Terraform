@@ -1,5 +1,10 @@
 package com.terraformersmc.terraform.biome.builder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
@@ -8,7 +13,12 @@ import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountExtraChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.placer.DoublePlantPlacer;
 import net.minecraft.world.gen.placer.SimpleBlockPlacer;
 import net.minecraft.world.gen.stateprovider.SimpleBlockStateProvider;
@@ -17,10 +27,7 @@ import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import com.terraformersmc.terraform.util.TerraformBiomeSets;
 
 public class TerraformBiome extends Biome {
 	private int grassColor;
@@ -87,6 +94,7 @@ public class TerraformBiome extends Biome {
 		private int foliageColor = -1;
 		private float spawnChance = -1;
 		private boolean template = false;
+		private boolean slimeSpawnBiome = false;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
 		Builder() {
@@ -110,6 +118,7 @@ public class TerraformBiome extends Biome {
 			this.grassColor = existing.grassColor;
 			this.foliageColor = existing.foliageColor;
 			this.spawnChance = existing.spawnChance;
+			this.slimeSpawnBiome = existing.slimeSpawnBiome;
 		}
 
 		@SuppressWarnings("unchecked")
@@ -126,6 +135,11 @@ public class TerraformBiome extends Biome {
 
 			// Set spawn chance
 			biome.setSpawnChance(this.spawnChance);
+
+			// Add as a slime spawn biome if needed
+			if (this.slimeSpawnBiome) {
+				TerraformBiomeSets.addSlimeSpawnBiome(biome);
+			}
 
 			// Add structures
 			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
@@ -365,12 +379,27 @@ public class TerraformBiome extends Biome {
 		}
 
 		public TerraformBiome.Builder addDefaultSpawnEntries() {
+			this.addDefaultCreatureSpawnEntries()
+					.addDefaultAmbientSpawnEntries()
+					.addDefaultMonsterSpawnEntries();
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultCreatureSpawnEntries() {
 			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4));
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultAmbientSpawnEntries() {
+			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8));
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultMonsterSpawnEntries() {
+			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
@@ -378,6 +407,11 @@ public class TerraformBiome extends Biome {
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
+			return this;
+		}
+
+		public TerraformBiome.Builder slimeSpawnBiome() {
+			slimeSpawnBiome = true;
 			return this;
 		}
 	}
