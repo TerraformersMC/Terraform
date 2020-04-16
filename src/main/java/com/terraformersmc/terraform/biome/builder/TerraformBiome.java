@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.terraformersmc.terraform.util.TerraformBiomeSets;
+
 public class TerraformBiome extends Biome {
 	private int grassColor;
 	private int foliageColor;
@@ -87,6 +89,7 @@ public class TerraformBiome extends Biome {
 		private int foliageColor = -1;
 		private float spawnChance = -1;
 		private boolean template = false;
+		private boolean slimeSpawnBiome = false;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
 		Builder() {
@@ -110,6 +113,7 @@ public class TerraformBiome extends Biome {
 			this.grassColor = existing.grassColor;
 			this.foliageColor = existing.foliageColor;
 			this.spawnChance = existing.spawnChance;
+			this.slimeSpawnBiome = existing.slimeSpawnBiome;
 		}
 
 		@SuppressWarnings("unchecked")
@@ -126,6 +130,11 @@ public class TerraformBiome extends Biome {
 
 			// Set spawn chance
 			biome.setSpawnChance(this.spawnChance);
+
+			// Add as a slime spawn biome if needed
+			if (this.slimeSpawnBiome) {
+				TerraformBiomeSets.addSlimeSpawnBiome(biome);
+			}
 
 			// Add structures
 			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
@@ -184,16 +193,16 @@ public class TerraformBiome extends Biome {
 
 			// Add Plant decoration features
 
-			WeightedBlockStateProvider weightedBlockStateProvider = new WeightedBlockStateProvider();
+			WeightedBlockStateProvider weightedStateProvider = new WeightedBlockStateProvider();
 			int chanceTotal = 0;
 			for (Map.Entry<BlockState, Integer> plant : plantFeatures.entrySet()) {
-				weightedBlockStateProvider.addState(plant.getKey(), plant.getValue());
+				weightedStateProvider.addState(plant.getKey(), plant.getValue());
 				chanceTotal += plant.getValue();
 			}
 			biome.addFeature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
 					Feature.RANDOM_PATCH.configure(
-							new RandomPatchFeatureConfig.Builder(weightedBlockStateProvider, new SimpleBlockPlacer())
+							new RandomPatchFeatureConfig.Builder(weightedStateProvider, new SimpleBlockPlacer())
 									.tries(32)
 									.build())
 							.createDecoratedFeature(
@@ -365,12 +374,27 @@ public class TerraformBiome extends Biome {
 		}
 
 		public TerraformBiome.Builder addDefaultSpawnEntries() {
+			this.addDefaultCreatureSpawnEntries()
+					.addDefaultAmbientSpawnEntries()
+					.addDefaultMonsterSpawnEntries();
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultCreatureSpawnEntries() {
 			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
+					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4));
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultAmbientSpawnEntries() {
+			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8));
+			return this;
+		}
+
+		public TerraformBiome.Builder addDefaultMonsterSpawnEntries() {
+			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
@@ -378,6 +402,11 @@ public class TerraformBiome extends Biome {
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
 					.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
+			return this;
+		}
+
+		public TerraformBiome.Builder slimeSpawnBiome() {
+			slimeSpawnBiome = true;
 			return this;
 		}
 	}

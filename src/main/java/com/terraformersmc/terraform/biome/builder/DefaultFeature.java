@@ -61,7 +61,9 @@ public enum DefaultFeature {
 	JUNGLE_VEGETATION("jungle_vegetation"),
 	DESERT_VEGETATION("desert_vegetation"),
 	SWAMP_VEGETATION("swamp_vegetation"),
-	DESSERT_FEATURES("desert_features"),
+	DESERT_FEATURES("desert_features"),
+	@Deprecated
+	DESSERT_FEATURES("dessert_features"),
 	FOSSILS("fossils"),
 	KELP("kelp"),
 	SEAGRASS_ON_STONE("seagrass_on_stone"),
@@ -256,6 +258,7 @@ public enum DefaultFeature {
 			case SWAMP_VEGETATION:
 				DefaultBiomeFeatures.addSwampVegetation(biome);
 				break;
+			case DESERT_FEATURES:
 			case DESSERT_FEATURES:
 				DefaultBiomeFeatures.addDesertFeatures(biome);
 				break;

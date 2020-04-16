@@ -13,6 +13,10 @@ import net.minecraft.world.gen.decorator.TreeDecorator;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.stateprovider.BlockStateProviderType;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.gen.stateprovider.BlockStateProviderType;
+
+import java.util.List;
 
 public class FallenLogFeatureConfig extends TreeFeatureConfig {
 	public final int lengthRandom;
