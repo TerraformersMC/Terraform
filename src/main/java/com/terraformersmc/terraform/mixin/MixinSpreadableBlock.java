@@ -24,7 +24,7 @@ public abstract class MixinSpreadableBlock {
 		return false;
 	}
 
-	@Inject(method = "scheduledTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getBlock()Lnet/minecraft/block/Block;"), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "randomTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getBlock()Lnet/minecraft/block/Block;"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onScheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info, BlockState defaultState, int i, BlockPos spreadingPos) {
 		Block grassBlock = TerraformGrassBlock.GRASS_SPREADS_TO.get(world.getBlockState(spreadingPos).getBlock());
 		if (grassBlock != null) {

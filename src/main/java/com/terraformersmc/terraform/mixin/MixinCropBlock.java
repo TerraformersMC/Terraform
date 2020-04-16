@@ -12,6 +12,6 @@ public class MixinCropBlock {
 	@Redirect(method = "getAvailableMoisture", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getBlock()Lnet/minecraft/block/Block;"))
 	private static Block onGetAvailableMoisture(BlockState state) {
 		Block block = state.getBlock();
-		return block instanceof FarmlandBlock && block.matches(TerraformBlockTags.FARMLAND) ? Blocks.FARMLAND : block;
+		return block instanceof FarmlandBlock && block.isIn(TerraformBlockTags.FARMLAND) ? Blocks.FARMLAND : block;
 	}
 }

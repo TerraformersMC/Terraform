@@ -6,8 +6,8 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.ToolMaterial;
 
 public abstract class TillableBlockRegistry extends HoeItem {
-	private TillableBlockRegistry(ToolMaterial material, float attackSpeed, Settings settings) {
-		super(material, attackSpeed, settings);
+	protected TillableBlockRegistry(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
+		super(material, attackDamage, attackSpeed, settings);
 	}
 
 	public static void add(Block block, BlockState state) {

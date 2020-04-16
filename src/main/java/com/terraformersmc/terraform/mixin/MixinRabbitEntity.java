@@ -27,7 +27,7 @@ public class MixinRabbitEntity {
 
 	@Inject(method = "isTargetPos", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info, Block block) {
-		if (block instanceof FarmlandBlock && block.matches(TerraformBlockTags.FARMLAND) && this.wantsCarrots && !this.field_6861) {
+		if (block instanceof FarmlandBlock && block.isIn(TerraformBlockTags.FARMLAND) && this.wantsCarrots && !this.field_6861) {
 			pos = pos.up();
 			BlockState state = world.getBlockState(pos);
 			block = state.getBlock();
