@@ -3,6 +3,8 @@
   "package": "com.terraformersmc.terraform.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "InvokerFoliagePlacerType",
+    "InvokerTrunkPlacerType",
     "MixinBlockEntityType",
     "MixinCropBlock",
     "MixinEaseBiomeEdgeLayer",
