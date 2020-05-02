@@ -55,7 +55,7 @@ public class TallCattailBlock extends TallSeagrassBlock {
 
 		if (half == DoubleBlockHalf.UPPER && otherState.getBlock() == this && otherState.get(HALF) == DoubleBlockHalf.LOWER) {
 			world.setBlockState(other, Blocks.WATER.getDefaultState(), 35);
-			world.playLevelEvent(player, 2001, other, Block.getRawIdFromState(otherState));
+			world.syncWorldEvent(player, 2001, other, Block.getRawIdFromState(otherState));
 
 			if (!world.isClient && !player.isCreative()) {
 				dropStacks(state, world, pos, null, player, player.getMainHandStack());
