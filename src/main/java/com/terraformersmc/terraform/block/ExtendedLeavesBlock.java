@@ -15,7 +15,7 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
 
 import net.fabricmc.api.EnvType;
@@ -66,7 +66,7 @@ public class ExtendedLeavesBlock extends Block {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		int distance = getDistanceFromLog(neighborState) + 1;
 		if (distance != 1 || state.get(DISTANCE) != distance) {
 			world.getBlockTickScheduler().schedule(pos, this, 1);
@@ -75,7 +75,7 @@ public class ExtendedLeavesBlock extends Block {
 		return state;
 	}
 
-	private static BlockState updateDistanceFromLogs(BlockState state, IWorld world, BlockPos pos) {
+	private static BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
 		int distance = MAX_DISTANCE;
 		BlockPos.Mutable mutable = new BlockPos.Mutable();
 

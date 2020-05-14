@@ -32,7 +32,7 @@ public class TerraformBiome extends Biome {
 	private TerraformBiome(Biome.Settings biomeSettings, ArrayList<SpawnEntry> spawns) {
 		super(biomeSettings);
 		for (SpawnEntry entry : spawns) {
-			this.addSpawn(entry.type.getCategory(), entry);
+			this.addSpawn(entry.type.getSpawnGroup(), entry);
 		}
 	}
 
@@ -64,15 +64,15 @@ public class TerraformBiome extends Biome {
 	}
 
 	@Override
-	public float getMaxSpawnLimit() {
+	public float getMaxSpawnChance() {
 		if (spawnChance == -1) {
-			return super.getMaxSpawnLimit();
+			return super.getMaxSpawnChance();
 		}
 
 		return spawnChance;
 	}
 
-	public static TerraformBiome.Builder builder() {
+		public static TerraformBiome.Builder builder() {
 		return new Builder();
 	}
 

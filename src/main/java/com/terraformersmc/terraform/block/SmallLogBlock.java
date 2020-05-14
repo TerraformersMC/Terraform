@@ -29,7 +29,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
 
 import net.fabricmc.api.EnvType;
@@ -173,7 +173,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	@Override
-	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, IWorld world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
