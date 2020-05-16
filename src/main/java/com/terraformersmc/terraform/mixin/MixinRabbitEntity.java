@@ -25,7 +25,7 @@ public class MixinRabbitEntity {
 	@Shadow
 	private boolean field_6861;
 
-	@Inject(method = "isTargetPos", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "isTargetPos(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Z", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info, Block block) {
 		if (block instanceof FarmlandBlock && block.matches(TerraformBlockTags.FARMLAND) && this.wantsCarrots && !this.field_6861) {
 			pos = pos.up();
