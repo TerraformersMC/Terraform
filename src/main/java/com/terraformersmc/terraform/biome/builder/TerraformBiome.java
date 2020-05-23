@@ -138,7 +138,7 @@ public class TerraformBiome extends Biome {
 
 			// Add structures
 			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
-				biome.addStructureFeature(structure.getKey().configure(structure.getValue()));
+				biome.addStructureFeature(structure.getKey().method_28659(structure.getValue()));
 			}
 
 			// Tree Feature stuff

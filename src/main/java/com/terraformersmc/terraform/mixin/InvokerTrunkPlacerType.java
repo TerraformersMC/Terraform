@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.mixin;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.foliage.FoliagePlacer;
 import net.minecraft.world.gen.foliage.FoliagePlacerType;
@@ -14,7 +14,7 @@ import java.util.function.Function;
 @Mixin(TrunkPlacerType.class)
 public interface InvokerTrunkPlacerType {
 	@Invoker
-	static <P extends TrunkPlacer> TrunkPlacerType<P> callRegister(String id, Function<Dynamic<?>, P> deserializer) {
+	static <P extends TrunkPlacer> TrunkPlacerType<P> callRegister(String id, Codec<P> deserializer) {
 		return null;
 	}
 }

@@ -94,7 +94,7 @@ public enum DefaultFeature {
 				DefaultBiomeFeatures.addOceanCarvers(biome);
 				break;
 			case STRUCTURES:
-				DefaultBiomeFeatures.addDefaultStructures(biome);
+				DefaultBiomeFeatures.method_28440(biome);
 				break;
 			case LAKES:
 				DefaultBiomeFeatures.addDefaultLakes(biome);

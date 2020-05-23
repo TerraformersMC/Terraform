@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -12,7 +12,6 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.ChunkGeneratorConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.SeagrassFeatureConfig;
 
@@ -24,8 +23,8 @@ public class CattailFeature extends Feature<SeagrassFeatureConfig> {
 	private Block tall;
 
 	// TODO: Migrate to feature config
-	public CattailFeature(Function<Dynamic<?>, ? extends SeagrassFeatureConfig> function, Block normal, Block tall) {
-		super(function);
+	public CattailFeature(Codec<SeagrassFeatureConfig> codec, Block normal, Block tall) {
+		super(codec);
 
 		this.normal = normal;
 		this.tall = tall;

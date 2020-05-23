@@ -1,10 +1,8 @@
 package com.terraformersmc.terraform.surface;
 
 import java.util.Random;
-import java.util.function.Function;
 
-import com.mojang.datafixers.Dynamic;
-
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -17,8 +15,8 @@ public class CliffSurfaceBuilder extends SurfaceBuilder<CliffSurfaceConfig> {
 	private int seaLevel;
 	private SurfaceBuilder<TernarySurfaceConfig> parent;
 
-	public CliffSurfaceBuilder(Function<Dynamic<?>, ? extends CliffSurfaceConfig> function, int seaLevel, SurfaceBuilder<TernarySurfaceConfig> parent) {
-		super(function);
+	public CliffSurfaceBuilder(Codec<CliffSurfaceConfig> codec, int seaLevel, SurfaceBuilder<TernarySurfaceConfig> parent) {
+		super(codec);
 
 		this.seaLevel = seaLevel;
 		this.parent = parent;

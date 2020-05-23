@@ -2,10 +2,8 @@ package com.terraformersmc.terraform.surface;
 
 import java.util.Random;
 import java.util.function.DoubleFunction;
-import java.util.function.Function;
 
-import com.mojang.datafixers.Dynamic;
-
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -14,8 +12,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
 
 public class FloodingBeachSurfaceBuilder extends BeachSurfaceBuilder {
-	public FloodingBeachSurfaceBuilder(Function<Dynamic<?>, ? extends TernarySurfaceConfig> function, int seaLevel, DoubleFunction<BlockState> sand) {
-		super(function, seaLevel, sand);
+	public FloodingBeachSurfaceBuilder(Codec<TernarySurfaceConfig> codec, int seaLevel, DoubleFunction<BlockState> sand) {
+		super(codec, seaLevel, sand);
 	}
 
 	@Override

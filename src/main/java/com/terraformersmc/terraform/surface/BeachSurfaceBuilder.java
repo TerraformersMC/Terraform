@@ -2,10 +2,8 @@ package com.terraformersmc.terraform.surface;
 
 import java.util.Random;
 import java.util.function.DoubleFunction;
-import java.util.function.Function;
 
-import com.mojang.datafixers.Dynamic;
-
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,9 +18,9 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<TernarySurfaceConfig> {
 
 	protected final BlockState WATER = Blocks.WATER.getDefaultState();
 
-	public BeachSurfaceBuilder(Function<Dynamic<?>, ? extends TernarySurfaceConfig> function, int seaLevel, DoubleFunction<BlockState> sand)
+	public BeachSurfaceBuilder(Codec<TernarySurfaceConfig> codec, int seaLevel, DoubleFunction<BlockState> sand)
 	{
-		super(function);
+		super(codec);
 
 		this.seaLevel = seaLevel;
 		this.sand = sand;
