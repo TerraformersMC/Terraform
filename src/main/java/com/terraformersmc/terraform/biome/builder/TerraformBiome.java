@@ -1,6 +1,7 @@
 package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.class_5312;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
@@ -17,10 +18,7 @@ import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.terraformersmc.terraform.util.TerraformBiomeSets;
 
@@ -29,7 +27,7 @@ public class TerraformBiome extends Biome {
 	private int foliageColor;
 	private float spawnChance;
 
-	private TerraformBiome(Biome.Settings biomeSettings, ArrayList<SpawnEntry> spawns) {
+	private TerraformBiome(Biome.Settings biomeSettings, List<SpawnEntry> spawns) {
 		super(biomeSettings);
 		for (SpawnEntry entry : spawns) {
 			this.addSpawn(entry.type.getSpawnGroup(), entry);
@@ -77,14 +75,14 @@ public class TerraformBiome extends Biome {
 	}
 
 	public static final class Builder extends BuilderBiomeSettings {
-		private ArrayList<DefaultFeature> defaultFeatures = new ArrayList<>();
-		private ArrayList<FeatureEntry> features = new ArrayList<>();
-		private Map<StructureFeature<FeatureConfig>, FeatureConfig> structureFeatures = new HashMap<>();
+		private List<DefaultFeature> defaultFeatures = new ArrayList<>();
+		private List<FeatureEntry> features = new ArrayList<>();
+		private List<class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>> structureFeatures = new ArrayList<>();
 		private Map<ConfiguredFeature, Integer> treeFeatures = new HashMap<>();
 		private Map<ConfiguredFeature, Integer> rareTreeFeatures = new HashMap<>();
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
-		private ArrayList<SpawnEntry> spawnEntries = new ArrayList<>();
+		private List<SpawnEntry> spawnEntries = new ArrayList<>();
 		private int grassColor = -1;
 		private int foliageColor = -1;
 		private float spawnChance = -1;
@@ -103,7 +101,7 @@ public class TerraformBiome extends Biome {
 
 			this.defaultFeatures.addAll(existing.defaultFeatures);
 			this.features.addAll(existing.features);
-			this.structureFeatures.putAll(existing.structureFeatures);
+			this.structureFeatures.addAll(existing.structureFeatures);
 			this.treeFeatures.putAll(existing.treeFeatures);
 			this.rareTreeFeatures.putAll(existing.rareTreeFeatures);
 			this.plantFeatures.putAll(existing.plantFeatures);
@@ -137,8 +135,8 @@ public class TerraformBiome extends Biome {
 			}
 
 			// Add structures
-			for (Map.Entry<StructureFeature<FeatureConfig>, FeatureConfig> structure : structureFeatures.entrySet()) {
-				biome.addStructureFeature(structure.getKey().method_28659(structure.getValue()));
+			for (class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> structure : structureFeatures) {
+				biome.addStructureFeature(structure);
 			}
 
 			// Tree Feature stuff
@@ -337,19 +335,13 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
-		public TerraformBiome.Builder addStructureFeature(StructureFeature<DefaultFeatureConfig> feature) {
-			return this.addStructureFeature(feature, FeatureConfig.DEFAULT);
-		}
-
-		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(StructureFeature<FC> feature, FC config) {
-			this.structureFeatures.put((StructureFeature) feature, config);
+		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> stucture) {
+			this.structureFeatures.add(stucture);
 			return this;
 		}
 
-		public TerraformBiome.Builder addStructureFeatures(StructureFeature<DefaultFeatureConfig>... defaultStructureFeatures) {
-			for (StructureFeature<DefaultFeatureConfig> feature : defaultStructureFeatures) {
-				this.structureFeatures.put((StructureFeature) feature, FeatureConfig.DEFAULT);
-			}
+		public TerraformBiome.Builder addStructureFeatures(class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>... stuctures) {
+			this.structureFeatures.addAll(Arrays.asList(stuctures));
 			return this;
 		}
 
