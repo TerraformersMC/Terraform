@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.class_5312;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
@@ -77,7 +76,7 @@ public class TerraformBiome extends Biome {
 	public static final class Builder extends BuilderBiomeSettings {
 		private List<DefaultFeature> defaultFeatures = new ArrayList<>();
 		private List<FeatureEntry> features = new ArrayList<>();
-		private List<class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>> structureFeatures = new ArrayList<>();
+		private List<ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>> structureFeatures = new ArrayList<>();
 		private Map<ConfiguredFeature, Integer> treeFeatures = new HashMap<>();
 		private Map<ConfiguredFeature, Integer> rareTreeFeatures = new HashMap<>();
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
@@ -135,7 +134,7 @@ public class TerraformBiome extends Biome {
 			}
 
 			// Add structures
-			for (class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> structure : structureFeatures) {
+			for (ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> structure : structureFeatures) {
 				biome.addStructureFeature(structure);
 			}
 
@@ -335,12 +334,12 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
-		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> stucture) {
+		public <FC extends FeatureConfig> TerraformBiome.Builder addStructureFeature(ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> stucture) {
 			this.structureFeatures.add(stucture);
 			return this;
 		}
 
-		public TerraformBiome.Builder addStructureFeatures(class_5312<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>... stuctures) {
+		public TerraformBiome.Builder addStructureFeatures(ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>... stuctures) {
 			this.structureFeatures.addAll(Arrays.asList(stuctures));
 			return this;
 		}

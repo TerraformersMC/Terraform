@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.biome.builder;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
 
 public enum DefaultFeature {
 	LAND_CARVERS("land_carvers"),
