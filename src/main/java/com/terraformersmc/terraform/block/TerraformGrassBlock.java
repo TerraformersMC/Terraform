@@ -77,7 +77,7 @@ public class TerraformGrassBlock extends GrassBlock {
 
 	public static boolean canSpread(BlockState state, WorldView world, BlockPos pos) {
 		BlockPos above = pos.up();
-		return canSurvive(state, world, pos) && !world.getFluidState(above).matches(FluidTags.WATER);
+		return canSurvive(state, world, pos) && !world.getFluidState(above).isIn(FluidTags.WATER);
 	}
 
 	@Override

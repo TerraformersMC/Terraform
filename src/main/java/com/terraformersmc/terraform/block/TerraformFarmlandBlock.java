@@ -80,7 +80,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 			}
 
 			checkPos = (BlockPos) iterator.next();
-		} while (!world.getFluidState(checkPos).matches(FluidTags.WATER));
+		} while (!world.getFluidState(checkPos).isIn(FluidTags.WATER));
 
 		return true;
 	}
