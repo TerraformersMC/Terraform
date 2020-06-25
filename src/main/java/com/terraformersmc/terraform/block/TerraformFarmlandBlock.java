@@ -63,7 +63,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 
 	@Override
 	public void onLandedUpon(World world, BlockPos pos, Entity entity, float height) {
-		if (!world.isClient && world.random.nextFloat() < height - 0.5F && entity instanceof LivingEntity && (entity instanceof PlayerEntity || world.getGameRules().getBoolean(GameRules.field_19388)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
+		if (!world.isClient && world.random.nextFloat() < height - 0.5F && entity instanceof LivingEntity && (entity instanceof PlayerEntity || world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) && entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F) {
 			setToCustomDirt(world.getBlockState(pos), world, pos);
 		}
 

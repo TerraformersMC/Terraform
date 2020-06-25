@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(FoliagePlacerType.class)
 public interface InvokerFoliagePlacerType {
 	@Invoker
-	static <P extends FoliagePlacer> FoliagePlacerType<P> callMethod_28850(String string, Codec<P> codec) {
+	static <P extends FoliagePlacer> FoliagePlacerType<P> callRegister(String string, Codec<P> codec) {
 		throw new UnsupportedOperationException();
 	}
 }
