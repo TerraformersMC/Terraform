@@ -35,7 +35,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!state.canPlaceAt(world, pos)) {
 			setToCustomDirt(state, world, pos);
 		} else {

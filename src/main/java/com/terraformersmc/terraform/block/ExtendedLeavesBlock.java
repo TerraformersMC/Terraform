@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.block;
 
-import java.util.Random;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,12 +14,13 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import java.util.Random;
 
 /**
  * A leaves block with extended range, permitting leaves to be as far as 13 blocks away from the tree rather than the
@@ -55,7 +56,6 @@ public class ExtendedLeavesBlock extends Block {
 	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), 3);
 	}
-
 
 
 	@Override
@@ -119,5 +119,10 @@ public class ExtendedLeavesBlock extends Block {
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
 		return updateDistanceFromLogs(this.getDefaultState().with(PERSISTENT, true), context.getWorld(), context.getBlockPos());
+	}
+
+	@Override
+	public VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
+		return VoxelShapes.empty();
 	}
 }
