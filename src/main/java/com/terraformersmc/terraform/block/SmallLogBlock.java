@@ -240,4 +240,14 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return state.get(HAS_LEAVES) ? VoxelShapes.fullCube() : this.collisionShapes[this.getShapeIndex(state)];
 	}
+
+	@Override
+	public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+		return this.collisionShapes[this.getShapeIndex(state)];
+	}
+
+	@Override
+	public VoxelShape getVisualShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		return this.collisionShapes[this.getShapeIndex(state)];
+	}
 }
