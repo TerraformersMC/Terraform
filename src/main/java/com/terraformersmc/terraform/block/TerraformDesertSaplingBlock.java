@@ -7,8 +7,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
 public class TerraformDesertSaplingBlock extends TerraformSaplingBlock {
-	public TerraformDesertSaplingBlock(SaplingGenerator generator) {
-		super(generator);
+
+	public TerraformDesertSaplingBlock(SaplingGenerator generator, Settings settings) {
+		super(generator, settings);
 	}
 
 	@Override
