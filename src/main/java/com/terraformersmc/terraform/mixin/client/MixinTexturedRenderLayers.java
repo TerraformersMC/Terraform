@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.mixin.client;
 
 import java.util.function.Consumer;
 

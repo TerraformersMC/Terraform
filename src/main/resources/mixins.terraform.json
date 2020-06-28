@@ -10,14 +10,14 @@
     "MixinEaseBiomeEdgeLayer",
     "MixinPlantingOnFarmland",
     "MixinRabbitEntity",
+    "MixinSlimeEntity",
     "MixinSpreadableBlock"
   ],
   "client": [
-    "MixinBoatEntityRenderer",
-    "MixinRenderLayers",
-    "MixinSignBlockEntityRenderer",
-    "MixinSlimeEntity",
-    "MixinTexturedRenderLayers"
+    "client.MixinBoatEntityRenderer",
+    "client.MixinRenderLayers",
+    "client.MixinSignBlockEntityRenderer",
+    "client.MixinTexturedRenderLayers"
   ],
   "injectors": {
     "defaultRequire": 1

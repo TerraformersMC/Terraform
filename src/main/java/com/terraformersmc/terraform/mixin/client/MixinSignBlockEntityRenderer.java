@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.mixin.client;
 
 import com.terraformersmc.terraform.util.TerraformSign;
 import org.spongepowered.asm.mixin.Mixin;
