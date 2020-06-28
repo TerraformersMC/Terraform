@@ -16,7 +16,7 @@ public class MixinRenderLayers {
 	@Shadow
 	private static boolean fancyGraphicsOrBetter;
 
-	@Inject(method = "getBlockLayer", at = @At("HEAD"))
+	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
 	private static void onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<RenderLayer> info) {
 		if (state.getBlock() instanceof ExtendedLeavesBlock || state.getBlock() instanceof SmallLogBlock && state.get(SmallLogBlock.HAS_LEAVES)) {
 			info.setReturnValue(fancyGraphicsOrBetter ? RenderLayer.getCutoutMipped() : RenderLayer.getSolid());
