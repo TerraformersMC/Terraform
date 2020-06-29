@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.biome.builder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.CountDecoratorConfig;
@@ -296,6 +297,12 @@ public class TerraformBiome extends Biome {
 		public Builder parent(String parent) {
 			super.parent(parent);
 
+			return this;
+		}
+
+		@Override
+		public Builder effects(BiomeEffects effects) {
+			super.effects(effects);
 			return this;
 		}
 
