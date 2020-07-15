@@ -5,6 +5,9 @@
   "version": "$version",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.terraformersmc.terraform.Terraform"
+    ],
     "client": [
       "com.terraformersmc.terraform.client.network.BoatSpawnNetworkHandler::register"
     ]
@@ -25,7 +28,8 @@
   ],
   "contributors": [
     "SuperCoder79",
-    "NeusFear"
+    "NeusFear",
+    "Wtoll"
   ],
   "description": "Base library for the Terraformers' mods",
   "custom": {

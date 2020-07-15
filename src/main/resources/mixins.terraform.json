@@ -11,13 +11,15 @@
     "MixinPlantingOnFarmland",
     "MixinRabbitEntity",
     "MixinSlimeEntity",
-    "MixinSpreadableBlock"
+    "MixinSpreadableBlock",
+    "BiomeAccessor"
   ],
   "client": [
     "client.MixinBoatEntityRenderer",
     "client.MixinRenderLayers",
     "client.MixinSignBlockEntityRenderer",
-    "client.MixinTexturedRenderLayers"
+    "client.MixinTexturedRenderLayers",
+    "client.MixinBackgroundRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
