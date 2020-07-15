@@ -6,10 +6,6 @@ import net.fabricmc.api.ModInitializer;
 
 import java.util.logging.Logger;
 
-/**
- * This is the root class of the mod that is loaded by fabric at run time.
- * Terraform#onInitialize()
- */
 public class Terraform implements ModInitializer {
 
 	/**
