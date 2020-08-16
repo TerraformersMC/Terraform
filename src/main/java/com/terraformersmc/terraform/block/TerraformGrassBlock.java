@@ -81,7 +81,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!world.isClient) {
 			if (!canSurvive(state, world, pos)) {
 				world.setBlockState(pos, dirt.getDefaultState());

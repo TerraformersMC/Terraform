@@ -37,13 +37,15 @@ public class NoiseCollisionChecker {
 
 	/**
 	 * Checks to see if the noise point of a biome collides with another
-	 * @param id The identifier of the biome in question
+	 *
+	 * @param id    The identifier of the biome in question
 	 * @param biome The biome object in question
 	 */
 	private static void checkBiome(Identifier id, Biome biome) {
 		long hash = ((BiomeAccessor) biome).getNoisePoints().stream().mapToInt(Biome.MixedNoisePoint::hashCode).sum();
 		NOISE_HASHES.forEach((biomeId, noiseHash) -> {
-			if (noiseHash.equals(hash)) {
+			Biome otherBiome = Registry.BIOME.get(biomeId);
+			if (otherBiome != null && otherBiome.getCategory() == Biome.Category.NETHER && biome.getCategory() == Biome.Category.NETHER && noiseHash.equals(hash)) {
 				Terraform.LOGGER.warning(String.format("Biome %s and biome %s share the same mixed noise point value. This will result in one eclipsing the other in generation. Please notify the mod authors immediately.", biomeId, id));
 			}
 		});
