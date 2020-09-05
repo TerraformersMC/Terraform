@@ -1,15 +1,23 @@
 package com.terraformersmc.terraform.biome.builder;
 
+import com.terraformersmc.terraform.util.TerraformBiomeSets;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
+import net.minecraft.world.biome.GenerationSettings;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
-import net.minecraft.world.gen.decorator.CountDecoratorConfig;
-import net.minecraft.world.gen.decorator.CountExtraChanceDecoratorConfig;
+import net.minecraft.world.gen.decorator.CountExtraDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.ConfiguredFeatures;
+import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.placer.DoublePlantPlacer;
 import net.minecraft.world.gen.placer.SimpleBlockPlacer;
 import net.minecraft.world.gen.stateprovider.SimpleBlockStateProvider;
@@ -18,63 +26,50 @@ import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.terraformersmc.terraform.util.TerraformBiomeSets;
+public class TerraformBiome {
+	private final Biome.Builder biome;
+	private final BiomeEffects.Builder effects;
+	private final GenerationSettings.Builder generationSettings;
+	private final SpawnSettings.Builder spawnSettings;
 
-public class TerraformBiome extends Biome {
-	private int grassColor;
-	private int foliageColor;
-	private float spawnChance;
-
-	private TerraformBiome(Biome.Settings biomeSettings, List<SpawnEntry> spawns) {
-		super(biomeSettings);
-		for (SpawnEntry entry : spawns) {
-			this.addSpawn(entry.type.getSpawnGroup(), entry);
+	private TerraformBiome(Biome.Builder biome,
+						   BiomeEffects.Builder effects,
+						   GenerationSettings.Builder generationSettings,
+						   SpawnSettings.Builder spawnSettings,
+						   List<SpawnSettings.SpawnEntry> spawns) {
+		this.biome = biome;
+		this.effects = effects;
+		this.generationSettings = generationSettings;
+		this.spawnSettings = spawnSettings;
+		for (SpawnSettings.SpawnEntry entry : spawns) {
+			spawnSettings.spawn(entry.type.getSpawnGroup(), entry);
 		}
 	}
 
 	public void setGrassAndFoliageColors(int grassColor, int foliageColor) {
-		this.grassColor = grassColor;
-		this.foliageColor = foliageColor;
+		this.effects.grassColor(grassColor)
+				.foliageColor(foliageColor);
 	}
 
 	public void setSpawnChance(float spawnChance) {
-		this.spawnChance = spawnChance;
+		this.spawnSettings.creatureSpawnProbability(spawnChance);
 	}
 
-	@Override
-	public int getGrassColorAt(double x, double y) {
-		if (grassColor == -1) {
-			return super.getGrassColorAt(x, y);
-		}
-
-		return grassColor;
-	}
-
-	@Override
-	public int getFoliageColor() {
-		if (foliageColor == -1) {
-			return super.getFoliageColor();
-		}
-
-		return foliageColor;
-	}
-
-	@Override
-	public float getMaxSpawnChance() {
-		if (spawnChance == -1) {
-			return super.getMaxSpawnChance();
-		}
-
-		return spawnChance;
-	}
-
-		public static TerraformBiome.Builder builder() {
-		return new Builder();
+	public static TerraformBiome.Builder builder(RegistryKey<Biome> key) {
+		return new com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder(key);
 	}
 
 	public static final class Builder extends BuilderBiomeSettings {
+		private final Biome.Builder biome = new Biome.Builder();
+		private final BiomeEffects.Builder effects = new BiomeEffects.Builder();
+		private final GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+		private final SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 		private List<DefaultFeature> defaultFeatures = new ArrayList<>();
 		private List<FeatureEntry> features = new ArrayList<>();
 		private List<ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>> structureFeatures = new ArrayList<>();
@@ -82,7 +77,7 @@ public class TerraformBiome extends Biome {
 		private Map<ConfiguredFeature, Integer> rareTreeFeatures = new HashMap<>();
 		private Map<BlockState, Integer> plantFeatures = new HashMap<>();
 		private Map<BlockState, Integer> doublePlantFeatures = new HashMap<>();
-		private List<SpawnEntry> spawnEntries = new ArrayList<>();
+		private List<SpawnSettings.SpawnEntry> spawnEntries = new ArrayList<>();
 		private int grassColor = -1;
 		private int foliageColor = -1;
 		private float spawnChance = -1;
@@ -90,13 +85,11 @@ public class TerraformBiome extends Biome {
 		private boolean slimeSpawnBiome = false;
 		// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
-		Builder() {
+		Builder(RegistryKey<Biome> key) {
 			super();
-
-			parent(null);
 		}
 
-		Builder(Builder existing) { // Template copy code
+		Builder(com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder existing) { // Template copy code
 			super(existing);
 
 			this.defaultFeatures.addAll(existing.defaultFeatures);
@@ -121,7 +114,7 @@ public class TerraformBiome extends Biome {
 			}
 
 			// Add SpawnEntries
-			TerraformBiome biome = new TerraformBiome(this, this.spawnEntries);
+			TerraformBiome biome = new TerraformBiome(this.biome, this.effects, this.generationSettings, this.spawnSettings, this.spawnEntries);
 
 			// Set grass and foliage colors
 			biome.setGrassAndFoliageColors(this.grassColor, this.foliageColor);
@@ -131,12 +124,12 @@ public class TerraformBiome extends Biome {
 
 			// Add as a slime spawn biome if needed
 			if (this.slimeSpawnBiome) {
-				TerraformBiomeSets.addSlimeSpawnBiome(biome);
+				TerraformBiomeSets.addSlimeSpawnBiome(key);
 			}
 
 			// Add structures
 			for (ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>> structure : structureFeatures) {
-				biome.addStructureFeature(structure);
+				generationSettings.structureFeature(structure);
 			}
 
 			// Tree Feature stuff
@@ -157,10 +150,11 @@ public class TerraformBiome extends Biome {
 
 					float weight = (float) count / totalTreesPerChunk;
 
-					biome.addFeature(
+					// TODO: This will not work, as each configured feature has to have a registered ID
+					// TODO: Potentially auto-configure based on <biome-id>/<tree-feature-id>
+					generationSettings.feature(
 							GenerationStep.Feature.VEGETAL_DECORATION,
-							feature.createDecoratedFeature(
-									Decorator.COUNT_EXTRA_HEIGHTMAP.configure(new CountExtraChanceDecoratorConfig(count, 0.1F * weight, 1)))
+							feature.decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP).decorate(Decorator.COUNT_EXTRA.configure(new CountExtraDecoratorConfig(count, 0.1F * weight, 1)))
 					);
 				}
 			}
@@ -171,22 +165,24 @@ public class TerraformBiome extends Biome {
 				ConfiguredFeature feature = tree.getKey();
 				int chance = tree.getValue();
 
-				biome.addFeature(
+				generationSettings.feature(
 						GenerationStep.Feature.VEGETAL_DECORATION,
-						feature.createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(new ChanceDecoratorConfig(chance)))
+						// TODO: This will not work, as each configured feature has to have a registered ID
+						// TODO: Potentially auto-configure based on <biome-id>/<tree-feature-id>
+						(ConfiguredFeature) feature.decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP).applyChance(chance)
 				);
 			}
 
 			// Add any minecraft (default) features
 
 			for (DefaultFeature defaultFeature : defaultFeatures) {
-				defaultFeature.add(biome);
+				defaultFeature.add(generationSettings);
 			}
 
 			// Add custom features that don't fit in the templates
 
 			for (FeatureEntry feature : features) {
-				biome.addFeature(feature.getStep(), feature.getFeature());
+				generationSettings.feature(feature.getStep(), feature.getFeature());
 			}
 
 			// Add Plant decoration features
@@ -197,116 +193,117 @@ public class TerraformBiome extends Biome {
 				weightedStateProvider.addState(plant.getKey(), plant.getValue());
 				chanceTotal += plant.getValue();
 			}
-			biome.addFeature(
+			generationSettings.feature(
 					GenerationStep.Feature.VEGETAL_DECORATION,
+					// TODO: This will not work, as each configured feature has to have a registered ID
+					// TODO: Potentially auto-configure based on <biome-id>/<tree-feature-id>
 					Feature.RANDOM_PATCH.configure(
 							new RandomPatchFeatureConfig.Builder(weightedStateProvider, new SimpleBlockPlacer())
 									.tries(32)
 									.build())
-							.createDecoratedFeature(
-									Decorator.COUNT_HEIGHTMAP_DOUBLE.configure(new CountDecoratorConfig(chanceTotal))));
+							.decorate(
+									ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP_SPREAD_DOUBLE.repeat(chanceTotal)));
 
 			// Add Double Plant decoration features
 
 			for (Map.Entry<BlockState, Integer> doublePlant : doublePlantFeatures.entrySet()) {
-				biome.addFeature(
+				generationSettings.feature(
 						GenerationStep.Feature.VEGETAL_DECORATION,
+						// TODO: This will not work, as each configured feature has to have a registered ID
+						// TODO: Potentially auto-configure based on <biome-id>/<tree-feature-id>
 						Feature.RANDOM_PATCH.configure(
 								new RandomPatchFeatureConfig.Builder(new SimpleBlockStateProvider(doublePlant.getKey()), new DoublePlantPlacer())
 										.tries(64)
 										.cannotProject()
 										.build())
-								.createDecoratedFeature(
-										Decorator.COUNT_HEIGHTMAP_32.configure(new CountDecoratorConfig(doublePlant.getValue()))));
+								.decorate(ConfiguredFeatures.Decorators.SPREAD_32_ABOVE).decorate(ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP).repeat(doublePlant.getValue())
+				);
 			}
 
-			return biome;
+			return biome.biome
+					.generationSettings(biome.generationSettings.build())
+					.effects(biome.effects.build())
+					.spawnSettings(biome.spawnSettings.build())
+					.build();
 		}
 
 		@Override
-		public <SC extends SurfaceConfig> Builder configureSurfaceBuilder(SurfaceBuilder<SC> builder, SC config) {
+		public <SC extends SurfaceConfig> com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder configureSurfaceBuilder(SurfaceBuilder<SC> builder, SC config) {
 			super.configureSurfaceBuilder(builder, config);
 
 			return this;
 		}
 
 		@Override
-		public Builder surfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder surfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
 			super.surfaceBuilder(surfaceBuilder);
 
 			return this;
 		}
 
 		@Override
-		public Builder precipitation(Biome.Precipitation precipitation) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder precipitation(Biome.Precipitation precipitation) {
 			super.precipitation(precipitation);
 
 			return this;
 		}
 
 		@Override
-		public Builder category(Biome.Category category) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder category(Biome.Category category) {
 			super.category(category);
 
 			return this;
 		}
 
 		@Override
-		public Builder depth(float depth) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder depth(float depth) {
 			super.depth(depth);
 
 			return this;
 		}
 
 		@Override
-		public Builder scale(float scale) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder scale(float scale) {
 			super.scale(scale);
 
 			return this;
 		}
 
 		@Override
-		public Builder temperature(float temperature) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder temperature(float temperature) {
 			super.temperature(temperature);
 
 			return this;
 		}
 
 		@Override
-		public Builder downfall(float downfall) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder downfall(float downfall) {
 			super.downfall(downfall);
 
 			return this;
 		}
 
 		@Override
-		public Builder waterColor(int color) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder waterColor(int color) {
 			super.waterColor(color);
 
 			return this;
 		}
 
 		@Override
-		public Builder waterFogColor(int color) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder waterFogColor(int color) {
 			super.waterFogColor(color);
 
 			return this;
 		}
 
 		@Override
-		public Builder parent(String parent) {
-			super.parent(parent);
-
-			return this;
-		}
-
-		@Override
-		public Builder effects(BiomeEffects effects) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder effects(BiomeEffects effects) {
 			super.effects(effects);
 			return this;
 		}
 
-		public Builder setSpawnChance(float spawnChance) {
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder setSpawnChance(float spawnChance) {
 			this.spawnChance = spawnChance;
 			return this;
 		}
@@ -336,7 +333,7 @@ public class TerraformBiome extends Biome {
 			return this;
 		}
 
-		public TerraformBiome.Builder addSpawnEntry(SpawnEntry entry) {
+		public TerraformBiome.Builder addSpawnEntry(SpawnSettings.SpawnEntry entry) {
 			this.spawnEntries.add(entry);
 			return this;
 		}
@@ -379,27 +376,27 @@ public class TerraformBiome extends Biome {
 		}
 
 		public TerraformBiome.Builder addDefaultCreatureSpawnEntries() {
-			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.COW, 8, 4, 4));
+			this.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.PIG, 10, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.COW, 8, 4, 4));
 			return this;
 		}
 
 		public TerraformBiome.Builder addDefaultAmbientSpawnEntries() {
-			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.BAT, 10, 8, 8));
+			this.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.BAT, 10, 8, 8));
 			return this;
 		}
 
 		public TerraformBiome.Builder addDefaultMonsterSpawnEntries() {
-			this.addSpawnEntry(new Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
-					.addSpawnEntry(new Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1));
+			this.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.SLIME, 100, 4, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
+					.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.WITCH, 5, 1, 1));
 			return this;
 		}
 
@@ -410,15 +407,15 @@ public class TerraformBiome extends Biome {
 	}
 
 	public static final class Template {
-		private final Builder builder;
+		private final com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder builder;
 
-		public Template(Builder builder) {
+		public Template(com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder builder) {
 			this.builder = builder;
 			builder.template = true;
 		}
 
-		public Builder builder() {
-			return new Builder(this.builder);
+		public com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder builder() {
+			return new com.terraformersmc.terraform.biome.builder.TerraformBiome.Builder(this.builder);
 		}
 	}
 }

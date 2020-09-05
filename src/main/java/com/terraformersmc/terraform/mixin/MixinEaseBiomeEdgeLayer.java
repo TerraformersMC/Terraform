@@ -1,18 +1,18 @@
 package com.terraformersmc.terraform.mixin;
 
-import java.util.Optional;
-import java.util.function.IntConsumer;
-
 import com.terraformersmc.terraform.biomeapi.OverworldBiomesExt;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BuiltinBiomes;
+import net.minecraft.world.biome.layer.EaseBiomeEdgeLayer;
+import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.EaseBiomeEdgeLayer;
-import net.minecraft.world.biome.layer.util.LayerRandomnessSource;
+import java.util.Optional;
+import java.util.function.IntConsumer;
 
 @Mixin(EaseBiomeEdgeLayer.class)
 @SuppressWarnings("unused") // it's a mixin
@@ -20,20 +20,20 @@ public class MixinEaseBiomeEdgeLayer {
 	@Inject(method = "sample", at = @At("HEAD"), cancellable = true)
 	public void onSample(LayerRandomnessSource rand, int neighbor1, int neighbor2, int neighbor3, int neighbor4, int center, CallbackInfoReturnable<Integer> info) {
 		//predicated borders
-		Biome biome = Registry.BIOME.get(center);
+		RegistryKey<Biome> biome = BuiltinBiomes.fromRawId(center);
 
 		for (OverworldBiomesExt.PredicatedBiomeEntry entry : OverworldBiomesExt.getPredicatedBorders(biome)) {
-			if (entry.predicate.test(Registry.BIOME.get(neighbor1)) || entry.predicate.test(Registry.BIOME.get(neighbor2)) || entry.predicate.test(Registry.BIOME.get(neighbor3)) || entry.predicate.test(Registry.BIOME.get(neighbor4))) {
-				info.setReturnValue(Registry.BIOME.getRawId(entry.biome));
+			if (entry.predicate.test(BuiltinBiomes.fromRawId(neighbor1)) || entry.predicate.test(BuiltinBiomes.fromRawId(neighbor2)) || entry.predicate.test(BuiltinBiomes.fromRawId(neighbor3)) || entry.predicate.test(BuiltinBiomes.fromRawId(neighbor4))) {
+				info.setReturnValue(OverworldBiomesExt.getRawId(entry.biome));
 			}
 		}
 
 		//border biomes
 		boolean replaced =
-			tryReplace(center, neighbor1, info::setReturnValue) ||
-				tryReplace(center, neighbor2, info::setReturnValue) ||
-				tryReplace(center, neighbor3, info::setReturnValue) ||
-				tryReplace(center, neighbor4, info::setReturnValue);
+				tryReplace(center, neighbor1, info::setReturnValue) ||
+						tryReplace(center, neighbor2, info::setReturnValue) ||
+						tryReplace(center, neighbor3, info::setReturnValue) ||
+						tryReplace(center, neighbor4, info::setReturnValue);
 
 		if (replaced) {
 			return;
@@ -41,9 +41,9 @@ public class MixinEaseBiomeEdgeLayer {
 
 		//center biomes
 		if (surrounded(neighbor1, neighbor2, neighbor3, neighbor4, center)) {
-			Optional<Biome> target = OverworldBiomesExt.getCenter(Registry.BIOME.get(center));
+			Optional<RegistryKey<Biome>> target = OverworldBiomesExt.getCenter(BuiltinBiomes.fromRawId(center));
 
-			target.ifPresent(value -> info.setReturnValue(Registry.BIOME.getRawId(value)));
+			target.ifPresent(value -> info.setReturnValue(OverworldBiomesExt.getRawId(value)));
 		}
 	}
 
@@ -52,9 +52,9 @@ public class MixinEaseBiomeEdgeLayer {
 			return false;
 		}
 
-		Optional<Biome> border = OverworldBiomesExt.getBorder(Registry.BIOME.get(neighbor));
+		Optional<RegistryKey<Biome>> border = OverworldBiomesExt.getBorder(BuiltinBiomes.fromRawId(neighbor));
 		if (border.isPresent()) {
-			consumer.accept(Registry.BIOME.getRawId(border.get()));
+			consumer.accept(OverworldBiomesExt.getRawId(border.get()));
 
 			return true;
 		}

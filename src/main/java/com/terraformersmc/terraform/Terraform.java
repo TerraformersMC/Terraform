@@ -1,7 +1,5 @@
 package com.terraformersmc.terraform;
 
-import com.terraformersmc.terraform.command.MapBiomesCommand;
-import com.terraformersmc.terraform.util.NoiseCollisionChecker;
 import net.fabricmc.api.ModInitializer;
 
 import java.util.logging.Logger;
@@ -23,7 +21,5 @@ public class Terraform implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
-		MapBiomesCommand.register();
-		NoiseCollisionChecker.onInitialize();
 	}
 }

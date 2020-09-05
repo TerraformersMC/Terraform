@@ -1,11 +1,9 @@
 package com.terraformersmc.terraform.block;
 
-import java.util.Random;
-import java.util.function.Supplier;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,11 +27,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import java.util.Random;
+import java.util.function.Supplier;
 
 // Rather complex: combine the function of leaves, logs, and cobblestone walls.
 
@@ -180,20 +178,20 @@ public class SmallLogBlock extends BareSmallLogBlock {
 
 		boolean leaves = state.get(HAS_LEAVES);
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.DOWN), leaves) || state.get(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.UP), leaves) || state.get(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.SOUTH), leaves) || state.get(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.WEST), leaves) || state.get(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.NORTH), leaves) || state.get(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, Block.isSideSolidFullSquare(neighbor, world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.DOWN), leaves) || state.get(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.UP), leaves) || state.get(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.SOUTH), leaves) || state.get(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.WEST), leaves) || state.get(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.NORTH), leaves) || state.get(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
 
 		return state
-			.with(UP, up)
-			.with(DOWN, down)
-			.with(NORTH, north)
-			.with(EAST, east)
-			.with(SOUTH, south)
-			.with(WEST, west);
+				.with(UP, up)
+				.with(DOWN, down)
+				.with(NORTH, north)
+				.with(EAST, east)
+				.with(SOUTH, south)
+				.with(WEST, west);
 	}
 
 	private int getShapeIndex(BlockState requested) {

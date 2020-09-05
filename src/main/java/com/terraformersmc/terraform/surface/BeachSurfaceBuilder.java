@@ -1,8 +1,5 @@
 package com.terraformersmc.terraform.surface;
 
-import java.util.Random;
-import java.util.function.DoubleFunction;
-
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -12,14 +9,17 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.TernarySurfaceConfig;
 
+import java.util.Random;
+import java.util.function.DoubleFunction;
+
 public class BeachSurfaceBuilder extends SurfaceBuilder<TernarySurfaceConfig> {
+	private static final BlockState STONE = Blocks.STONE.getDefaultState();
 	protected int seaLevel;
 	private DoubleFunction<BlockState> sand;
 
 	protected final BlockState WATER = Blocks.WATER.getDefaultState();
 
-	public BeachSurfaceBuilder(Codec<TernarySurfaceConfig> codec, int seaLevel, DoubleFunction<BlockState> sand)
-	{
+	public BeachSurfaceBuilder(Codec<TernarySurfaceConfig> codec, int seaLevel, DoubleFunction<BlockState> sand) {
 		super(codec);
 
 		this.seaLevel = seaLevel;
@@ -27,8 +27,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<TernarySurfaceConfig> {
 	}
 
 	@Override
-	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, TernarySurfaceConfig config)
-	{
+	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, TernarySurfaceConfig config) {
 		int localX = x & 15;
 		int localZ = z & 15;
 

@@ -1,23 +1,25 @@
 package com.terraformersmc.terraform.util;
 
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.world.biome.Biome;
-
 public class TerraformBiomeSets {
-	private static final Set<Biome> SLIME_SPAWN_BIOMES = new HashSet<>();
+	private static final Set<RegistryKey<Biome>> SLIME_SPAWN_BIOMES = new HashSet<>();
 
-	public static Set<Biome> getSlimeSpawnBiomes() {
+	public static Set<RegistryKey<Biome>> getSlimeSpawnBiomes() {
 		return SLIME_SPAWN_BIOMES;
 	}
 
-	public static void addSlimeSpawnBiome(Biome biome) {
+	public static void addSlimeSpawnBiome(RegistryKey<Biome> biome) {
 		SLIME_SPAWN_BIOMES.add(biome);
 	}
 
-	public static void addSlimeSpawnBiomes(Biome... biomes) {
+	@SafeVarargs
+	public static void addSlimeSpawnBiomes(RegistryKey<Biome>... biomes) {
 		SLIME_SPAWN_BIOMES.addAll(Arrays.asList(biomes));
 	}
 }

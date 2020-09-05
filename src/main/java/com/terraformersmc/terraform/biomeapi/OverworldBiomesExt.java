@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.biomeapi;
 
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
@@ -11,39 +13,44 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class OverworldBiomesExt {
-	private static Map<Biome, Biome> OVERWORLD_BORDER_MAP = new HashMap<>();
-	private static Map<Biome, Biome> OVERWORLD_CENTER_MAP = new HashMap<>();
-	private static Map<Biome, List<PredicatedBiomeEntry>> PREDICATED_BORDER_MAP = new HashMap<>();
+	private static Map<RegistryKey<Biome>, RegistryKey<Biome>> OVERWORLD_BORDER_MAP = new HashMap<>();
+	private static Map<RegistryKey<Biome>, RegistryKey<Biome>> OVERWORLD_CENTER_MAP = new HashMap<>();
+	private static Map<RegistryKey<Biome>, List<PredicatedBiomeEntry>> PREDICATED_BORDER_MAP = new HashMap<>();
 
-	public static void addBorderBiome(Biome biome, Biome border) {
+	public static void addBorderBiome(RegistryKey<Biome> biome, RegistryKey<Biome> border) {
 		OVERWORLD_BORDER_MAP.put(Objects.requireNonNull(biome), Objects.requireNonNull(border));
 	}
 
-	public static Optional<Biome> getBorder(Biome biome) {
+	public static Optional<RegistryKey<Biome>> getBorder(RegistryKey<Biome> biome) {
 		return Optional.ofNullable(OVERWORLD_BORDER_MAP.get(biome));
 	}
 
-	public static void addCenterBiome(Biome biome, Biome border) {
+	public static void addCenterBiome(RegistryKey<Biome> biome, RegistryKey<Biome> border) {
 		OVERWORLD_CENTER_MAP.put(Objects.requireNonNull(biome), Objects.requireNonNull(border));
 	}
 
-	public static Optional<Biome> getCenter(Biome biome) {
+	public static Optional<RegistryKey<Biome>> getCenter(RegistryKey<Biome> biome) {
 		return Optional.ofNullable(OVERWORLD_CENTER_MAP.get(biome));
 	}
 
-	public static final List<PredicatedBiomeEntry> getPredicatedBorders(Biome biome) {
+	public static final List<PredicatedBiomeEntry> getPredicatedBorders(RegistryKey<Biome> biome) {
 		return PREDICATED_BORDER_MAP.getOrDefault(biome, new ArrayList<>());
 	}
 
-	public static void addPredicatedBorderBiome(Biome biomeBase, Biome biomeBorder, Predicate<Biome> predicate) {
+	public static void addPredicatedBorderBiome(RegistryKey<Biome> biomeBase, RegistryKey<Biome> biomeBorder, Predicate<RegistryKey<Biome>> predicate) {
 		PREDICATED_BORDER_MAP.computeIfAbsent(biomeBase, biome -> new ArrayList<>()).add(new PredicatedBiomeEntry(biomeBorder, predicate));
 	}
 
-	public static final class PredicatedBiomeEntry {
-		public final Biome biome;
-		public final Predicate<Biome> predicate;
+	public static int getRawId(RegistryKey<Biome> biomeKey) {
+		Biome biome = BuiltinRegistries.BIOME.getOrThrow(biomeKey);
+		return BuiltinRegistries.BIOME.getRawId(biome);
+	}
 
-		PredicatedBiomeEntry(Biome b, Predicate<Biome> p) {
+	public static final class PredicatedBiomeEntry {
+		public final RegistryKey<Biome> biome;
+		public final Predicate<RegistryKey<Biome>> predicate;
+
+		PredicatedBiomeEntry(RegistryKey<Biome> b, Predicate<RegistryKey<Biome>> p) {
 			biome = b;
 			predicate = p;
 		}

@@ -1,6 +1,8 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.GenerationSettings;
+import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.ConfiguredFeatures;
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
 
 public enum DefaultFeature {
@@ -85,212 +87,212 @@ public enum DefaultFeature {
 		return this.name;
 	}
 
-	public void add(Biome biome) {
+	public void add(GenerationSettings.Builder builder) {
 		switch (this) {
 			case LAND_CARVERS:
-				DefaultBiomeFeatures.addLandCarvers(biome);
+				DefaultBiomeFeatures.addLandCarvers(builder);
 				break;
 			case OCEAN_CARVERS:
-				DefaultBiomeFeatures.addOceanCarvers(biome);
+				DefaultBiomeFeatures.addOceanCarvers(builder);
 				break;
 			case STRUCTURES:
-				DefaultBiomeFeatures.method_28440(biome);
+				DefaultBiomeFeatures.addDefaultUndergroundStructures(builder);
 				break;
 			case LAKES:
-				DefaultBiomeFeatures.addDefaultLakes(biome);
+				DefaultBiomeFeatures.addDefaultLakes(builder);
 				break;
 			case DESERT_LAKES:
-				DefaultBiomeFeatures.addDesertLakes(biome);
+				DefaultBiomeFeatures.addDesertLakes(builder);
 				break;
 			case DUNGEONS:
-				DefaultBiomeFeatures.addDungeons(biome);
+				DefaultBiomeFeatures.addDungeons(builder);
 				break;
 			case MINEABLES:
-				DefaultBiomeFeatures.addMineables(biome);
+				DefaultBiomeFeatures.addMineables(builder);
 				break;
 			case ORES:
-				DefaultBiomeFeatures.addDefaultOres(biome);
+				DefaultBiomeFeatures.addDefaultOres(builder);
 				break;
 			case EXTRA_GOLD:
-				DefaultBiomeFeatures.addExtraGoldOre(biome);
+				DefaultBiomeFeatures.addExtraGoldOre(builder);
 				break;
 			case EMERALD_ORE:
-				DefaultBiomeFeatures.addEmeraldOre(biome);
+				DefaultBiomeFeatures.addEmeraldOre(builder);
 				break;
 			case INFECTED_STONE:
-				DefaultBiomeFeatures.addInfestedStone(biome);
+				DefaultBiomeFeatures.addInfestedStone(builder);
 				break;
 			case DISKS:
-				DefaultBiomeFeatures.addDefaultDisks(biome);
+				DefaultBiomeFeatures.addDefaultDisks(builder);
 				break;
 			case CLAY:
-				DefaultBiomeFeatures.addClay(biome);
+				DefaultBiomeFeatures.addClay(builder);
 				break;
 			case MOSSY_ROCKS:
-				DefaultBiomeFeatures.addMossyRocks(biome);
+				DefaultBiomeFeatures.addMossyRocks(builder);
 				break;
 			case LARGE_FERNS:
-				DefaultBiomeFeatures.addLargeFerns(biome);
+				DefaultBiomeFeatures.addLargeFerns(builder);
 				break;
 			case SWEET_BERRY_BUSHES:
-				DefaultBiomeFeatures.addSweetBerryBushes(biome);
+				DefaultBiomeFeatures.addSweetBerryBushes(builder);
 				break;
 			case SWEET_BERRY_BUSHES_SNOWY:
-				DefaultBiomeFeatures.addSweetBerryBushesSnowy(biome);
+				DefaultBiomeFeatures.addSweetBerryBushesSnowy(builder);
 				break;
 			case BAMBOO:
-				DefaultBiomeFeatures.addBamboo(biome);
+				DefaultBiomeFeatures.addBamboo(builder);
 				break;
 			case BAMBOO_JUNGLE_TREES:
-				DefaultBiomeFeatures.addBambooJungleTrees(biome);
+				DefaultBiomeFeatures.addBambooJungleTrees(builder);
 				break;
 			case TAIGA_TREES:
-				DefaultBiomeFeatures.addTaigaTrees(biome);
+				DefaultBiomeFeatures.addTaigaTrees(builder);
 				break;
 			case WATER_BIOME_OAK_TREES:
-				DefaultBiomeFeatures.addWaterBiomeOakTrees(biome);
+				DefaultBiomeFeatures.addWaterBiomeOakTrees(builder);
 				break;
 			case BIRCH_TREES:
-				DefaultBiomeFeatures.addBirchTrees(biome);
+				DefaultBiomeFeatures.addBirchTrees(builder);
 				break;
 			case FOREST_TREES:
-				DefaultBiomeFeatures.addForestTrees(biome);
+				DefaultBiomeFeatures.addForestTrees(builder);
 				break;
 			case TALL_BIRCH_TREES:
-				DefaultBiomeFeatures.addTallBirchTrees(biome);
+				DefaultBiomeFeatures.addTallBirchTrees(builder);
 				break;
 			case SAVANNA_TREES:
-				DefaultBiomeFeatures.addSavannaTrees(biome);
+				DefaultBiomeFeatures.addSavannaTrees(builder);
 				break;
 			case EXTRA_SAVANNA_TREES:
-				DefaultBiomeFeatures.addExtraSavannaTrees(biome);
+				DefaultBiomeFeatures.addExtraSavannaTrees(builder);
 				break;
 			case MOUNTAIN_TREES:
-				DefaultBiomeFeatures.addMountainTrees(biome);
+				DefaultBiomeFeatures.addMountainTrees(builder);
 				break;
 			case EXTRA_MOUNTAIN_TREES:
-				DefaultBiomeFeatures.addExtraMountainTrees(biome);
+				DefaultBiomeFeatures.addExtraMountainTrees(builder);
 				break;
 			case JUNGLE_TREES:
-				DefaultBiomeFeatures.addJungleTrees(biome);
+				DefaultBiomeFeatures.addJungleTrees(builder);
 				break;
 			case JUNGLE_EDGE_TREES:
-				DefaultBiomeFeatures.addJungleEdgeTrees(biome);
+				DefaultBiomeFeatures.addJungleEdgeTrees(builder);
 				break;
 			case BADLANDS_PLATEAU_TREES:
-				DefaultBiomeFeatures.addBadlandsPlateauTrees(biome);
+				DefaultBiomeFeatures.addBadlandsPlateauTrees(builder);
 				break;
 			case SNOWY_SPRUCE_TREES:
-				DefaultBiomeFeatures.addSnowySpruceTrees(biome);
+				DefaultBiomeFeatures.addSnowySpruceTrees(builder);
 				break;
 			case GIANT_SPRUCE_TAIGA_TREES:
-				DefaultBiomeFeatures.addGiantSpruceTaigaTrees(biome);
+				builder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.TREES_GIANT_SPRUCE);
 				break;
 			case MEGA_SPRUCE_TAIGA_TREES:
-				DefaultBiomeFeatures.addGiantTreeTaigaTrees(biome);
+				builder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.TREES_GIANT);
 				break;
 			case JUNGLE_GRASS:
-				DefaultBiomeFeatures.addJungleGrass(biome);
+				DefaultBiomeFeatures.addJungleGrass(builder);
 				break;
 			case SAVANNA_TALL_GRASS:
-				DefaultBiomeFeatures.addSavannaTallGrass(biome);
+				DefaultBiomeFeatures.addSavannaTallGrass(builder);
 				break;
 			case SHATTERED_SAVANNA_TALL_GRASS:
-				DefaultBiomeFeatures.addShatteredSavannaGrass(biome);
+				DefaultBiomeFeatures.addShatteredSavannaGrass(builder);
 				break;
 			case SAVANNA_GRASS:
-				DefaultBiomeFeatures.addSavannaGrass(biome);
+				DefaultBiomeFeatures.addSavannaGrass(builder);
 				break;
 			case BADLANDS_GRASS:
-				DefaultBiomeFeatures.addBadlandsGrass(biome);
+				DefaultBiomeFeatures.addBadlandsGrass(builder);
 				break;
 			case FOREST_FLOWERS:
-				DefaultBiomeFeatures.addForestFlowers(biome);
+				DefaultBiomeFeatures.addForestFlowers(builder);
 				break;
 			case FOREST_GRASS:
-				DefaultBiomeFeatures.addForestGrass(biome);
+				DefaultBiomeFeatures.addForestGrass(builder);
 				break;
 			case SWAMP_FEATURES:
-				DefaultBiomeFeatures.addSwampFeatures(biome);
+				DefaultBiomeFeatures.addSwampFeatures(builder);
 				break;
 			case MUSHROOM_FIELDS_FEATURES:
-				DefaultBiomeFeatures.addMushroomFieldsFeatures(biome);
+				DefaultBiomeFeatures.addMushroomFieldsFeatures(builder);
 				break;
 			case PLAINS_FEATURES:
-				DefaultBiomeFeatures.addPlainsFeatures(biome);
+				DefaultBiomeFeatures.addPlainsFeatures(builder);
 				break;
 			case DESERT_DEAD_BUSHES:
-				DefaultBiomeFeatures.addDesertDeadBushes(biome);
+				DefaultBiomeFeatures.addDesertDeadBushes(builder);
 				break;
 			case GIANT_TAIGA_GRASS:
-				DefaultBiomeFeatures.addGiantTaigaGrass(biome);
+				DefaultBiomeFeatures.addGiantTaigaGrass(builder);
 				break;
 			case DEFAULT_FLOWERS:
-				DefaultBiomeFeatures.addDefaultFlowers(biome);
+				DefaultBiomeFeatures.addDefaultFlowers(builder);
 				break;
 			case EXTRA_DEFAULT_FLOWERS:
-				DefaultBiomeFeatures.addExtraDefaultFlowers(biome);
+				DefaultBiomeFeatures.addExtraDefaultFlowers(builder);
 				break;
 			case DEFAULT_GRASS:
-				DefaultBiomeFeatures.addDefaultGrass(biome);
+				DefaultBiomeFeatures.addDefaultGrass(builder);
 				break;
 			case TAIGA_GRASS:
-				DefaultBiomeFeatures.addTaigaGrass(biome);
+				DefaultBiomeFeatures.addTaigaGrass(builder);
 				break;
 			case PLAINS_TALL_GRASS:
-				DefaultBiomeFeatures.addPlainsTallGrass(biome);
+				DefaultBiomeFeatures.addPlainsTallGrass(builder);
 				break;
 			case DEFAULT_MUSHROOMS:
-				DefaultBiomeFeatures.addDefaultMushrooms(biome);
+				DefaultBiomeFeatures.addDefaultMushrooms(builder);
 				break;
 			case DEFAULT_VEGETATION:
-				DefaultBiomeFeatures.addDefaultVegetation(biome);
+				DefaultBiomeFeatures.addDefaultVegetation(builder);
 				break;
 			case BADLANDS_VEGETATION:
-				DefaultBiomeFeatures.addBadlandsVegetation(biome);
+				DefaultBiomeFeatures.addBadlandsVegetation(builder);
 				break;
 			case JUNGLE_VEGETATION:
-				DefaultBiomeFeatures.addJungleVegetation(biome);
+				DefaultBiomeFeatures.addJungleVegetation(builder);
 				break;
 			case DESERT_VEGETATION:
-				DefaultBiomeFeatures.addDesertVegetation(biome);
+				DefaultBiomeFeatures.addDesertVegetation(builder);
 				break;
 			case SWAMP_VEGETATION:
-				DefaultBiomeFeatures.addSwampVegetation(biome);
+				DefaultBiomeFeatures.addSwampVegetation(builder);
 				break;
 			case DESERT_FEATURES:
 			case DESSERT_FEATURES:
-				DefaultBiomeFeatures.addDesertFeatures(biome);
+				DefaultBiomeFeatures.addDesertFeatures(builder);
 				break;
 			case FOSSILS:
-				DefaultBiomeFeatures.addFossils(biome);
+				DefaultBiomeFeatures.addFossils(builder);
 				break;
 			case KELP:
-				DefaultBiomeFeatures.addKelp(biome);
+				DefaultBiomeFeatures.addKelp(builder);
 				break;
 			case SEAGRASS_ON_STONE:
-				DefaultBiomeFeatures.addSeagrassOnStone(biome);
+				DefaultBiomeFeatures.addSeagrassOnStone(builder);
 				break;
 			case SEAGRASS:
-				DefaultBiomeFeatures.addSeagrass(biome);
+				builder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.SEAGRASS_WARM);
 				break;
 			case MORE_SEAGRASS:
-				DefaultBiomeFeatures.addMoreSeagrass(biome);
+				builder.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.SEAGRASS_DEEP_WARM);
 				break;
 			case LESS_KELP:
-				DefaultBiomeFeatures.addLessKelp(biome);
+				DefaultBiomeFeatures.addLessKelp(builder);
 				break;
 			case SPRINGS:
-				DefaultBiomeFeatures.addSprings(biome);
+				DefaultBiomeFeatures.addSprings(builder);
 				break;
 			case ICEBERGS:
-				DefaultBiomeFeatures.addIcebergs(biome);
+				DefaultBiomeFeatures.addIcebergs(builder);
 				break;
 			case BLUE_ICE:
-				DefaultBiomeFeatures.addBlueIce(biome);
+				DefaultBiomeFeatures.addBlueIce(builder);
 				break;
 			case FROZEN_TOP_LAYER:
-				DefaultBiomeFeatures.addFrozenTopLayer(biome);
+				DefaultBiomeFeatures.addFrozenTopLayer(builder);
 				break;
 		}
 	}

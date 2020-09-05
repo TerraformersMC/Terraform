@@ -1,12 +1,17 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import com.terraformersmc.terraform.mixinterface.FogDensityControlBiome;
 import net.minecraft.client.sound.MusicType;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.sound.*;
+import net.minecraft.sound.BiomeAdditionsSound;
+import net.minecraft.sound.BiomeMoodSound;
+import net.minecraft.sound.MusicSound;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.BiomeParticleConfig;
+import net.minecraft.world.biome.GenerationSettings;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
@@ -20,44 +25,51 @@ import java.util.List;
 /**
  * A base class to construct data driven nether biomes
  */
-public class TerraformNetherBiome extends Biome implements FogDensityControlBiome {
+public class TerraformNetherBiome {
+
+	private Biome biome;
 
 	private float fogDensity;
 
+	private List<Biome.MixedNoisePoint> noises;
+
 	/**
 	 * Constructs a new nether biome from a nether biome builder
+	 *
 	 * @param builder The nether biome builder to construct a biome from
 	 */
-	public TerraformNetherBiome(Builder builder) {
-		super(new Biome.Settings()
-			.surfaceBuilder(builder.surfaceBuilder)
-			.precipitation(Precipitation.NONE)
-			.category(Category.NETHER)
-			.depth(0.1F)
-			.scale(0.2F)
-			.temperature(2.0F)
-			.downfall(0.0F)
-			.effects(new BiomeEffects.Builder()
-				.waterColor(4159204)
-				.waterFogColor(4341314)
-				.fogColor(builder.fogColor)
-				.loopSound(builder.loopSound)
-				.moodSound(builder.moodSound)
-				.additionsSound(builder.additionSound)
-				.music(builder.music)
-				.particleConfig(builder.particle)
-				.build())
-			.noises(builder.noisePoints));
-		builder.features.forEach((feature) -> this.addFeature(feature.getStep(), feature.getFeature()));
-		builder.structureFeatures.forEach(this::addStructureFeature);
-		builder.spawns.forEach((spawn) -> this.addSpawn(spawn.type.getSpawnGroup(), spawn));
+	public TerraformNetherBiome(com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder builder) {
+		Biome.Builder netherBuilder = new Biome.Builder()
+				.precipitation(Biome.Precipitation.NONE)
+				.category(Biome.Category.NETHER)
+				.depth(0.1F)
+				.scale(0.2F)
+				.temperature(2.0F)
+				.downfall(0.0F)
+				.effects(new BiomeEffects.Builder()
+						.waterColor(4159204)
+						.waterFogColor(4341314)
+						.fogColor(builder.fogColor)
+						.loopSound(builder.loopSound)
+						.moodSound(builder.moodSound)
+						.additionsSound(builder.additionSound)
+						.music(builder.music)
+						.particleConfig(builder.particle)
+						.build());
 
-		fogDensity = builder.fogDensity;
-	}
+		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+		generationSettings.surfaceBuilder(builder.surfaceBuilder);
+		builder.features.forEach((feature) -> generationSettings.feature(feature.getStep(), feature.getFeature()));
+		builder.structureFeatures.forEach(generationSettings::structureFeature);
 
-	@Override
-	public float fogMultiplier() {
-		return this.fogDensity;
+		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
+		builder.spawns.forEach((spawn) -> spawnSettings.spawn(spawn.type.getSpawnGroup(), spawn));
+
+		this.noises = builder.noisePoints;
+		this.fogDensity = builder.fogDensity;
+		this.biome = netherBuilder.generationSettings(generationSettings.build())
+				.spawnSettings(spawnSettings.build())
+				.build();
 	}
 
 	/**
@@ -116,10 +128,10 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 
 		/**
 		 * The music type for the biome.
-		 *
+		 * <p>
 		 * Defaults to the nether wastes music type.
 		 */
-		private MusicSound music = MusicType.method_27283(SoundEvents.MUSIC_NETHER_NETHER_WASTES);
+		private MusicSound music = MusicType.createIngameMusic(SoundEvents.MUSIC_NETHER_NETHER_WASTES);
 
 		/**
 		 * The ambient particle configuration for the biome.
@@ -139,7 +151,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		/**
 		 * A list of all of the spawn entries for the biome.
 		 */
-		private List<Biome.SpawnEntry> spawns = new ArrayList<>();
+		private List<SpawnSettings.SpawnEntry> spawns = new ArrayList<>();
 
 		/**
 		 * A list of all of the noise points for the biome.
@@ -148,9 +160,10 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 
 		/**
 		 * Constructs a copy of the builder from the parent.
+		 *
 		 * @param parent The parent builder to copy from.
 		 */
-		public Builder(Builder parent) {
+		public Builder(com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder parent) {
 			this.surfaceBuilder = parent.surfaceBuilder;
 			this.fogColor = parent.fogColor;
 			this.fogDensity = parent.fogDensity;
@@ -168,32 +181,36 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		/**
 		 * Constructs a new default builder object.
 		 */
-		public Builder() { }
+		public Builder() {
+		}
 
 		/**
 		 * Creates a copy of the current builder.
+		 *
 		 * @return Returns a copy of the current builder.
 		 */
-		public Builder copy() {
-			return new Builder(this);
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder copy() {
+			return new com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder(this);
 		}
 
 		/**
 		 * Sets the fog color of the biome to the given fog color.
+		 *
 		 * @param color The color to set the fog of the biome to.
 		 * @return The biome builder with the modified fog color.
 		 */
-		public Builder fogColor(int color) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder fogColor(int color) {
 			this.fogColor = color;
 			return this;
 		}
 
 		/**
 		 * Sets the fog density of the biome to the given density.
+		 *
 		 * @param density The density to set the biome fog to.
 		 * @return The biome builder with the modified fog density.
 		 */
-		public Builder fogDensity(float density) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder fogDensity(float density) {
 			this.fogDensity = density;
 			return this;
 		}
@@ -203,20 +220,21 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param sound The sound event to set as the loop sound for the biome.
 		 * @return The biome builder with the modified loop sound.
 		 */
-		public Builder loopSound(SoundEvent sound) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder loopSound(SoundEvent sound) {
 			this.loopSound = sound;
 			return this;
 		}
 
 		/**
 		 * Sets the mood sound of the biome to the given mood sound configuration.
-		 * @param sound The sound event to set as the mood sound for the biome.
-		 * @param tickInterval The time in ticks between plays of the mood sound.
-		 * @param spawnRange The spawn range of the mood sound.
+		 *
+		 * @param sound         The sound event to set as the mood sound for the biome.
+		 * @param tickInterval  The time in ticks between plays of the mood sound.
+		 * @param spawnRange    The spawn range of the mood sound.
 		 * @param extraDistance The extra distance of the mood sound.
 		 * @return The biome builder with the modified mood sound.
 		 */
-		public Builder moodSound(SoundEvent sound, int tickInterval, int spawnRange, double extraDistance) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder moodSound(SoundEvent sound, int tickInterval, int spawnRange, double extraDistance) {
 			this.moodSound = new BiomeMoodSound(sound, tickInterval, spawnRange, extraDistance);
 			return this;
 		}
@@ -226,17 +244,18 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param sound The sound event to set as the mood sound for the biome.
 		 * @return The biome builder with the modified mood sound.
 		 */
-		public Builder moodSound(SoundEvent sound) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder moodSound(SoundEvent sound) {
 			return this.moodSound(sound, 6000, 8, 2.0);
 		}
 
 		/**
 		 * Sets the addition sound of the biome to the given sound configuration.
-		 * @param sound The sound event to set as the addition sound for the biome.
+		 *
+		 * @param sound       The sound event to set as the addition sound for the biome.
 		 * @param probability The probability that the sound will play every tick.
 		 * @return The biome builder with the modified addition sound.
 		 */
-		public Builder additionSound(SoundEvent sound, double probability) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder additionSound(SoundEvent sound, double probability) {
 			this.additionSound = new BiomeAdditionsSound(sound, probability);
 			return this;
 		}
@@ -246,8 +265,8 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param sound The sound event to set as the game music event for the biome.
 		 * @return The biome builder with the modified music sound.
 		 */
-		public Builder music(SoundEvent sound) {
-			this.music = MusicType.method_27283(sound);
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder music(SoundEvent sound) {
+			this.music = MusicType.createIngameMusic(sound);
 			return this;
 		}
 
@@ -257,7 +276,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param probability The probability the particle will be generated every tick.
 		 * @return The biome builder with the modified ambient particle configuration.
 		 */
-		public Builder particle(ParticleEffect particle, float probability) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder particle(ParticleEffect particle, float probability) {
 			this.particle = new BiomeParticleConfig(particle, probability);
 			return this;
 		}
@@ -267,7 +286,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param feature The feature entry to add to the biome.
 		 * @return The biome builder with the added feature entry.
 		 */
-		public Builder feature(FeatureEntry feature) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder feature(FeatureEntry feature) {
 			this.features.add(feature);
 			return this;
 		}
@@ -278,7 +297,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param feature The configured feature to add to the biome.
 		 * @return The biome builder with the added feature entry.
 		 */
-		public Builder feature(GenerationStep.Feature step, ConfiguredFeature feature) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder feature(GenerationStep.Feature step, ConfiguredFeature feature) {
 			return feature(new FeatureEntry(step, feature));
 		}
 
@@ -287,7 +306,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param structureFeature The configured structure feature to add to the biome.
 		 * @return The biome builder with the added structure feature.
 		 */
-		public Builder structureFeature(ConfiguredStructureFeature structureFeature) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder structureFeature(ConfiguredStructureFeature structureFeature) {
 			this.structureFeatures.add(structureFeature);
 			return this;
 		}
@@ -297,7 +316,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param spawn The spawn entry to add to the biome.
 		 * @return The biome builder with the added spawn entry.
 		 */
-		public Builder spawn(Biome.SpawnEntry spawn) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder spawn(SpawnSettings.SpawnEntry spawn) {
 			this.spawns.add(spawn);
 			return this;
 		}
@@ -307,7 +326,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @param noise The noise point to add to the biome.
 		 * @return The biome builder with the added noise point.
 		 */
-		public Builder noise(Biome.MixedNoisePoint noise) {
+		public com.terraformersmc.terraform.biome.builder.TerraformNetherBiome.Builder noise(Biome.MixedNoisePoint noise) {
 			this.noisePoints.add(noise);
 			return this;
 		}
@@ -317,7 +336,7 @@ public class TerraformNetherBiome extends Biome implements FogDensityControlBiom
 		 * @return A new biome constructed with the biome builder parameters.
 		 */
 		public Biome build() {
-			return new TerraformNetherBiome(this);
+			return new TerraformNetherBiome(this).biome;
 		}
 
 	}

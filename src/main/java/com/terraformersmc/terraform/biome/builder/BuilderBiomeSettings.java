@@ -1,8 +1,6 @@
 package com.terraformersmc.terraform.biome.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.BiomeParticleConfig;
@@ -10,7 +8,11 @@ import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
-public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
+import java.util.ArrayList;
+import java.util.List;
+
+public class BuilderBiomeSettings extends Biome.Builder implements Cloneable {
+	protected RegistryKey<Biome> key;
 	private ConfiguredSurfaceBuilder<?> surfaceBuilder;
 	private Biome.Precipitation precipitation;
 	private Biome.Category category;
@@ -23,7 +25,6 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	private Integer fogColor = 0xC0D8FF;
 	private BiomeParticleConfig particleConfig;
 	private List<Biome.MixedNoisePoint> noisePoints = new ArrayList<>();
-	private String parent;
 
 	public BuilderBiomeSettings() {
 		super();
@@ -73,25 +74,15 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 		if (existing.noisePoints != null) {
 			existing.noisePoints.forEach(this::noisePoint);
 		}
-
-		if (existing.parent != null) {
-			this.parent(existing.parent);
-		}
 	}
 
-	@Override
 	public <SC extends SurfaceConfig> BuilderBiomeSettings configureSurfaceBuilder(SurfaceBuilder<SC> builder, SC config) {
 		this.surfaceBuilder = new ConfiguredSurfaceBuilder<>(builder, config);
-		super.configureSurfaceBuilder(builder, config);
-
 		return this;
 	}
 
-	@Override
 	public BuilderBiomeSettings surfaceBuilder(ConfiguredSurfaceBuilder<?> surfaceBuilder) {
 		this.surfaceBuilder = surfaceBuilder;
-		super.surfaceBuilder(surfaceBuilder);
-
 		return this;
 	}
 
@@ -174,7 +165,6 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 	@Deprecated
 	public BuilderBiomeSettings noisePoint(Biome.MixedNoisePoint point) {
 		this.noisePoints.add(point);
-		super.noises(noisePoints);
 		return this;
 	}
 
@@ -192,11 +182,4 @@ public class BuilderBiomeSettings extends Biome.Settings implements Cloneable {
 		}
 	}
 
-	@Override
-	public BuilderBiomeSettings parent(String parent) {
-		this.parent = parent;
-		super.parent(parent);
-
-		return this;
-	}
 }
