@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "terraform-biome-builder-api-v1",
+  "name": "Terraform Biome Builder API (v1)",
+  "version": "$version",
+  "environment": "*",
+  "entrypoints": {
+
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/terraform-biome-builder-api-v1/icon.png",
+  "contact": {
+    "homepage": "https://github.com/TerraformersMC/Terraform",
+    "issues": "https://github.com/TerraformersMC/Terraform/issues"
+  },
+  "depends": {
+    "fabric": "*"
+  },
+  "authors": [
+    "Prospector",
+    "coderbot16",
+    "TerraformersMC"
+  ],
+  "contributors": [
+    "SuperCoder79",
+    "NeusFear",
+    "Wtoll"
+  ],
+  "description": "Adds an API for adding biomes and making biomes generate",
+  "custom": {
+    "modmenu:api": true
+  },
+  "mixins": [
+
+  ]
+}

@@ -3,76 +3,171 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'eclipse'
-    id 'fabric-loom' version '0.4.13'
+    id 'fabric-loom' version '0.5-SNAPSHOT'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-archivesBaseName = project.archive_name
-version = project.mod_version
-group = project.maven_group
-
-def ENV = System.getenv()
-version = version + "+" + (ENV.BUILD_NUMBER ? ("build." + ENV.BUILD_NUMBER) : "custom")
-
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+static def formatVersion(project, version) {
+	return version + "+" + (System.getenv().BUILD_NUMBER ? ("build." + System.getenv().BUILD_NUMBER) : "custom");
 }
 
-processResources {
-    inputs.property "version", project.version
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'eclipse'
+	apply plugin: 'maven-publish'
+	apply plugin: 'fabric-loom'
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand "version": project.version
-    }
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
+	group = project.maven_group
+
+	sourceSets {
+		testmod {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
+		}
+	}
+
+	dependencies {
+		minecraft "com.mojang:minecraft:$project.minecraft_version"
+		mappings "net.fabricmc:yarn:$project.yarn_mappings:v2"
+		modImplementation "net.fabricmc:fabric-loader:$project.loader_version"
+
+		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+	}
+
+	configurations {
+		dev
+	}
+
+	repositories {
+		mavenLocal()
+	}
+
+	jar {
+		classifier = "dev"
+	}
+
+	afterEvaluate {
+		remapJar {
+			input = file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar")
+			archiveName = "${archivesBaseName}-${version}.jar"
+		}
+
+		artifacts {
+			dev file: file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar"), type: "jar", builtBy: jar
+		}
+
+		processResources {
+			inputs.property "version", project.version
+
+			from(sourceSets.main.resources.srcDirs) {
+				include "fabric.mod.json"
+				expand "version": project.version
+			}
+
+			from(sourceSets.main.resources.srcDirs) {
+				exclude "fabric.mod.json"
+			}
+		}
+	}
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+	}
+
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = "sources"
+		from sourceSets.main.allSource
+	}
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+subprojects {
+
+	dependencies {
+		testmodCompile sourceSets.main.output
+	}
+
+	task remapMavenJar(type: Copy, dependsOn: remapJar) {
+		afterEvaluate {
+			from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
+			into("${project.buildDir}/libs/")
+			rename { String fn -> "$archivesBaseName-${version}-maven.jar" }
+		}
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				afterEvaluate {
+					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
+						builtBy remapMavenJar
+					}
+					artifact(sourcesJar) {
+						builtBy remapSourcesJar
+					}
+				}
+			}
+		}
+
+		setupRepositories(repositories)
+	}
+
+	javadoc.enabled = false
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
-}
-
-jar {
-    from "LICENSE"
+task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
+	afterEvaluate {
+		input = file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar")
+		archiveName = "${archivesBaseName}-${version}-maven.jar"
+		addNestedDependencies = false
+	}
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
+				builtBy remapMavenJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+			pom.withXml {
+				def depsNode = asNode().appendNode("dependencies")
+				subprojects.each {
+					def depNode = depsNode.appendNode("dependency")
+					depNode.appendNode("groupId", it.group)
+					depNode.appendNode("artifactId", it.name)
+					depNode.appendNode("version", it.version)
+					depNode.appendNode("scope", "compile")
+				}
+			}
+		}
+	}
 
-            afterEvaluate {
-				artifact remapJar
-            }
-        }
-    }
-
-    repositories {
-        if (project.hasProperty('mavenPass')) {
-            maven {
-                url = "http://mavenupload.modmuss50.me/"
-                credentials {
-                    username = "buildslave"
-                    password = project.getProperty('mavenPass')
-                }
-            }
-        }
-    }
+	setupRepositories(repositories)
 }
+
+void setupRepositories(RepositoryHandler repositories) {
+	//repositories.mavenLocal() // uncomment for testing
+	if (project.hasProperty('mavenPass')) {
+		repositories.maven {
+			url "http://mavenupload.modmuss50.me/"
+			credentials {
+				username 'buildslave'
+				password project.getProperty('mavenPass')
+			}
+		}
+	}
+}
+
+dependencies {
+	afterEvaluate {
+		subprojects.each {
+			compile project(path: "${it.name}", configuration: "dev")
+			include project("${it.name}:")
+		}
+	}
+}
+

@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "InvokerFoliagePlacerType",
+    "InvokerTrunkPlacerType",
+    "MixinBlockEntityType",
+    "MixinCropBlock",
+    "MixinPlantingOnFarmland",
+    "MixinRabbitEntity",
+    "MixinSlimeEntity",
+    "MixinSpreadableBlock"
+  ],
+  "client": [
+    "client.MixinBackgroundRenderer",
+    "client.MixinBoatEntityRenderer",
+    "client.MixinRenderLayers",
+    "client.MixinSignBlockEntityRenderer",
+    "client.MixinTexturedRenderLayers"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
