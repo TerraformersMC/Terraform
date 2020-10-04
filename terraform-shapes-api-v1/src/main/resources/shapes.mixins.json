@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.cumulus.shapes.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

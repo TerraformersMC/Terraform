@@ -1,14 +1,10 @@
-package com.terraformersmc.terraform.biome.builder;
+package com.terraformersmc.terraform.biomebuilder;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
-import net.minecraft.world.biome.BiomeParticleConfig;
 import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BuilderBiomeSettings implements Cloneable {
 	protected ConfiguredSurfaceBuilder<?> surfaceBuilder;

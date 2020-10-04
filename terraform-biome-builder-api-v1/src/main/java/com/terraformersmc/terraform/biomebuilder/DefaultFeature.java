@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.biome.builder;
+package com.terraformersmc.terraform.biomebuilder;
 
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures;

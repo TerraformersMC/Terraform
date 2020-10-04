@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "terraform-wood-api-v1",
-  "name": "Terraform Wood API (v1)",
+  "id": "terraform-legacy-v0",
+  "name": "Terraform Legacy (v0)",
   "version": "$version",
   "environment": "*",
   "entrypoints": {
 
   },
   "license": "LGPL-3.0",
-  "icon": "assets/terraform-wood-api-v1/icon.png",
+  "icon": "assets/terraform-legacy-v0/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
@@ -26,7 +26,7 @@
     "NeusFear",
     "Wtoll"
   ],
-  "description": "Adds an API for adding wood stuff easier",
+  "description": "DEPRECATED, WILL BE REMOVED. LEGACY TERRAFORM BITS THAT HAVE NOT BEEN MODULARIZED YET",
   "custom": {
     "modmenu:api": true
   },

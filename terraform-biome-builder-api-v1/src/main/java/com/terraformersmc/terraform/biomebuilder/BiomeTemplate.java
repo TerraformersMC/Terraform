@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.biome.builder;
+package com.terraformersmc.terraform.biomebuilder;
 
 public final class BiomeTemplate {
 	private final TerraformBiomeBuilder builder;

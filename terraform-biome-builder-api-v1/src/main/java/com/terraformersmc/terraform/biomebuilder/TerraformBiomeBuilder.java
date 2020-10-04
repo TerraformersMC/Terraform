@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.biome.builder;
+package com.terraformersmc.terraform.biomebuilder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;

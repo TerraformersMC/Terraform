@@ -75,11 +75,6 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
 	}
-
-	task sourcesJar(type: Jar, dependsOn: classes) {
-		classifier = "sources"
-		from sourceSets.main.allSource
-	}
 }
 
 subprojects {
@@ -103,9 +98,6 @@ subprojects {
 					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
 						builtBy remapMavenJar
 					}
-					artifact(sourcesJar) {
-						builtBy remapSourcesJar
-					}
 				}
 			}
 		}
@@ -114,39 +106,6 @@ subprojects {
 	}
 
 	javadoc.enabled = false
-}
-
-task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
-	afterEvaluate {
-		input = file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar")
-		archiveName = "${archivesBaseName}-${version}-maven.jar"
-		addNestedDependencies = false
-	}
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
-				builtBy remapMavenJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-			pom.withXml {
-				def depsNode = asNode().appendNode("dependencies")
-				subprojects.each {
-					def depNode = depsNode.appendNode("dependency")
-					depNode.appendNode("groupId", it.group)
-					depNode.appendNode("artifactId", it.name)
-					depNode.appendNode("version", it.version)
-					depNode.appendNode("scope", "compile")
-				}
-			}
-		}
-	}
-
-	setupRepositories(repositories)
 }
 
 void setupRepositories(RepositoryHandler repositories) {
@@ -171,3 +130,14 @@ dependencies {
 	}
 }
 
+task buildTerraform {
+	subprojects.each {
+		subprojects.each { dependsOn("${it.name}:build") }
+	}
+}
+
+task publishTerraform {
+	subprojects.each {
+		subprojects.each { dependsOn("${it.name}:publish") }
+	}
+}
