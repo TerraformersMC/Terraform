@@ -76,7 +76,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 		builder.temperature(this.temperature);
 		builder.effects(this.effects.build());
 
-		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+		GenerationSettings.Builder generationSettings = new GenerationSettings.Builder().surfaceBuilder(this.surfaceBuilder);
 
 		// Set grass and foliage colors
 		// todo: grass and foliage
@@ -101,7 +101,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 			generationSettings.structureFeature(structure);
 		}
 
-		// Tree Feature stuff
+		/*// Tree Feature stuff
 		if (treeFeatures.size() > 0) {
 
 			// Determine the total tree count
@@ -136,7 +136,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 					GenerationStep.Feature.VEGETAL_DECORATION,
 					feature.decorate(Decorator.CHANCE.configure(new ChanceDecoratorConfig(chance)))
 			);
-		}
+		}*/
 
 		// Add any minecraft (default) features
 
@@ -150,7 +150,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 			generationSettings.feature(feature.getStep(), feature.getFeature());
 		}
 
-		// Add Plant decoration features
+		/*// Add Plant decoration features
 
 		WeightedBlockStateProvider weightedStateProvider = new WeightedBlockStateProvider();
 		int chanceTotal = 0;
@@ -179,9 +179,9 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 									.build())
 							.decorate(
 									ConfiguredFeatures.Decorators.SQUARE_HEIGHTMAP));
-		}
+		}*/
 
-		builder.generationSettings(generationSettings.surfaceBuilder(this.surfaceBuilder).build());
+		builder.generationSettings(generationSettings.build());
 
 		builder.spawnSettings(spawnSettings.build());
 		Biome biome = builder.build();
@@ -280,7 +280,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 		return this;
 	}
 
-	public TerraformBiomeBuilder addCustomFeature(GenerationStep.Feature step, ConfiguredFeature feature) {
+	public TerraformBiomeBuilder addFeature(GenerationStep.Feature step, ConfiguredFeature feature) {
 		this.features.add(new FeatureEntry(step, feature));
 		return this;
 	}
