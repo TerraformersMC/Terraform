@@ -1,13 +1,13 @@
 plugins {
-    id 'java'
-    id 'maven-publish'
-    id 'idea'
-    id 'eclipse'
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'java'
+	id 'maven-publish'
+	id 'idea'
+	id 'eclipse'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 }
 
 static def formatVersion(project, version) {
-	return version + "+" + (System.getenv().BUILD_NUMBER ? ("build." + System.getenv().BUILD_NUMBER) : "custom");
+	return version + version.endsWith("-SNAPSHOT") ? ("+" + (System.getenv().BUILD_NUMBER ? ("build." + System.getenv().BUILD_NUMBER) : "custom")) : "";
 }
 
 allprojects {
