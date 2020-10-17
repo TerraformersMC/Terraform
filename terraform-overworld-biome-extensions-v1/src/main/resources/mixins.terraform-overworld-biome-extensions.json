@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.overworldbiomes.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinEaseBiomeEdgeLayer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

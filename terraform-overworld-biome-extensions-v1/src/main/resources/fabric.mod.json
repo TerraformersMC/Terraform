@@ -4,17 +4,11 @@
   "name": "Terraform Biome API (v1)",
   "version": "$version",
   "environment": "*",
-  "entrypoints": {
-
-  },
   "license": "LGPL-3.0",
   "icon": "assets/terraform-biome-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
-  },
-  "depends": {
-    "fabric": "*"
   },
   "authors": [
     "Prospector",
@@ -26,11 +20,11 @@
     "NeusFear",
     "Wtoll"
   ],
-  "description": "Adds an API for adding biomes and making biomes generate",
+  "description": "Extensions to the Fabric Biomes API enabling more advanced biome generation",
   "custom": {
     "modmenu:api": true
   },
   "mixins": [
-
+    "mixins.terraform-overworld-biome-extensions.json"
   ]
 }
