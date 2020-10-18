@@ -33,32 +33,32 @@ public class BoatSpawnNetworkHandler {
 		byte pitch = buffer.readByte();
 		byte yaw = buffer.readByte();
 
-		Entity entity = type.create(client.world);
+		if (client.isOnThread()) {
+			spawn(client, id, uuid, type, x, y, z, pitch, yaw);
+		} else {
+			client.execute(() -> spawn(client, id, uuid, type, x, y, z, pitch, yaw));
+		}
+	}
+
+	private static void spawn(MinecraftClient client, int id, UUID uuid, EntityType type, double x, double y, double z, byte pitch, byte yaw) {
+		ClientWorld world = client.world;
+
+		if (world == null) {
+			return;
+		}
+
+		Entity entity = type.create(world);
 
 		if (entity == null) {
 			return;
 		}
-		
+
 		entity.setEntityId(id);
 		entity.setUuid(uuid);
 		entity.updatePosition(x, y, z);
 		entity.updateTrackedPosition(x, y, z);
 		entity.pitch = pitch * 360 / 256F;
 		entity.yaw = yaw * 360 / 256F;
-
-		if (client.isOnThread()) {
-			spawn(client, entity);
-		} else {
-			client.execute(() -> spawn(client, entity));
-		}
-	}
-
-	private static void spawn(MinecraftClient client, Entity entity) {
-		final ClientWorld world = client.world;
-		
-		if (world == null) {
-			return;
-		}
 
 		world.addEntity(entity.getEntityId(), entity);
 	}
