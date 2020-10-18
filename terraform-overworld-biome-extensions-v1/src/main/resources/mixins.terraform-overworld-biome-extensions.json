@@ -3,6 +3,7 @@
   "package": "com.terraformersmc.terraform.overworldbiomes.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BuiltinBiomesAccessor",
     "MixinEaseBiomeEdgeLayer"
   ],
   "injectors": {
