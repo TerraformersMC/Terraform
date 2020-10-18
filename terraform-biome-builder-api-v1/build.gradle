@@ -1,5 +1,5 @@
 archivesBaseName = "terraform-biome-builder-api-v1"
-version = formatVersion(project, "0.1.0-SNAPSHOT")
+version = formatVersion(project, "0.1.1-SNAPSHOT")
 
 dependencies {
 	modImplementation fabricApi.module("fabric-biome-api-v1", project.fabric_version)

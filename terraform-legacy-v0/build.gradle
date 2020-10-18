@@ -1,5 +1,5 @@
 archivesBaseName = "terraform-legacy-v0"
-version = formatVersion(project, "0.1.0-SNAPSHOT")
+version = formatVersion(project, "0.1.1-SNAPSHOT")
 
 dependencies {
 	modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
