@@ -1,5 +1,4 @@
-package com.terraformersmc.terraform.block;
-
+package com.terraformersmc.terraform.dirt.block;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -21,7 +20,7 @@ import java.util.Random;
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
  */
 public class TerraformFarmlandBlock extends FarmlandBlock {
-	private static Block trampled; //sets the block to revert to when trampled
+	private Block trampled; //sets the block to revert to when trampled
 
 	public TerraformFarmlandBlock(Settings settings, Block trampled) {
 		super(settings);
@@ -52,7 +51,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 		}
 	}
 
-	public static void setToCustomDirt(BlockState state, World world, BlockPos pos) {
+	public void setToCustomDirt(BlockState state, World world, BlockPos pos) {
 		world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(state, trampled.getDefaultState(), world, pos));
 	}
 

@@ -1,5 +1,6 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.dirt.mixin;
 
+import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,14 +16,12 @@ import net.minecraft.block.StemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
-import com.terraformersmc.terraform.tag.TerraformBlockTags;
-
 @Mixin({AttachedStemBlock.class, CropBlock.class, StemBlock.class, PlantBlock.class})
 public class MixinPlantingOnFarmland {
 	@Inject(method = "canPlantOnTop", at = @At("HEAD"), cancellable = true)
 	private void onCanPlantOnTop(BlockState floor, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
 		Block block = floor.getBlock();
-		if (block instanceof FarmlandBlock && block.isIn(TerraformBlockTags.FARMLAND)) {
+		if (block instanceof FarmlandBlock && block.isIn(TerraformDirtBlockTags.FARMLAND)) {
 			callback.setReturnValue(true);
 		}
 	}

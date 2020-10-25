@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.block;
+package com.terraformersmc.terraform.dirt.block;
 
 import net.minecraft.block.SnowyBlock;
 

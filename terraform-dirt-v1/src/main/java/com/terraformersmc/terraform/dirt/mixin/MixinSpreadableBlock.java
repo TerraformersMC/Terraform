@@ -1,6 +1,5 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.dirt.mixin;
 
-import com.terraformersmc.terraform.block.TerraformGrassBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -8,6 +7,8 @@ import net.minecraft.block.SpreadableBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
+
+import com.terraformersmc.terraform.dirt.block.TerraformGrassBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,5 +1,6 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.dirt.mixin;
 
+import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +15,6 @@ import net.minecraft.block.FarmlandBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
-import com.terraformersmc.terraform.tag.TerraformBlockTags;
-
 @Mixin(targets = "net.minecraft.entity.passive.RabbitEntity$EatCarrotCropGoal")
 public class MixinRabbitEntity {
 
@@ -27,7 +26,7 @@ public class MixinRabbitEntity {
 
 	@Inject(method = "isTargetPos(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Z", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info, Block block) {
-		if (block instanceof FarmlandBlock && block.isIn(TerraformBlockTags.FARMLAND) && this.wantsCarrots && !this.hasTarget) {
+		if (block instanceof FarmlandBlock && block.isIn(TerraformDirtBlockTags.FARMLAND) && this.wantsCarrots && !this.hasTarget) {
 			pos = pos.up();
 			BlockState state = world.getBlockState(pos);
 			block = state.getBlock();
