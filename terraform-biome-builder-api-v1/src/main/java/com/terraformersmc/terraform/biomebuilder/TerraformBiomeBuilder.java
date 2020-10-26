@@ -24,7 +24,6 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 	private final ArrayList<SpawnSettings.SpawnEntry> spawnEntries = new ArrayList<>();
 	private float spawnChance = -1.0F;
 	private boolean template = false;
-	private boolean surfaceSlimeSpawns = false;
 	private boolean playerSpawnFriendly = false;
 	// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
@@ -43,7 +42,6 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 		this.spawnEntries.addAll(existing.spawnEntries);
 
 		this.spawnChance = existing.spawnChance;
-		this.surfaceSlimeSpawns = existing.surfaceSlimeSpawns;
 		this.playerSpawnFriendly = existing.playerSpawnFriendly;
 	}
 
@@ -72,11 +70,6 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 
 		for (SpawnSettings.SpawnEntry spawnEntry : spawnEntries) {
 			spawnSettings.spawn(spawnEntry.type.getSpawnGroup(), spawnEntry);
-		}
-
-		// Slimes will spawn on the surface at night
-		if (surfaceSlimeSpawns) {
-			((PrivateSlimeSpawnData.BuilderExtension) builder).surfaceSlimeSpawns();
 		}
 
 		if (playerSpawnFriendly) {
@@ -237,11 +230,6 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 				.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.SLIME, 100, 4, 4))
 				.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
 				.addSpawnEntry(new SpawnSettings.SpawnEntry(EntityType.WITCH, 5, 1, 1));
-		return this;
-	}
-
-	public TerraformBiomeBuilder surfaceSlimeSpawns() {
-		surfaceSlimeSpawns = true;
 		return this;
 	}
 

@@ -7,10 +7,13 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
+
+import com.terraformersmc.terraform.biomebuilder.TerraformSlimeSpawnBiomes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,8 +33,8 @@ public abstract class MixinSlimeEntity extends MobEntity implements Monster {
 			return; // Delegate back to vanilla
 		}
 
-		Biome biome = world.getBiome(pos);
-		boolean hasSurfaceSlimeSpawns = ((PrivateSlimeSpawnData.BiomeExtension) (Object) biome).hasSurfaceSlimeSpawns();
+		RegistryKey<Biome> biomeKey = world.method_31081(pos).orElse(null);
+		boolean hasSurfaceSlimeSpawns = TerraformSlimeSpawnBiomes.getSlimeSpawnBiomes().contains(biomeKey);
 
 		// Handle spawning for biomes registered as slime-spawnable
 		if (hasSurfaceSlimeSpawns && pos.getY() > 50 && pos.getY() < 70 && random.nextFloat() < 0.5F && random.nextFloat() < world.getMoonSize() && world.getLightLevel(pos) <= random.nextInt(8)) {
