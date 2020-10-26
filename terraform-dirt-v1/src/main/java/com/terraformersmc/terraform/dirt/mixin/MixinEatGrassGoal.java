@@ -29,27 +29,29 @@ public class MixinEatGrassGoal {
 	@Final
 	private World world;
 
-	@Inject(method = "canStart", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;GRASS_BLOCK:Lnet/minecraft/block/Block;"), cancellable = true)
+	private static final String GRASS_BLOCK = "Lnet/minecraft/block/Blocks;GRASS_BLOCK:Lnet/minecraft/block/Block;";
+
+	@Inject(method = "canStart", at = @At(value = "FIELD", target = GRASS_BLOCK), cancellable = true)
 	private void terraform$startOnCustomGrass(CallbackInfoReturnable<Boolean> callbackInfo) {
-		BlockPos pos = this.mob.getPositionTarget();
+		BlockPos pos = this.mob.getBlockPos();
 
 		if (this.world.getBlockState(pos.down()).isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
 			callbackInfo.setReturnValue(true);
 		}
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;down()Lnet/minecraft/util/math/BlockPos;"))
+	@Inject(method = "tick", at = @At(value = "FIELD", target = GRASS_BLOCK))
 	private void terraform$finishEatingOnCustomGrass(CallbackInfo info) {
-		BlockPos pos = this.mob.getBlockPos().down();
-		BlockState down = this.world.getBlockState(pos.down());
+		BlockPos downPos = this.mob.getBlockPos().down();
+		BlockState down = this.world.getBlockState(downPos);
 
 		if (down.isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
 			if (this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
-				this.world.syncWorldEvent(2001, pos, Block.getRawIdFromState(Blocks.GRASS_BLOCK.getDefaultState()));
+				this.world.syncWorldEvent(2001, downPos, Block.getRawIdFromState(Blocks.GRASS_BLOCK.getDefaultState()));
 
 				Block replacement = TerraformDirtRegistry.getByGrassBlock(down.getBlock()).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
 
-				this.world.setBlockState(pos, replacement.getDefaultState(), 2);
+				this.world.setBlockState(downPos, replacement.getDefaultState(), 2);
 			}
 
 			this.mob.onEatingGrass();

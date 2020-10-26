@@ -12,7 +12,6 @@ public class TerraformDirtBlockTags {
 	 */
 	public static final Tag<Block> SOIL = register("soil");
 	public static final Tag<Block> GRASS_BLOCKS = register("grass_blocks");
-	public static final Tag<Block> PODZOL = register("podzol");
 	public static final Tag<Block> FARMLAND = register("farmland");
 
 	private TerraformDirtBlockTags() {

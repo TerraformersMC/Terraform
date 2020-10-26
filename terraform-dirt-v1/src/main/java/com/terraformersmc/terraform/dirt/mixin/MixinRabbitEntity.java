@@ -30,6 +30,7 @@ public class MixinRabbitEntity {
 			pos = pos.up();
 			BlockState state = world.getBlockState(pos);
 			block = state.getBlock();
+
 			if (block instanceof CarrotsBlock && ((CarrotsBlock) block).isMature(state)) {
 				this.hasTarget = true;
 				info.setReturnValue(true);
