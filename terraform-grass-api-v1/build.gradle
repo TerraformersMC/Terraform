@@ -1,6 +1,0 @@
-archivesBaseName = "terraform-grass-api-v1"
-version = formatVersion(project, "0.1.0-SNAPSHOT")
-
-dependencies {
-
-}

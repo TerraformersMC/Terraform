@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.boat.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinBoatEntityRenderer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

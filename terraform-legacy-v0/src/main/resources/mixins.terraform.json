@@ -4,15 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "InvokerFoliagePlacerType",
-    "InvokerTrunkPlacerType",
-    "MixinBlockEntityType"
+    "InvokerTrunkPlacerType"
   ],
   "client": [
-    "client.MixinBackgroundRenderer",
-    "client.MixinBoatEntityRenderer",
-    "client.MixinRenderLayers",
-    "client.MixinSignBlockEntityRenderer",
-    "client.MixinTexturedRenderLayers"
+    "client.MixinBackgroundRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

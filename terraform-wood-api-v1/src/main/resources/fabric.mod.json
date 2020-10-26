@@ -1,18 +1,22 @@
 {
   "schemaVersion": 1,
-  "id": "terraform-legacy-v0",
-  "name": "Terraform Legacy (v0)",
+  "id": "terraform-wood-api-v1",
+  "name": "Terraform Wood API (v1)",
   "version": "$version",
   "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.terraformersmc.terraform.boat.BoatSpawnNetworkHandler::register"
+    ]
+  },
   "license": "LGPL-3.0",
-  "icon": "assets/terraform-legacy-v0/icon.png",
+  "icon": "assets/terraform-wood-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
   "depends": {
-    "fabric-networking-v0": "*",
-    "fabric-object-builder-api-v1": "*"
+    "fabric": "*"
   },
   "authors": [
     "Prospector",
@@ -24,11 +28,11 @@
     "NeusFear",
     "Wtoll"
   ],
-  "description": "DEPRECATED, WILL BE REMOVED. LEGACY TERRAFORM BITS THAT HAVE NOT BEEN MODULARIZED YET",
+  "description": "Adds an API for adding custom wood types",
   "custom": {
     "modmenu:api": true
   },
   "mixins": [
-    "mixins.terraform.json"
+
   ]
 }
