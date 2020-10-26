@@ -17,11 +17,29 @@ public class TerraformDirtRegistry {
 	private static final List<DirtBlocks> TYPES = new ArrayList<>();
 	private static final Map<Block, DirtBlocks> BY_GRASS_BLOCK = new HashMap<>();
 
+	/**
+	 * Registers a new set of dirt blocks to Terraform.
+	 *
+	 * <p>This is needed to make sure that the dirt can be tilled into farmland, that plants and saplings will work with
+	 * your dirt, and make most other interactions work.</p>
+	 *
+	 * <p>Please note that you must add your blocks to the correct {@link TerraformDirtBlockTags tags}</p> as well, or
+	 * else things will not work properly!</p>
+	 *
+	 * @param blocks the DirtBlocks to register with Terraform. Note that you are still responsible for registering the
+	 *               block instances with {@link net.minecraft.util.registry.Registry#BLOCK} yourself, this method does
+	 *               not do that for you.
+	 * @return the registered DirtBlocks instance for convenience
+	 */
 	public static DirtBlocks register(DirtBlocks blocks) {
 		Objects.requireNonNull(blocks);
 
 		TYPES.add(blocks);
 		BY_GRASS_BLOCK.put(blocks.getGrassBlock(), blocks);
+
+		TillableBlockRegistry.add(blocks.getDirt(), blocks.getFarmland().getDefaultState());
+		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmland().getDefaultState());
+		TillableBlockRegistry.add(blocks.getGrassPath(), blocks.getFarmland().getDefaultState());
 
 		return blocks;
 	}

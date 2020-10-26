@@ -6,11 +6,7 @@
     "InvokerFoliagePlacerType",
     "InvokerTrunkPlacerType",
     "MixinBlockEntityType",
-    "MixinCropBlock",
-    "MixinPlantingOnFarmland",
-    "MixinRabbitEntity",
-    "MixinSlimeEntity",
-    "MixinSpreadableBlock"
+    "MixinSlimeEntity"
   ],
   "client": [
     "client.MixinBackgroundRenderer",

@@ -17,7 +17,6 @@ import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilder.SurfaceConfig;
 
-
 public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 	private final ArrayList<DefaultFeature> defaultFeatures = new ArrayList<>();
 	private final ArrayList<FeatureEntry> features = new ArrayList<>();
