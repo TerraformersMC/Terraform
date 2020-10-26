@@ -28,6 +28,6 @@
     "modmenu:api": true
   },
   "mixins": [
-
+    "mixins.terraform-biome-builder.json"
   ]
 }

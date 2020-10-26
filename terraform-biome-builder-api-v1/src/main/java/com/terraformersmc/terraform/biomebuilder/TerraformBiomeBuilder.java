@@ -22,9 +22,9 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 	private final ArrayList<FeatureEntry> features = new ArrayList<>();
 	private final ArrayList<ConfiguredStructureFeature<? extends FeatureConfig, ? extends StructureFeature<? extends FeatureConfig>>> structureFeatures = new ArrayList<>();
 	private final ArrayList<SpawnSettings.SpawnEntry> spawnEntries = new ArrayList<>();
-	private float spawnChance = -1;
+	private float spawnChance = -1.0F;
 	private boolean template = false;
-	private boolean slimeSpawnBiome = false;
+	private boolean surfaceSlimeSpawns = false;
 	private boolean playerSpawnFriendly = false;
 	// NOTE: Make sure to add any additional fields to the Template copy code down below!
 
@@ -43,7 +43,7 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 		this.spawnEntries.addAll(existing.spawnEntries);
 
 		this.spawnChance = existing.spawnChance;
-		this.slimeSpawnBiome = existing.slimeSpawnBiome;
+		this.surfaceSlimeSpawns = existing.surfaceSlimeSpawns;
 		this.playerSpawnFriendly = existing.playerSpawnFriendly;
 	}
 
@@ -66,16 +66,17 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 
 		SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 		// Set spawn chance
-		// todo: set spawn chance
-		spawnSettings.creatureSpawnProbability(this.spawnChance);
+		if (this.spawnChance != -1.0F) {
+			spawnSettings.creatureSpawnProbability(this.spawnChance);
+		}
+
 		for (SpawnSettings.SpawnEntry spawnEntry : spawnEntries) {
 			spawnSettings.spawn(spawnEntry.type.getSpawnGroup(), spawnEntry);
 		}
 
-		// Add as a slime spawn biome if needed
-		if (this.slimeSpawnBiome) {
-			//todo: slime biomes
-//			TerraformBiomeSets.addSlimeSpawnBiome(biome);
+		// Slimes will spawn on the surface at night
+		if (surfaceSlimeSpawns) {
+			((PrivateSlimeSpawnData.BuilderExtension) builder).surfaceSlimeSpawns();
 		}
 
 		if (playerSpawnFriendly) {
@@ -239,8 +240,8 @@ public final class TerraformBiomeBuilder extends BuilderBiomeSettings {
 		return this;
 	}
 
-	public TerraformBiomeBuilder slimeSpawnBiome() {
-		slimeSpawnBiome = true;
+	public TerraformBiomeBuilder surfaceSlimeSpawns() {
+		surfaceSlimeSpawns = true;
 		return this;
 	}
 

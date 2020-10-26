@@ -5,8 +5,7 @@
   "mixins": [
     "InvokerFoliagePlacerType",
     "InvokerTrunkPlacerType",
-    "MixinBlockEntityType",
-    "MixinSlimeEntity"
+    "MixinBlockEntityType"
   ],
   "client": [
     "client.MixinBackgroundRenderer",
