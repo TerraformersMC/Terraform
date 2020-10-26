@@ -1,6 +1,5 @@
 package com.terraformersmc.terraform.biomebuilder.mixin;
 
-import com.terraformersmc.terraform.biomebuilder.PrivateSlimeSpawnData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;

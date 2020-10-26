@@ -3,8 +3,6 @@
   "package": "com.terraformersmc.terraform.biomebuilder.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinBiome",
-    "MixinBiomeBuilder",
     "MixinSlimeEntity"
   ],
   "injectors": {
