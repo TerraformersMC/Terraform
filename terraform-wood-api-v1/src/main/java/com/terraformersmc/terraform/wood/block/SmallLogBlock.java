@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.block;
+package com.terraformersmc.terraform.wood.block;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;

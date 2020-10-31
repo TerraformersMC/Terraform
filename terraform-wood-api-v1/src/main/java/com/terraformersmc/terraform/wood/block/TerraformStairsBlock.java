@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.block;
+package com.terraformersmc.terraform.wood.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.StairsBlock;

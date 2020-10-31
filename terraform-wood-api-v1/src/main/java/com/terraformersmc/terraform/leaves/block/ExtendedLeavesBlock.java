@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.block;
+package com.terraformersmc.terraform.leaves.block;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

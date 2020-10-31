@@ -10,9 +10,6 @@
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
-  "depends": {
-    "fabric": "*"
-  },
   "authors": [
     "Prospector",
     "coderbot16",

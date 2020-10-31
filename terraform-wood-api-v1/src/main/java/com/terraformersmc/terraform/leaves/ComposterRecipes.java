@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.leaves;
 
-import com.terraformersmc.terraform.block.ExtendedLeavesBlock;
-import com.terraformersmc.terraform.block.LeafPileBlock;
+import com.terraformersmc.terraform.leaves.block.ExtendedLeavesBlock;
+import com.terraformersmc.terraform.leaves.block.LeafPileBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ComposterBlock;
