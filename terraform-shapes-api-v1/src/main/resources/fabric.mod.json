@@ -23,5 +23,5 @@
   "description": "Adds an API for dealing with shapes",
   "custom": {
     "modmenu:api": true
-  },
+  }
 }
