@@ -1,5 +1,5 @@
 archivesBaseName = "terraform-wood-api-v1"
-version = formatVersion(project, "0.1.1-SNAPSHOT")
+version = formatVersion(project, "1.0.0")
 
 dependencies {
 	modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
