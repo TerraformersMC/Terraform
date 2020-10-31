@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "terraform-tree-api-v1",
+  "name": "Terraform Tree API (v1)",
+  "version": "$version",
+  "environment": "*",
+  "license": "LGPL-3.0",
+  "icon": "assets/terraform-tree-api-v1/icon.png",
+  "contact": {
+    "homepage": "https://github.com/TerraformersMC/Terraform",
+    "issues": "https://github.com/TerraformersMC/Terraform/issues"
+  },
+  "authors": [
+    "Prospector",
+    "coderbot16",
+    "TerraformersMC"
+  ],
+  "contributors": [
+    "SuperCoder79",
+    "NeusFear",
+    "Wtoll"
+  ],
+  "description": "Interfaces for adding custom trees as well as some common code for compatibility between mods",
+  "custom": {
+    "modmenu:api": true
+  },
+  "mixins": [
+    "mixins.terraform-tree-api-v1.json"
+  ]
+}

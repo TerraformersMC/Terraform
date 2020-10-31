@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.block;
+package com.terraformersmc.terraform.tree.block;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SaplingBlock;

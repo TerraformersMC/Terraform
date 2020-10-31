@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.placer;
+package com.terraformersmc.terraform.tree.placer;
 
 import com.mojang.serialization.Codec;
 import com.terraformersmc.terraform.mixin.InvokerFoliagePlacerType;

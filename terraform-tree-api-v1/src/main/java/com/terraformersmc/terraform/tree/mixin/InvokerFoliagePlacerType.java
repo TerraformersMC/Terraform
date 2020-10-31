@@ -1,4 +1,4 @@
-package com.terraformersmc.terraform.mixin;
+package com.terraformersmc.terraform.tree.mixin;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.world.gen.foliage.FoliagePlacer;

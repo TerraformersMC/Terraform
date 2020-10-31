@@ -16,6 +16,7 @@ include 'terraform-dirt-v1'
 include 'terraform-overworld-biome-extensions-v1'
 include 'terraform-shapes-api-v1'
 include 'terraform-surfaces-api-v1'
+include 'terraform-tree-api-v1'
 include 'terraform-wood-api-v1'
 
 include 'terraform-legacy-v0'

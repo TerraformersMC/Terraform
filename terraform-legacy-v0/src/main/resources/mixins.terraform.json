@@ -1,13 +1,9 @@
 {
   "required": true,
-  "package": "com.terraformersmc.terraform.mixin",
+  "package": "com.terraformersmc.terraform.mixin.client",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "InvokerFoliagePlacerType",
-    "InvokerTrunkPlacerType"
-  ],
   "client": [
-    "client.MixinBackgroundRenderer"
+    "MixinBackgroundRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
