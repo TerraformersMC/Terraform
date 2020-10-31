@@ -1,17 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "terraform-dirt-v1",
-  "name": "Terraform Dirt (v1)",
+  "id": "terraform-overworld-biome-extensions-api-v1",
+  "name": "Terraform Overworld Biome Extensions API (v1)",
   "version": "$version",
   "environment": "*",
   "license": "LGPL-3.0",
-  "icon": "assets/terraform-dirt-v1/icon.png",
+  "icon": "assets/terraform-biome-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
-  },
-  "depends": {
-    "fabric-tag-extensions-v0": "*"
   },
   "authors": [
     "Prospector",
@@ -23,11 +20,11 @@
     "NeusFear",
     "Wtoll"
   ],
-  "description": "Makes adding custom dirt/grass/podzol/etc blocks much simpler",
+  "description": "Extensions to the Fabric Biomes API enabling more advanced biome generation",
   "custom": {
     "modmenu:api": true
   },
   "mixins": [
-    "mixins.terraform-dirt.json"
+    "mixins.terraform-overworld-biome-extensions.json"
   ]
 }

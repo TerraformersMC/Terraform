@@ -13,8 +13,8 @@ rootProject.name = "terraform-api"
 
 include 'terraform-biome-builder-api-v1'
 include 'terraform-config-api-v1'
-include 'terraform-dirt-v1'
-include 'terraform-overworld-biome-extensions-v1'
+include 'terraform-dirt-api-v1'
+include 'terraform-overworld-biome-extensions-api-v1'
 include 'terraform-shapes-api-v1'
 include 'terraform-surfaces-api-v1'
 include 'terraform-tree-api-v1'
