@@ -21,7 +21,7 @@ import net.minecraft.world.gen.tree.AlterGroundTreeDecorator;
 @Mixin(AlterGroundTreeDecorator.class)
 public class MixinAlterGroundTreeDecorator {
 	// prepareGroundColumn
-	@Inject(method = "method_23463", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "method_23463(Lnet/minecraft/world/ModifiableTestableWorld;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;)V", at = @At("HEAD"), cancellable = true)
 	private void terraform$allowCustomPodzolPlacement(ModifiableTestableWorld world, Random random, BlockPos pos, CallbackInfo callback) {
 		for(int i = 2; i >= -3; --i) {
 			BlockPos posUp = pos.up(i);

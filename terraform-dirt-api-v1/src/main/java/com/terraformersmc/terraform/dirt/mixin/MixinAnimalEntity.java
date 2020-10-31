@@ -16,7 +16,7 @@ import net.minecraft.world.WorldAccess;
 
 @Mixin(AnimalEntity.class)
 public class MixinAnimalEntity {
-	@Inject(method = "isValidNaturalSpawn", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "isValidNaturalSpawn(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)Z", at = @At("HEAD"), cancellable = true)
 	private static void terraform$spawnOnCustomGrass(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
 		if(TerraformDirtBlockTags.GRASS_BLOCKS.contains(world.getBlockState(pos.down()).getBlock()) && world.getBaseLightLevel(pos, 0) > 8) {
 			cir.setReturnValue(true);
