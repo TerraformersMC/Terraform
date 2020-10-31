@@ -26,8 +26,6 @@ public class TerraformBoatEntity extends BoatEntity {
 	public TerraformBoatEntity(EntityType<? extends TerraformBoatEntity> type, World world, TerraformBoat boat) {
 		super(type, world);
 
-		System.out.println("Creating a new TerraformBoatEntity: " + world);
-
 		this.boat = boat;
 	}
 
