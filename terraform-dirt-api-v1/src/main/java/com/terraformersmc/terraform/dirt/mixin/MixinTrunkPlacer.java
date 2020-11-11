@@ -17,7 +17,7 @@ import net.minecraft.world.gen.trunk.TrunkPlacer;
 
 @Mixin(TrunkPlacer.class)
 public class MixinTrunkPlacer {
-	@Inject(method = "method_27400", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "setToDirt", at = @At("HEAD"), cancellable = true)
 	private static void notAlwaysDirt(ModifiableTestableWorld world, BlockPos pos, CallbackInfo ci) {
 		if (!world.testBlockState(pos, state -> state.isIn(TerraformDirtBlockTags.SOIL))) {
 			return;
