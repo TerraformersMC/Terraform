@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MaterialColor;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class StrippableLogBlock extends PillarBlock {
 	private Supplier<Block> stripped;
 
-	public StrippableLogBlock(Supplier<Block> stripped, MaterialColor top, Settings settings) {
+	public StrippableLogBlock(Supplier<Block> stripped, MapColor top, Settings settings) {
 		super(settings);
 
 		this.stripped = stripped;

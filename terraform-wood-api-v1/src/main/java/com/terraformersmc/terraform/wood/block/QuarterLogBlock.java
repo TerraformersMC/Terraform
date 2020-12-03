@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MaterialColor;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,7 @@ public class QuarterLogBlock extends PillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 	private final Supplier<Block> stripped;
 
-	public QuarterLogBlock(Supplier<Block> stripped, MaterialColor color, Block.Settings settings) {
+	public QuarterLogBlock(Supplier<Block> stripped, MapColor color, Block.Settings settings) {
 		super(settings);
 
 		this.stripped = stripped;

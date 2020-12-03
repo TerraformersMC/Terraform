@@ -5,7 +5,7 @@
   "mixins": [
 	"MixinAlterGroundTreeDecorator",
 	"MixinAnimalEntity",
-	"MixinCropBlock",
+	//TODO: UNDO this "MixinCropBlock",
 	"MixinEatGrassGoal",
 	"MixinFeature",
 	"MixinPlantBlock",

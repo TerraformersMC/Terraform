@@ -77,8 +77,8 @@ public class TerraformBoatEntity extends BoatEntity {
 				}
 
 				this.handleFallDamage(this.fallDistance, 1.0F);
-				if (!this.world.isClient && !this.removed) {
-					this.remove();
+				if (!this.world.isClient && !this.isRemoved()) {
+					this.remove(RemovalReason.KILLED);
 					if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
 						for(int i = 0; i < 3; i++) {
 							this.dropItem(this.asPlanks());
