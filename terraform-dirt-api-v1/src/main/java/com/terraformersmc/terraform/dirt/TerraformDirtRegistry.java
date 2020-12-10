@@ -16,6 +16,7 @@ import net.minecraft.world.TestableWorld;
 public class TerraformDirtRegistry {
 	private static final List<DirtBlocks> TYPES = new ArrayList<>();
 	private static final Map<Block, DirtBlocks> BY_GRASS_BLOCK = new HashMap<>();
+	private static final Map<Block, DirtBlocks> BY_FARMLAND = new HashMap<>();
 
 	/**
 	 * Registers a new set of dirt blocks to Terraform.
@@ -36,6 +37,7 @@ public class TerraformDirtRegistry {
 
 		TYPES.add(blocks);
 		BY_GRASS_BLOCK.put(blocks.getGrassBlock(), blocks);
+		BY_FARMLAND.put(blocks.getFarmland(), blocks);
 
 		TillableBlockRegistry.add(blocks.getDirt(), blocks.getFarmland().getDefaultState());
 		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmland().getDefaultState());
@@ -61,5 +63,9 @@ public class TerraformDirtRegistry {
 
 	public static Optional<DirtBlocks> getByGrassBlock(Block grass) {
 		return Optional.ofNullable(BY_GRASS_BLOCK.get(grass));
+	}
+
+	public static Optional<DirtBlocks> getByFarmland(Block farmland) {
+		return Optional.ofNullable(BY_FARMLAND.get(farmland));
 	}
 }
