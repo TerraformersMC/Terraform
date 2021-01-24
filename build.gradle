@@ -99,7 +99,7 @@ subprojects {
 				def xml = new URL("http://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
 				def metadata = new XmlSlurper().parseText(xml)
 				def versions = metadata.versioning.versions.version*.text();
-				if (!versions.contains(version)) {
+				if (versions.contains(version)) {
 					println "$archivesBaseName version $version will not be published; already exists"
 				} else {
 					println "$archivesBaseName version $version will be published"
@@ -114,6 +114,7 @@ subprojects {
 
 	publishing {
 		if (shouldPublishBuild) {
+			println "Setting up maven publishing"
 			publications {
 				mavenJava(MavenPublication) {
 					afterEvaluate {
