@@ -22,7 +22,7 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew checkVersion publishTerraform --stacktrace --parallel
+        run: ./gradlew publishTerraform --stacktrace --parallel
         env:
           MAVEN_URL: ${{ secrets.MAVEN_URL }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
