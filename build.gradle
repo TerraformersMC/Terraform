@@ -79,6 +79,8 @@ allprojects {
 
 subprojects {
 
+	ext.shouldPublishBuild = false
+
 	dependencies {
 		testmodCompile sourceSets.main.output
 	}
@@ -97,29 +99,30 @@ subprojects {
 				def xml = new URL("http://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
 				def metadata = new XmlSlurper().parseText(xml)
 				def versions = metadata.versioning.versions.version*.text();
-				if (versions.contains(version)) {
-					throw new RuntimeException("${version} of $archivesBaseName has already been released!")
+				if (!versions.contains(version)) {
+					shouldPublishBuild = true
 				}
 			} catch (FileNotFoundException e) {
 				println "$archivesBaseName is not on maven yet"
+				shouldPublishBuild = true
 			}
 		}
 	}
 
-	publish.mustRunAfter checkVersion
-
 	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				afterEvaluate {
-					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
-						builtBy remapMavenJar
+		if (shouldPublishBuild) {
+			publications {
+				mavenJava(MavenPublication) {
+					afterEvaluate {
+						artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
+							builtBy remapMavenJar
+						}
 					}
 				}
 			}
-		}
 
-		setupRepositories(repositories)
+			setupRepositories(repositories)
+		}
 	}
 
 	javadoc.enabled = false
