@@ -93,7 +93,7 @@ subprojects {
 
 	task checkVersion {
 		doFirst {
-			def xml = new URL("https://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
+			def xml = new URL("http://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
 			def metadata = new XmlSlurper().parseText(xml)
 			def versions = metadata.versioning.versions.version*.text();
 			if (versions.contains(version)) {
