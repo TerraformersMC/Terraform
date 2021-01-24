@@ -154,13 +154,14 @@ task publishTerraformLocally {
 	}
 }
 
-boolean checkVersion(archivesBaseName, version) {
+ext.checkVersion = { archivesBaseName, version ->
 	try {
 		def xml = new URL("http://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
 		def metadata = new XmlSlurper().parseText(xml)
 		def versions = metadata.versioning.versions.version*.text();
 		if (versions.contains(version)) {
 			println "$archivesBaseName version $version will not be published; already exists"
+			return false
 		} else {
 			println "$archivesBaseName version $version will be published"
 			return true
@@ -169,5 +170,4 @@ boolean checkVersion(archivesBaseName, version) {
 		println "$archivesBaseName is not on maven yet"
 		return true
 	}
-	return false
 }
