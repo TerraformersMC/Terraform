@@ -157,7 +157,7 @@ task publishTerraformLocally {
 	}
 }
 
-static boolean checkVersion(archivesBaseName, version) {
+boolean checkVersion(archivesBaseName, version) {
 	try {
 		def xml = new URL("http://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
 		def metadata = new XmlSlurper().parseText(xml)
