@@ -78,9 +78,6 @@ allprojects {
 }
 
 subprojects {
-
-	ext.shouldPublishBuild = false
-
 	dependencies {
 		testmodCompile sourceSets.main.output
 	}
@@ -172,4 +169,5 @@ boolean checkVersion(archivesBaseName, version) {
 		println "$archivesBaseName is not on maven yet"
 		return true
 	}
+	return false
 }
