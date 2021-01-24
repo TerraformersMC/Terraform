@@ -7,7 +7,7 @@ plugins {
 }
 
 static def formatVersion(project, version) {
-	return version + (!version.endsWith("-SNAPSHOT") ? ("+" + (System.getenv().BUILD_NUMBER ? ("build." + System.getenv().BUILD_NUMBER) : "custom")) : "");
+	return version;
 }
 
 allprojects {
@@ -91,6 +91,19 @@ subprojects {
 		}
 	}
 
+	task checkVersion {
+		doFirst {
+			def xml = new URL("https://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
+			def metadata = new XmlSlurper().parseText(xml)
+			def versions = metadata.versioning.versions.version*.text();
+			if (versions.contains(version)) {
+				throw new RuntimeException("${version} of $archivesBaseName has already been released!")
+			}
+		}
+	}
+
+	publish.mustRunAfter checkVersion
+
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
@@ -110,12 +123,13 @@ subprojects {
 
 void setupRepositories(RepositoryHandler repositories) {
 	//repositories.mavenLocal() // uncomment for testing
-	if (project.hasProperty('mavenPass')) {
+	def ENV = System.getenv()
+	if (ENV.MAVEN_URL) {
 		repositories.maven {
-			url "http://mavenupload.modmuss50.me/"
+			url ENV.MAVEN_URL
 			credentials {
-				username 'buildslave'
-				password project.getProperty('mavenPass')
+				username ENV.MAVEN_USERNAME
+				password ENV.MAVEN_PASSWORD
 			}
 		}
 	}
