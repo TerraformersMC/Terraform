@@ -4,7 +4,7 @@
   "name": "Terraform Shapes API (v1)",
   "version": "$version",
   "environment": "*",
-  "license": "LGPL-3.0",
+  "license": "LGPL-3.0-only",
   "icon": "assets/terraform-shapes-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",

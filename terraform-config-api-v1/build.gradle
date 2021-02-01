@@ -1,2 +1,2 @@
 archivesBaseName = "terraform-config-api-v1"
-version = formatVersion(project, "1.0.2")
+version = formatVersion(project, "1.0.3")

@@ -9,7 +9,7 @@
       "com.terraformersmc.terraform.boat.BoatSpawnNetworkHandler::register"
     ]
   },
-  "license": "LGPL-3.0",
+  "license": "LGPL-3.0-only",
   "icon": "assets/terraform-wood-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",

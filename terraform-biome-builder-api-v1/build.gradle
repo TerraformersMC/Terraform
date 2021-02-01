@@ -1,2 +1,2 @@
 archivesBaseName = "terraform-biome-builder-api-v1"
-version = formatVersion(project, "1.0.3")
+version = formatVersion(project, "1.0.4")
