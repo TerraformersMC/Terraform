@@ -30,7 +30,24 @@
   ],
   "description": "Adds an API for adding custom wood types",
   "custom": {
-    "modmenu:api": true
+    "modmenu:api": true,
+    "modmenu": {
+      "parent": {
+        "id": "terraform-api",
+        "name": "Terraform API",
+        "description": "Modular core library that expands on the hooks that Fabric API provides",
+        "icon": "assets/terraform-wood-api-v1/icon.png",
+        "badges": [
+          "library"
+        ]
+      },
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      }
+    }
   },
   "mixins": [
     "mixins.terraform-boats.json",

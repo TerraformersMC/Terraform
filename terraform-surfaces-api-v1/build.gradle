@@ -1,2 +1,2 @@
 archivesBaseName = "terraform-surfaces-api-v1"
-version = formatVersion(project, "1.0.1")
+version = formatVersion(project, "1.0.2")

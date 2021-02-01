@@ -5,7 +5,7 @@
   "version": "$version",
   "environment": "*",
   "license": "LGPL-3.0",
-  "icon": "assets/terraform-biome-api-v1/icon.png",
+  "icon": "assets/terraform-overworld-biome-extensions-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
@@ -22,7 +22,24 @@
   ],
   "description": "Extensions to the Fabric Biomes API enabling more advanced biome generation",
   "custom": {
-    "modmenu:api": true
+    "modmenu:api": true,
+    "modmenu": {
+      "parent": {
+        "id": "terraform-api",
+        "name": "Terraform API",
+        "description": "Modular core library that expands on the hooks that Fabric API provides",
+        "icon": "assets/terraform-overworld-biome-extensions-api-v1/icon.png",
+        "badges": [
+          "library"
+        ]
+      },
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      }
+    }
   },
   "mixins": [
     "mixins.terraform-overworld-biome-extensions.json"
