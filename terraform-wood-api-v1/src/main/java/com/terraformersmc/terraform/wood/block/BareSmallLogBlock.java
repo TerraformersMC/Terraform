@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
@@ -41,13 +42,13 @@ import java.util.function.Supplier;
  * Used for things like the Saguaro Cactus.
  */
 public class BareSmallLogBlock extends Block implements Waterloggable {
-	public static final BooleanProperty UP = BooleanProperty.of("up");
-	public static final BooleanProperty DOWN = BooleanProperty.of("down");
-	public static final BooleanProperty NORTH = BooleanProperty.of("north");
-	public static final BooleanProperty EAST = BooleanProperty.of("east");
-	public static final BooleanProperty SOUTH = BooleanProperty.of("south");
-	public static final BooleanProperty WEST = BooleanProperty.of("west");
-	public static final BooleanProperty WATERLOGGED = BooleanProperty.of("waterlogged");
+	public static final BooleanProperty UP = Properties.UP;
+	public static final BooleanProperty DOWN = Properties.DOWN;
+	public static final BooleanProperty NORTH = Properties.NORTH;
+	public static final BooleanProperty EAST = Properties.EAST;
+	public static final BooleanProperty SOUTH = Properties.SOUTH;
+	public static final BooleanProperty WEST = Properties.WEST;
+	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
 	private static final int UP_MASK = 1 << Direction.UP.ordinal();
 	private static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
