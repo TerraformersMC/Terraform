@@ -16,7 +16,7 @@
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
   "depends": {
-    "fabric-networking-v0": "*"
+    "fabric-networking-api-v1": "*"
   },
   "authors": [
     "Prospector",
