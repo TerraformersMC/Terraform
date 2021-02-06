@@ -72,6 +72,12 @@ allprojects {
 			}
 		}
 	}
+
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = "sources"
+		from sourceSets.main.allSource
+	}
+
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
 	}
@@ -102,6 +108,9 @@ subprojects {
 				afterEvaluate {
 					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
 						builtBy remapMavenJar
+					}
+					artifact(sourcesJar) {
+						builtBy remapSourcesJar
 					}
 				}
 			}

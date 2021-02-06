@@ -1,5 +1,5 @@
 archivesBaseName = "terraform-dirt-api-v1"
-version = formatVersion(project, "1.1.3")
+version = formatVersion(project, "1.1.4")
 
 dependencies {
 	modImplementation fabricApi.module("fabric-tag-extensions-v0", project.fabric_version)
