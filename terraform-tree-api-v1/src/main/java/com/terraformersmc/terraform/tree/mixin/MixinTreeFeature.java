@@ -15,10 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(TreeFeature.class)
 public abstract class MixinTreeFeature<FC extends FeatureConfig> extends Feature<FC> {
 	@Shadow
-	protected abstract int method_29963(TestableWorld testableWorld, int i, BlockPos blockPos, TreeFeatureConfig treeFeatureConfig);
-
-	@Shadow
-	private static boolean isDirtOrGrass(TestableWorld world, BlockPos pos) {
+	private static boolean canPlaceTreeOn(TestableWorld world, BlockPos pos) {
 		throw new AssertionError();
 	}
 
@@ -29,12 +26,12 @@ public abstract class MixinTreeFeature<FC extends FeatureConfig> extends Feature
 	}
 
 	// TODO: Not sure if the redirect is better or worse here
-	@Redirect(method = "generate(Lnet/minecraft/world/ModifiableTestableWorld;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Ljava/util/Set;Ljava/util/Set;Lnet/minecraft/util/math/BlockBox;Lnet/minecraft/world/gen/feature/TreeFeatureConfig;)Z", at = @At(value = "INVOKE", target = "net/minecraft/world/gen/feature/TreeFeature.isDirtOrGrass (Lnet/minecraft/world/TestableWorld;Lnet/minecraft/util/math/BlockPos;)Z"))
+	@Redirect(method = "generate(Lnet/minecraft/world/gen/feature/util/FeatureContext;)Z", at = @At(value = "INVOKE", target = "net/minecraft/world/gen/feature/TreeFeature.canPlaceTreeOn(Lnet/minecraft/world/TestableWorld;Lnet/minecraft/util/math/BlockPos;)Z"))
 	private boolean terrestria$allowSandyTreeGeneration(TestableWorld world, BlockPos pos) {
 		if ((this instanceof ExtendedTreeGeneration)) {
 			return ((ExtendedTreeGeneration) this).canGenerateOn(world, pos);
 		} else {
-			return isDirtOrGrass(world, pos);
+			return canPlaceTreeOn(world, pos);
 		}
 	}
 }

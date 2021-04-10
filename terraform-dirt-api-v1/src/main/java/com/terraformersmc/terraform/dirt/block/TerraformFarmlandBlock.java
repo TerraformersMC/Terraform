@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.dirt.block;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
@@ -66,7 +67,7 @@ public class TerraformFarmlandBlock extends FarmlandBlock {
 			setToCustomDirt(world.getBlockState(pos), world, pos);
 		}
 
-		entity.handleFallDamage(height, 1.0F);
+		entity.handleFallDamage(height, 1.0F, DamageSource.FALL);
 	}
 
 	private static boolean isWaterNearby(WorldView world, BlockPos pos) {

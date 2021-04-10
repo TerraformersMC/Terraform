@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -76,7 +77,7 @@ public class TerraformBoatEntity extends BoatEntity {
 					return;
 				}
 
-				this.handleFallDamage(this.fallDistance, 1.0F);
+				this.handleFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
 				if (!this.world.isClient && !this.isRemoved()) {
 					this.remove(RemovalReason.KILLED);
 					if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
@@ -99,7 +100,7 @@ public class TerraformBoatEntity extends BoatEntity {
 	public Packet<?> createSpawnPacket() {
 		final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 
-		buf.writeVarInt(this.getEntityId());
+		buf.writeVarInt(this.getId());
 		buf.writeUuid(this.uuid);
 		buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(this.getType()));
 		buf.writeDouble(this.getX());
