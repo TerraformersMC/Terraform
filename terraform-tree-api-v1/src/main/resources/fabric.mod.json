@@ -20,6 +20,9 @@
     "NeusFear",
     "Wtoll"
   ],
+  "depends": {
+    "fabric-object-builder-api-v1": "*"
+  },
   "description": "Interfaces for adding custom trees as well as some common code for compatibility between mods",
   "custom": {
     "modmenu:api": true,
