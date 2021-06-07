@@ -23,7 +23,7 @@ public class CliffSurfaceBuilder extends SurfaceBuilder<CliffSurfaceConfig> {
 	}
 
 	@Override
-	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noise, BlockState stone, BlockState water, int var11, long seed, CliffSurfaceConfig config) {
+	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noise, BlockState stone, BlockState water, int var11, int l, long seed, CliffSurfaceConfig config) {
 		x &= 15;
 		z &= 15;
 
@@ -62,7 +62,7 @@ public class CliffSurfaceBuilder extends SurfaceBuilder<CliffSurfaceConfig> {
 
 			chunk.setBlockState(pos, config.getTopMaterial(), false);
 		} else {
-			parent.generate(rand, chunk, biome, x, z, height, noise, stone, water, var11, seed, config);
+			parent.generate(rand, chunk, biome, x, z, height, noise, stone, water, var11, l, seed, config);
 		}
 	}
 }

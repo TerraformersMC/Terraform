@@ -56,7 +56,7 @@ public class TerraformBoatItem extends Item {
 
 		TerraformBoatEntity boat = createBoat(world, hit.getPos().x, hit.getPos().y, hit.getPos().z);
 
-		boat.yaw = player.yaw;
+		boat.setYaw(player.getYaw());
 
 		if (!world.isSpaceEmpty(boat, boat.getBoundingBox().expand(-0.1D))) {
 			return new TypedActionResult<>(ActionResult.FAIL, stack);

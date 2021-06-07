@@ -1,8 +1,14 @@
 package com.terraformersmc.terraform.dirt;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.HoeItem;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.ToolMaterial;
 
 /**
@@ -20,9 +26,21 @@ public abstract class TillableBlockRegistry extends HoeItem {
 	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
 	 *
 	 * @param block the block being tilled
-	 * @param state the state to replace it with
+	 * @param pair the interaction between the blocks
+	 */
+	public static void add(Block block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>> pair) {
+		TILLED_BLOCKS.put(block, pair);
+	}
+	
+	/**
+	 * Adds a custom tillable block mapping.
+	 *
+	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
+	 *
+	 * @param block the block being tilled
+	 * @param state the block to be replaced with
 	 */
 	public static void add(Block block, BlockState state) {
-		TILLED_BLOCKS.put(block, state);
+		TILLED_BLOCKS.put(block, Pair.of(HoeItem::usagePredicate, getTillingConsumer(state)));
 	}
 }
