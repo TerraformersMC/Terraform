@@ -17,7 +17,7 @@ public class FloodingBeachSurfaceBuilder extends BeachSurfaceBuilder {
 	}
 
 	@Override
-	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, TernarySurfaceConfig config) {
+	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, int i, long seed, TernarySurfaceConfig config) {
 		BlockPos.Mutable pos = new BlockPos.Mutable(x & 15, this.seaLevel - 1, z & 15);
 
 		while (pos.getY() > 0) {
@@ -28,6 +28,6 @@ public class FloodingBeachSurfaceBuilder extends BeachSurfaceBuilder {
 			pos.move(Direction.DOWN);
 		}
 
-		super.generate(rand, chunk, biome, x, z, height, noiseVal, var9, var10, var11, seed, config);
+		super.generate(rand, chunk, biome, x, z, height, noiseVal, var9, var10, var11, i, seed, config);
 	}
 }

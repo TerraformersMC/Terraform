@@ -13,12 +13,15 @@ public enum DefaultFeature {
 	DESERT_LAKES("desert_lakes"),
 	DUNGEONS("dungeons"),
 	MINEABLES("mineables"),
+	MINEABLES_GLOW_LICHEN("mineables_glow_lichen"),
+	DRIPSTONE("dripstone"),
 	ORES("ores"),
 	EXTRA_GOLD("extra_gold"),
 	EMERALD_ORE("emerald_ore"),
 	INFECTED_STONE("infected_stone"),
 	DISKS("disks"),
 	CLAY("clay"),
+	CLAY_DISK("clay_disk"),
 	MOSSY_ROCKS("mossy_rocks"),
 	LARGE_FERNS("large_ferns"),
 	SWEET_BERRY_BUSHES("sweet_berry_bushes"),
@@ -62,6 +65,10 @@ public enum DefaultFeature {
 	DESERT_VEGETATION("desert_vegetation"),
 	SWAMP_VEGETATION("swamp_vegetation"),
 	DESERT_FEATURES("desert_features"),
+	LUSH_CAVES("lush_caves"),
+	NETHER_MINEABLES("nether_mineables"),
+	ANCIENT_DEBRIS("ancient_debris"),
+	AMETHYST_GEODE("amethyst_geode"),
 	FOSSILS("fossils"),
 	KELP("kelp"),
 	SEAGRASS_ON_STONE("seagrass_on_stone"),
@@ -110,6 +117,12 @@ public enum DefaultFeature {
 			case MINEABLES:
 				DefaultBiomeFeatures.addMineables(genBuilder);
 				break;
+			case MINEABLES_GLOW_LICHEN:
+				DefaultBiomeFeatures.addMineables(genBuilder, true);
+				break;
+			case DRIPSTONE:
+				DefaultBiomeFeatures.addDripstone(genBuilder);
+				break;
 			case ORES:
 				DefaultBiomeFeatures.addDefaultOres(genBuilder);
 				break;
@@ -126,7 +139,10 @@ public enum DefaultFeature {
 				DefaultBiomeFeatures.addDefaultDisks(genBuilder);
 				break;
 			case CLAY:
-				DefaultBiomeFeatures.addClay(genBuilder);
+				DefaultBiomeFeatures.addClayOre(genBuilder);
+				break;
+			case CLAY_DISK:
+				DefaultBiomeFeatures.addClayDisk(genBuilder);
 				break;
 			case MOSSY_ROCKS:
 				DefaultBiomeFeatures.addMossyRocks(genBuilder);
@@ -256,6 +272,18 @@ public enum DefaultFeature {
 				break;
 			case DESERT_FEATURES:
 				DefaultBiomeFeatures.addDesertFeatures(genBuilder);
+				break;
+			case LUSH_CAVES:
+				DefaultBiomeFeatures.addLushCavesDecoration(genBuilder);
+				break;
+			case NETHER_MINEABLES:
+				DefaultBiomeFeatures.addNetherMineables(genBuilder);
+				break;
+			case ANCIENT_DEBRIS:
+				DefaultBiomeFeatures.addAncientDebris(genBuilder);
+				break;
+			case AMETHYST_GEODE:
+				DefaultBiomeFeatures.addAmethystGeodes(genBuilder);
 				break;
 			case FOSSILS:
 				DefaultBiomeFeatures.addFossils(genBuilder);

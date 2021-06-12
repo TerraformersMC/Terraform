@@ -8,7 +8,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundEvents;
@@ -19,7 +19,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class TerraformBoatEntity extends BoatEntity {
 	private TerraformBoat boat;
@@ -49,10 +49,10 @@ public class TerraformBoatEntity extends BoatEntity {
 	}
 
 	@Override
-	protected void writeCustomDataToTag(CompoundTag tag) {}
+	protected void writeCustomDataToNbt(NbtCompound tag) {}
 
 	@Override
-	protected void readCustomDataFromTag(CompoundTag tag) {}
+	protected void readCustomDataFromNbt(NbtCompound tag) {}
 
 	private boolean isOnLand() {
 		// super hackish way of evaluating the condition (this.location == BoatEntity.Location.ON_LAND)
@@ -79,7 +79,7 @@ public class TerraformBoatEntity extends BoatEntity {
 
 				this.handleFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
 				if (!this.world.isClient && !this.isRemoved()) {
-					this.remove(RemovalReason.KILLED);
+					this.kill();
 					if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
 						for(int i = 0; i < 3; i++) {
 							this.dropItem(this.asPlanks());
@@ -106,10 +106,10 @@ public class TerraformBoatEntity extends BoatEntity {
 		buf.writeDouble(this.getX());
 		buf.writeDouble(this.getY());
 		buf.writeDouble(this.getZ());
-		buf.writeByte(MathHelper.floor(this.pitch * 256.0F / 360.0F));
-		buf.writeByte(MathHelper.floor(this.yaw * 256.0F / 360.0F));
+		buf.writeByte(MathHelper.floor(this.getPitch() * 256.0F / 360.0F));
+		buf.writeByte(MathHelper.floor(this.getYaw() * 256.0F / 360.0F));
 
-		return ServerSidePacketRegistry.INSTANCE.toPacket(new Identifier("terraform", "spawn_boat"), buf);
+		return ServerPlayNetworking.createS2CPacket(new Identifier("terraform", "spawn_boat"), buf);
 	}
 
 	@Override
