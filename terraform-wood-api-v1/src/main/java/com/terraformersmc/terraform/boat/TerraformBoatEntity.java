@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.boat;
 
 import io.netty.buffer.Unpooled;
-
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class TerraformBoatEntity extends BoatEntity {
+	public static final Identifier SPAWN_BOAT_CHANNEL = new Identifier("terraform-wood-api-v1", "spawn_boat");
 	private TerraformBoat boat;
 
 	public TerraformBoatEntity(EntityType<? extends TerraformBoatEntity> type, World world, TerraformBoat boat) {
@@ -68,7 +69,7 @@ public class TerraformBoatEntity extends BoatEntity {
 		// Run other logic, including setting the private field fallVelocity
 		super.fall(double_1, false, state, pos);
 
-		if(!this.hasVehicle() && boolean_1) {
+		if (!this.hasVehicle() && boolean_1) {
 			this.fallDistance = savedFallDistance;
 
 			if (this.fallDistance > 3.0F) {
@@ -81,11 +82,11 @@ public class TerraformBoatEntity extends BoatEntity {
 				if (!this.world.isClient && !this.isRemoved()) {
 					this.kill();
 					if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-						for(int i = 0; i < 3; i++) {
+						for (int i = 0; i < 3; i++) {
 							this.dropItem(this.asPlanks());
 						}
 
-						for(int i = 0; i < 2; i++) {
+						for (int i = 0; i < 2; i++) {
 							this.dropItem(Items.STICK);
 						}
 					}

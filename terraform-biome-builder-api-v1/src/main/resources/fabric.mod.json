@@ -4,7 +4,7 @@
   "name": "Terraform Biome Builder API (v1)",
   "version": "$version",
   "environment": "*",
-  "license": "LGPL-3.0",
+  "license": "LGPL-3.0-only",
   "icon": "assets/terraform-biome-builder-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
@@ -22,7 +22,24 @@
   ],
   "description": "Adds an API for adding biomes and making biomes generate",
   "custom": {
-    "modmenu:api": true
+    "modmenu:api": true,
+    "modmenu": {
+      "parent": {
+        "id": "terraform-api",
+        "name": "Terraform API",
+        "description": "Modular core library that expands on the hooks that Fabric API provides",
+        "icon": "assets/terraform-biome-builder-api-v1/icon.png",
+        "badges": [
+          "library"
+        ]
+      },
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      }
+    }
   },
   "mixins": [
     "mixins.terraform-biome-builder.json"

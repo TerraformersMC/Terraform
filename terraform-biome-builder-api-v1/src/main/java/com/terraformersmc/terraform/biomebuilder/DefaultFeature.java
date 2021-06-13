@@ -3,6 +3,8 @@ package com.terraformersmc.terraform.biomebuilder;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
 
+import java.util.function.Consumer;
+
 public enum DefaultFeature {
 	LAND_CARVERS("land_carvers"),
 	OCEAN_CARVERS("ocean_carvers"),
@@ -79,13 +81,19 @@ public enum DefaultFeature {
 	FROZEN_TOP_LAYER("frozen_top_layer");
 
 	private final String name;
+	private final Consumer<GenerationSettings.Builder> function;
 
-	DefaultFeature(String name) {
+	DefaultFeature(String name, Consumer<GenerationSettings.Builder> function) {
 		this.name = name;
+		this.function = function;
 	}
 
 	public String getName() {
 		return this.name;
+	}
+
+	public Consumer<GenerationSettings.Builder> getFunction() {
+		return this.function;
 	}
 
 	public void add(GenerationSettings.Builder genBuilder) {

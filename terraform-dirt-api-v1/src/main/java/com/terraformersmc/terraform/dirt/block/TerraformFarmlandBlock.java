@@ -19,19 +19,19 @@ import java.util.Random;
 
 /**
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
+ * @see com.terraformersmc.terraform.dirt.mixin.MixinFarmlandBlock
  */
 public class TerraformFarmlandBlock extends FarmlandBlock {
-	private Block trampled; //sets the block to revert to when trampled
-
+	/**
+	 * @deprecated the "trampled" block is no longer controlled by TerraformFarmlandBlock, use the other constructor.
+	 */
+	@Deprecated
 	public TerraformFarmlandBlock(Settings settings, Block trampled) {
 		super(settings);
-		this.setDefaultState(this.getStateManager().getDefaultState().with(MOISTURE, 0));
-		this.trampled = trampled;
 	}
 
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) {
-		return !this.getDefaultState().canPlaceAt(context.getWorld(), context.getBlockPos()) ? trampled.getDefaultState() : this.getDefaultState();
+	public TerraformFarmlandBlock(Settings settings) {
+		super(settings);
 	}
 
 	@Override

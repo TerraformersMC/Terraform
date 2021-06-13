@@ -4,7 +4,7 @@
   "name": "Terraform Surfaces API (v1)",
   "version": "$version",
   "environment": "*",
-  "license": "LGPL-3.0",
+  "license": "LGPL-3.0-only",
   "icon": "assets/terraform-surfaces-api-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
@@ -22,6 +22,23 @@
   ],
   "description": "Adds a bunch of cool biome surfaces",
   "custom": {
-    "modmenu:api": true
+    "modmenu:api": true,
+    "modmenu": {
+      "parent": {
+        "id": "terraform-api",
+        "name": "Terraform API",
+        "description": "Modular core library that expands on the hooks that Fabric API provides",
+        "icon": "assets/terraform-surfaces-api-v1/icon.png",
+        "badges": [
+          "library"
+        ]
+      },
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      }
+    }
   }
 }

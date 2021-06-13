@@ -7,7 +7,7 @@ plugins {
 }
 
 static def formatVersion(project, version) {
-	return version + (!version.endsWith("-SNAPSHOT") ? ("+" + (System.getenv().BUILD_NUMBER ? ("build." + System.getenv().BUILD_NUMBER) : "custom")) : "");
+	return version;
 }
 
 allprojects {
@@ -67,6 +67,12 @@ allprojects {
 			}
 		}
 	}
+
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = "sources"
+		from sourceSets.main.allSource
+	}
+
 	tasks.withType(JavaCompile) {
 		it.options.encoding = "UTF-8"
 		it.options.release = 16
@@ -74,7 +80,6 @@ allprojects {
 }
 
 subprojects {
-
 	dependencies {
 		testmodImplementation sourceSets.main.output
 	}
@@ -87,12 +92,21 @@ subprojects {
 		}
 	}
 
+	publish {
+		onlyIf {
+			checkVersion(archivesBaseName, version)
+		}
+	}
+
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
 				afterEvaluate {
 					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
 						builtBy remapMavenJar
+					}
+					artifact(sourcesJar) {
+						builtBy remapSourcesJar
 					}
 				}
 			}
@@ -106,12 +120,13 @@ subprojects {
 
 void setupRepositories(RepositoryHandler repositories) {
 	//repositories.mavenLocal() // uncomment for testing
-	if (project.hasProperty('mavenPass')) {
+	def ENV = System.getenv()
+	if (ENV.MAVEN_URL) {
 		repositories.maven {
-			url "http://mavenupload.modmuss50.me/"
+			url ENV.MAVEN_URL
 			credentials {
-				username 'buildslave'
-				password project.getProperty('mavenPass')
+				username ENV.MAVEN_USERNAME
+				password ENV.MAVEN_PASSWORD
 			}
 		}
 	}
@@ -141,5 +156,23 @@ task publishTerraform {
 task publishTerraformLocally {
 	subprojects.each {
 		subprojects.each { dependsOn("${it.name}:publishToMavenLocal") }
+	}
+}
+
+ext.checkVersion = { archivesBaseName, version ->
+	try {
+		def xml = new URL("https://maven.terraformersmc.com/com/terraformersmc/terraform-api/$archivesBaseName/maven-metadata.xml").text
+		def metadata = new XmlSlurper().parseText(xml)
+		def versions = metadata.versioning.versions.version*.text();
+		if (versions.contains(version)) {
+			println "$archivesBaseName version $version will not be published; already exists"
+			return false
+		} else {
+			println "$archivesBaseName version $version will be published"
+			return true
+		}
+	} catch (FileNotFoundException ignored) {
+		println "$archivesBaseName is not on maven yet"
+		return true
 	}
 }
