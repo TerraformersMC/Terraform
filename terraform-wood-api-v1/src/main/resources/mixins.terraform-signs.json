@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.sign.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinTexturedRenderLayers"
+  ],
+  "mixins": [
+    "MixinBlockEntityType"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
