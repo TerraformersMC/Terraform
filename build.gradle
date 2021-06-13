@@ -80,10 +80,6 @@ allprojects {
 }
 
 subprojects {
-	dependencies {
-		testmodImplementation sourceSets.main.output
-	}
-
 	task remapMavenJar(type: Copy, dependsOn: remapJar) {
 		afterEvaluate {
 			from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
@@ -135,6 +131,7 @@ void setupRepositories(RepositoryHandler repositories) {
 dependencies {
 	afterEvaluate {
 		subprojects.each {
+			testmodImplementation sourceSets.main.output
 			implementation project(path: "${it.name}", configuration: "dev")
 			include project("${it.name}:")
 		}
