@@ -11,11 +11,7 @@ jobs:
     strategy:
       matrix:
         # Use these Java versions
-        java: [
-          1.8,  # Minimum
-          11,   # LTS
-          15    # Latest
-        ]
+        java: [16]
         os: [ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
