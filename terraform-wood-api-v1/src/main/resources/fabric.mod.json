@@ -26,7 +26,7 @@
   "contributors": [
     "SuperCoder79",
     "NeusFear",
-    "Wtoll"
+    "Vaerian"
   ],
   "description": "Adds an API for adding custom wood types",
   "custom": {
@@ -51,7 +51,6 @@
   },
   "mixins": [
     "mixins.terraform-boats.json",
-    "mixins.terraform-leaves.json",
-    "mixins.terraform-signs.json"
+    "mixins.terraform-leaves.json"
   ]
 }

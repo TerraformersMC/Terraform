@@ -174,7 +174,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		if(stripped != null && held.getItem() instanceof MiningToolItem) {
 			MiningToolItem tool = (MiningToolItem) held.getItem();
 
-			if(tool.isEffectiveOn(state) || tool.getMiningSpeedMultiplier(held, state) > 1.0F) {
+			if(tool.getMiningSpeedMultiplier(held, state) > 1.0F) {
 				world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 				if(!world.isClient) {

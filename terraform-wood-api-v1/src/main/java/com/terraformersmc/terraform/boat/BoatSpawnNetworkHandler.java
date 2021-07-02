@@ -18,10 +18,10 @@ import java.util.UUID;
 @Environment(EnvType.CLIENT)
 public class BoatSpawnNetworkHandler {
 	public void register() {
-		ClientPlayNetworking.registerGlobalReceiver(TerraformBoatEntity.SPAWN_BOAT_CHANNEL, BoatSpawnNetworkHandler::accept);
+		ClientPlayNetworking.registerGlobalReceiver(new Identifier("terraform", "spawn_boat"), BoatSpawnNetworkHandler::accept);
 	}
 
-	public static void accept(MinecraftClient client, ClientPlayNetworkHandler networkHandler, PacketByteBuf buffer, PacketSender sender) {
+	public static void accept(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buffer, PacketSender responseSender) {
 		int id = buffer.readVarInt();
 		UUID uuid = buffer.readUuid();
 		EntityType type = Registry.ENTITY_TYPE.get(buffer.readVarInt());
@@ -55,9 +55,9 @@ public class BoatSpawnNetworkHandler {
 		entity.setUuid(uuid);
 		entity.updatePosition(x, y, z);
 		entity.updateTrackedPosition(x, y, z);
-		entity.pitch = pitch * 360 / 256F;
-		entity.yaw = yaw * 360 / 256F;
+		entity.setPitch(pitch * 360 / 256F);
+		entity.setYaw(yaw * 360 / 256F);
 
-		world.addEntity(entity.getEntityId(), entity);
+		world.addEntity(entity.getId(), entity);
 	}
 }

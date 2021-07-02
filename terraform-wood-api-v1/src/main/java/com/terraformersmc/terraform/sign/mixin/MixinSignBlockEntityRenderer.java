@@ -18,11 +18,14 @@ import net.fabricmc.api.Environment;
 @Mixin(SignBlockEntityRenderer.class)
 @Environment(EnvType.CLIENT)
 public class MixinSignBlockEntityRenderer {
-    @Inject(method = "getModelTexture", at = @At("HEAD"), cancellable = true)
-    private static void getModelTexture(Block block, CallbackInfoReturnable<SpriteIdentifier> info) {
-        if (block instanceof TerraformSign) {
+	/*
+	@Inject(method = "getModelTexture", at = @At("HEAD"), cancellable = true)
+	private static void getModelTexture(Block block, CallbackInfoReturnable<SpriteIdentifier> info) {
+		if (block instanceof TerraformSign) {
 			Identifier texture = ((TerraformSign) block).getTexture();
-        	info.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, texture));
-        }
-    }
+			info.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, texture));
+		}
+	}
+
+	 */
 }

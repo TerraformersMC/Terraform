@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.MaterialColor;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,7 @@ public class QuarterLogBlock extends PillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 	private final Supplier<Block> stripped;
 
-	public QuarterLogBlock(Supplier<Block> stripped, MaterialColor color, Block.Settings settings) {
+	public QuarterLogBlock(Supplier<Block> stripped, MapColor color, Block.Settings settings) {
 		super(settings);
 
 		this.stripped = stripped;
@@ -76,7 +76,7 @@ public class QuarterLogBlock extends PillarBlock {
 
 		MiningToolItem tool = (MiningToolItem) held;
 
-		if(stripped != null && (tool.isEffectiveOn(state) || tool.getMiningSpeedMultiplier(heldStack, state) > 1.0F)) {
+		if(stripped != null && (tool.getMiningSpeedMultiplier(heldStack, state) > 1.0F)) {
 			world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 			if(!world.isClient) {

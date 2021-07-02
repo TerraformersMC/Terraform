@@ -20,7 +20,7 @@ public class MixinPlantingOnFarmland {
 	@Inject(method = "canPlantOnTop", at = @At("HEAD"), cancellable = true)
 	private void onCanPlantOnTop(BlockState floor, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
 		Block block = floor.getBlock();
-		if (block instanceof FarmlandBlock && block.isIn(TerraformDirtBlockTags.FARMLAND)) {
+		if (block instanceof FarmlandBlock && TerraformDirtBlockTags.FARMLAND.contains(block)) {
 			callback.setReturnValue(true);
 		}
 	}

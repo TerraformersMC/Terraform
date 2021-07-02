@@ -4,10 +4,11 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundEvents;
@@ -17,6 +18,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class TerraformBoatEntity extends BoatEntity {
 	public static final Identifier SPAWN_BOAT_CHANNEL = new Identifier("terraform-wood-api-v1", "spawn_boat");
@@ -47,12 +50,10 @@ public class TerraformBoatEntity extends BoatEntity {
 	}
 
 	@Override
-	protected void writeCustomDataToTag(CompoundTag tag) {
-	}
+	protected void writeCustomDataToNbt(NbtCompound tag) {}
 
 	@Override
-	protected void readCustomDataFromTag(CompoundTag tag) {
-	}
+	protected void readCustomDataFromNbt(NbtCompound tag) {}
 
 	private boolean isOnLand() {
 		// super hackish way of evaluating the condition (this.location == BoatEntity.Location.ON_LAND)
@@ -77,9 +78,9 @@ public class TerraformBoatEntity extends BoatEntity {
 					return;
 				}
 
-				this.handleFallDamage(this.fallDistance, 1.0F);
-				if (!this.world.isClient && !this.removed) {
-					this.remove();
+				this.handleFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
+				if (!this.world.isClient && !this.isRemoved()) {
+					this.kill();
 					if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
 						for (int i = 0; i < 3; i++) {
 							this.dropItem(this.asPlanks());
@@ -100,16 +101,16 @@ public class TerraformBoatEntity extends BoatEntity {
 	public Packet<?> createSpawnPacket() {
 		final PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 
-		buf.writeVarInt(this.getEntityId());
+		buf.writeVarInt(this.getId());
 		buf.writeUuid(this.uuid);
 		buf.writeVarInt(Registry.ENTITY_TYPE.getRawId(this.getType()));
 		buf.writeDouble(this.getX());
 		buf.writeDouble(this.getY());
 		buf.writeDouble(this.getZ());
-		buf.writeByte(MathHelper.floor(this.pitch * 256.0F / 360.0F));
-		buf.writeByte(MathHelper.floor(this.yaw * 256.0F / 360.0F));
+		buf.writeByte(MathHelper.floor(this.getPitch() * 256.0F / 360.0F));
+		buf.writeByte(MathHelper.floor(this.getYaw() * 256.0F / 360.0F));
 
-		return ServerPlayNetworking.createS2CPacket(SPAWN_BOAT_CHANNEL, buf);
+		return ServerPlayNetworking.createS2CPacket(new Identifier("terraform", "spawn_boat"), buf);
 	}
 
 	@Override

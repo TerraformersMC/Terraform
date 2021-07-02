@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
 import java.util.Random;
-import java.util.function.Predicate;
+import java.util.function.BiConsumer;
 
 import com.terraformersmc.terraform.dirt.DirtBlocks;
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
@@ -15,14 +15,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ModifiableTestableWorld;
-import net.minecraft.world.gen.tree.AlterGroundTreeDecorator;
+import net.minecraft.world.TestableWorld;
+import net.minecraft.world.gen.treedecorator.AlterGroundTreeDecorator;
 
 @Mixin(AlterGroundTreeDecorator.class)
 public class MixinAlterGroundTreeDecorator {
 	// prepareGroundColumn
-	@Inject(method = "method_23463(Lnet/minecraft/world/ModifiableTestableWorld;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;)V", at = @At("HEAD"), cancellable = true)
-	private void terraform$allowCustomPodzolPlacement(ModifiableTestableWorld world, Random random, BlockPos pos, CallbackInfo callback) {
+	@Inject(method = "setColumn(Lnet/minecraft/world/TestableWorld;Ljava/util/function/BiConsumer;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;)V", at = @At("HEAD"), cancellable = true)
+	private void terraform$allowCustomPodzolPlacement(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, CallbackInfo callback) {
 		for(int i = 2; i >= -3; --i) {
 			BlockPos posUp = pos.up(i);
 
@@ -32,7 +32,7 @@ public class MixinAlterGroundTreeDecorator {
 				// Fall back to vanilla podzol if the soil block is unregistered.
 				Block podzol = TerraformDirtRegistry.getFromWorld(world, posUp).map(DirtBlocks::getPodzol).orElse(Blocks.PODZOL);
 
-				world.setBlockState(posUp, podzol.getDefaultState(), 18);
+				replacer.accept(posUp, podzol.getDefaultState());
 				callback.cancel();
 				return;
 			}

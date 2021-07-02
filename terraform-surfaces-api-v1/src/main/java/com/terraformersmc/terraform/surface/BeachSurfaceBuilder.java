@@ -27,7 +27,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<TernarySurfaceConfig> {
 	}
 
 	@Override
-	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, TernarySurfaceConfig config) {
+	public void generate(Random rand, Chunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, int i, long seed, TernarySurfaceConfig config) {
 		int localX = x & 15;
 		int localZ = z & 15;
 

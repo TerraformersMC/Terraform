@@ -9,9 +9,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(CropBlock.class)
 public class MixinCropBlock {
-	@Redirect(method = "getAvailableMoisture(Lnet/minecraft/block/Block;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getBlock()Lnet/minecraft/block/Block;"))
-	private static Block onGetAvailableMoisture(BlockState state) {
-		Block block = state.getBlock();
-		return block instanceof FarmlandBlock && block.isIn(TerraformDirtBlockTags.FARMLAND) ? Blocks.FARMLAND : block;
+	@Redirect(method = "Lnet/minecraft/block/CropBlock;getAvailableMoisture(Lnet/minecraft/block/Block;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"))
+	private static boolean onGetAvailableMoisture(BlockState state, Block block) {
+		return state.isOf(block) || (block == Blocks.FARMLAND && TerraformDirtBlockTags.FARMLAND.contains(state.getBlock()));
 	}
 }

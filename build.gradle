@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 }
 
 static def formatVersion(project, version) {
@@ -17,8 +17,8 @@ allprojects {
 	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
 
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+	sourceCompatibility = JavaVersion.VERSION_16
+	targetCompatibility = JavaVersion.VERSION_16
 
 	group = project.maven_group
 
@@ -62,13 +62,8 @@ allprojects {
 		processResources {
 			inputs.property "version", project.version
 
-			from(sourceSets.main.resources.srcDirs) {
-				include "fabric.mod.json"
+			filesMatching("fabric.mod.json") {
 				expand "version": project.version
-			}
-
-			from(sourceSets.main.resources.srcDirs) {
-				exclude "fabric.mod.json"
 			}
 		}
 	}
@@ -79,15 +74,12 @@ allprojects {
 	}
 
 	tasks.withType(JavaCompile) {
-		options.encoding = "UTF-8"
+		it.options.encoding = "UTF-8"
+		it.options.release = 16
 	}
 }
 
 subprojects {
-	dependencies {
-		testmodCompile sourceSets.main.output
-	}
-
 	task remapMavenJar(type: Copy, dependsOn: remapJar) {
 		afterEvaluate {
 			from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
@@ -139,7 +131,8 @@ void setupRepositories(RepositoryHandler repositories) {
 dependencies {
 	afterEvaluate {
 		subprojects.each {
-			compile project(path: "${it.name}", configuration: "dev")
+			testmodImplementation sourceSets.main.output
+			implementation project(path: "${it.name}", configuration: "dev")
 			include project("${it.name}:")
 		}
 	}
