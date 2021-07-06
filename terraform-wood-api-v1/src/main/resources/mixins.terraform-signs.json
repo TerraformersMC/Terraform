@@ -1,8 +1,9 @@
 {
   "required": true,
   "package": "com.terraformersmc.terraform.sign.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "client": [
+    "MixinSignBlockEntityRenderer",
     "MixinTexturedRenderLayers"
   ],
   "mixins": [
