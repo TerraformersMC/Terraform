@@ -5,8 +5,11 @@
   "version": "$version",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer"
+    ],
     "client": [
-      "com.terraformersmc.terraform.boat.BoatSpawnNetworkHandler::register"
+      "com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientInitializer"
     ]
   },
   "license": "LGPL-3.0-only",
@@ -16,7 +19,10 @@
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
   "depends": {
-    "fabric-networking-api-v1": "*"
+    "fabric-object-builder-api-v1": "*",
+    "fabric-networking-api-v1": "*",
+    "fabric-renderer-registries-v1": "*",
+    "fabric-resource-loader-v0": "*"
   },
   "authors": [
     "Prospector",
