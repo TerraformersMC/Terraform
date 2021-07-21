@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.terraformersmc.terraform.boat.mixin",
+  "package": "com.terraformersmc.terraform.boat.impl.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
     "MixinBoatEntityRenderer"

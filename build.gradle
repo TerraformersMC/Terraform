@@ -10,6 +10,16 @@ static def formatVersion(project, version) {
 	return version;
 }
 
+dependencies {
+	afterEvaluate {
+		subprojects.each {
+			testmodImplementation sourceSets.main.output
+			implementation project(path: "${it.name}", configuration: "dev")
+			include project("${it.name}:")
+		}
+	}
+}
+
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'idea'
@@ -124,16 +134,6 @@ void setupRepositories(RepositoryHandler repositories) {
 				username ENV.MAVEN_USERNAME
 				password ENV.MAVEN_PASSWORD
 			}
-		}
-	}
-}
-
-dependencies {
-	afterEvaluate {
-		subprojects.each {
-			testmodImplementation sourceSets.main.output
-			implementation project(path: "${it.name}", configuration: "dev")
-			include project("${it.name}:")
 		}
 	}
 }
