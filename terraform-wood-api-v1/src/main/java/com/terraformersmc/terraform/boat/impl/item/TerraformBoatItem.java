@@ -1,10 +1,11 @@
-package com.terraformersmc.terraform.boat.impl;
+package com.terraformersmc.terraform.boat.impl.item;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
+import com.terraformersmc.terraform.boat.impl.TerraformBoatEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
