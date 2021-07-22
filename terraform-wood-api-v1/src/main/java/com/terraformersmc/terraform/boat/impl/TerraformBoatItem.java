@@ -2,6 +2,7 @@ package com.terraformersmc.terraform.boat.impl;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 
@@ -26,14 +27,14 @@ import net.minecraft.world.event.GameEvent;
  */
 public class TerraformBoatItem extends Item {
 	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
-	private final TerraformBoatType boat;
+	private final Supplier<TerraformBoatType> boatSupplier;
 
 	/**
-	 * @param boat the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item
+	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item
 	 */
-	public TerraformBoatItem(TerraformBoatType boat, Item.Settings settings) {
+	public TerraformBoatItem(Supplier<TerraformBoatType> boatSupplier, Item.Settings settings) {
 		super(settings);
-		this.boat = boat;
+		this.boatSupplier = boatSupplier;
 	}
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -62,7 +63,7 @@ public class TerraformBoatItem extends Item {
 		if (hitResult.getType() == HitResult.Type.BLOCK) {
 			TerraformBoatEntity boatEntity = new TerraformBoatEntity(world, hitResult.getPos().x, hitResult.getPos().y, hitResult.getPos().z);
 
-			boatEntity.setTerraformBoat(this.boat);
+			boatEntity.setTerraformBoat(this.boatSupplier.get());
 			boatEntity.setYaw(user.getYaw());
 
 			if (!world.isSpaceEmpty(boatEntity, boatEntity.getBoundingBox().expand(-0.1d))) {
