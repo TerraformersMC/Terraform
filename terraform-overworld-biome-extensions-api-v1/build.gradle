@@ -1,2 +1,2 @@
 archivesBaseName = "terraform-overworld-biome-extensions-api-v1"
-version = formatVersion(project, "1.0.4")
+version = formatVersion(project, "1.0.5")
