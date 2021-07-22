@@ -35,8 +35,9 @@ public interface TerraformBoatType {
 		/**
 		 * @see TerraformBoatType#getItem
 		 */
-		public void item(Item item) {
+		public Builder item(Item item) {
 			this.item = item;
+			return this;
 		}
 	}
 }
