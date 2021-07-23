@@ -1,9 +1,5 @@
 package com.terraformersmc.terraform.shapes.api;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-08
- * @project Shapes
- */
 public interface Quaternion {
 
     static Quaternion of(double ofW, double ofI, double ofJ, double ofK) {

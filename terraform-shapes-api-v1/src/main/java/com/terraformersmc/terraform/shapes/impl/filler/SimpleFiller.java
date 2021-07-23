@@ -5,10 +5,6 @@ import com.terraformersmc.terraform.shapes.api.Position;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.ModifiableWorld;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public class SimpleFiller implements Filler {
 
     private final ModifiableWorld world;

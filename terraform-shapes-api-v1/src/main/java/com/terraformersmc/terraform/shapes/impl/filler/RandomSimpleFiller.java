@@ -7,10 +7,6 @@ import net.minecraft.world.ModifiableWorld;
 
 import java.util.Random;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-16
- * @project Shapes
- */
 public class RandomSimpleFiller implements Filler {
 
     private final ModifiableWorld world;

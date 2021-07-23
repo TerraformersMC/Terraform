@@ -8,10 +8,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public interface Shape {
 
     static Shape of(Predicate<Position> equation, Position max, Position min) {

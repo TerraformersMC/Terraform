@@ -7,10 +7,6 @@ import com.terraformersmc.terraform.shapes.api.layer.Layer;
 import java.util.Random;
 import java.util.function.Predicate;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-14
- * @project Shapes
- */
 public class NoiseTranslateLayer implements Layer {
 
     private final double magnitude;

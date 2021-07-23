@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
+
 public interface Position {
 
     double getX();
@@ -25,6 +22,8 @@ public interface Position {
     void setY(double d);
 
     void setZ(double d);
+
+    Position move(double x, double y, double z);
 
     static Position of(double ofX, double ofY, double ofZ) {
         return new Position() {
@@ -61,6 +60,11 @@ public interface Position {
             public void setZ(double d) {
                 z = d;
             }
+
+            @Override
+            public Position move(double x, double y, double z) {
+            	return Position.of(this.x + x, this.y + y, this.z + z);
+			}
         };
     }
 
@@ -104,7 +108,6 @@ public interface Position {
                 Position.of(end.getX(), start.getY(), end.getZ())
         );
     }
-
 
     static Position of(Quaternion q) {
         return Position.of(q.getI(), q.getJ(), q.getK());

@@ -3,10 +3,6 @@ package com.terraformersmc.terraform.shapes.impl.layer.transform;
 import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.layer.TransformationLayer;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public class TranslateLayer extends TransformationLayer {
 
     private final Position translation;

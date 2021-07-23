@@ -3,10 +3,6 @@ package com.terraformersmc.terraform.shapes.impl;
 import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.Shape;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public class Shapes {
 
     public static Shape rectangle(double w, double d) {
@@ -24,9 +20,6 @@ public class Shapes {
                 Position.of(-a, 0, -b)
         );
     }
-
-
-
 
     public static Shape ellipticalPrism(double a, double b, double height) {
         return Shape.of(
@@ -52,10 +45,6 @@ public class Shapes {
         );
     }
 
-
-
-
-
     public static Shape rectangularPyramid(double width, double height, double depth) {
         return Shape.of(
                 (pos) -> pos.getX() > -(width*(1-(pos.getY()/height)))/2 && pos.getX() < (width*(1-(pos.getY()/height)))/2 && pos.getY() > 0 && pos.getY() < height && pos.getZ() > -(depth*(1-(pos.getY()/height)))/2 && pos.getZ() < (depth*(1-(pos.getY()/height)))/2,
@@ -72,7 +61,6 @@ public class Shapes {
         );
     }
 
-
     public static Shape ellipsoid(double a, double b, double c) {
         return Shape.of(
                 (pos) -> ((pos.getX() * pos.getX())/(a * a)) + ((pos.getZ() * pos.getZ())/(b * b)) + ((pos.getY() * pos.getY())/(c * c)) < 1,
@@ -88,5 +76,4 @@ public class Shapes {
                 Position.of(-a, 0, -b)
         );
     }
-
 }

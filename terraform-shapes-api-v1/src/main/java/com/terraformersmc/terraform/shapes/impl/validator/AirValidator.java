@@ -5,10 +5,6 @@ import com.terraformersmc.terraform.shapes.api.Position;
 import net.minecraft.world.TestableWorld;
 import net.minecraft.world.WorldView;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public class AirValidator extends AllMeetValidator {
 
     private final WorldView worldView;

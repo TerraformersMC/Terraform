@@ -8,10 +8,6 @@ import net.minecraft.world.TestableWorld;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-25
- * @project Shapes
- */
 public class SafelistValidator extends AllMeetValidator {
 
     private final List<BlockState> safeStates;

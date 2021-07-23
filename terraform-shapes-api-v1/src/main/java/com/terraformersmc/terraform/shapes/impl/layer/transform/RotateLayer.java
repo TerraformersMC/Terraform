@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * @author <Wtoll> Will Toll on 2020-06-07
- * @project Shapes
- */
 public class RotateLayer implements Layer {
 
     private final Quaternion rotation;
