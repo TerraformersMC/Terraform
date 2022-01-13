@@ -4,6 +4,7 @@ plugins {
 	id 'idea'
 	id 'eclipse'
 	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
 static def formatVersion(project, version) {
@@ -26,6 +27,7 @@ allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
+	apply plugin: 'io.github.juuxel.loom-quiltflower-mini'
 
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
@@ -37,6 +39,10 @@ allprojects {
 			compileClasspath += main.compileClasspath
 			runtimeClasspath += main.runtimeClasspath
 		}
+	}
+
+	quiltflower {
+		addToRuntimeClasspath.set(true)
 	}
 
 	dependencies {
