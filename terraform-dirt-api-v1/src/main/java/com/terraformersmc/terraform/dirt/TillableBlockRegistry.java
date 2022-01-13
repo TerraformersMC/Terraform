@@ -29,7 +29,7 @@ public abstract class TillableBlockRegistry extends HoeItem {
 	 * @param pair the interaction between the blocks
 	 */
 	public static void add(Block block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>> pair) {
-		TILLED_BLOCKS.put(block, pair);
+		TILLING_ACTIONS.put(block, pair);
 	}
 	
 	/**
@@ -41,6 +41,6 @@ public abstract class TillableBlockRegistry extends HoeItem {
 	 * @param state the block to be replaced with
 	 */
 	public static void add(Block block, BlockState state) {
-		TILLED_BLOCKS.put(block, Pair.of(HoeItem::usagePredicate, getTillingConsumer(state)));
+		TILLING_ACTIONS.put(block, Pair.of(HoeItem::canTillFarmland, createTillAction(state)));
 	}
 }
