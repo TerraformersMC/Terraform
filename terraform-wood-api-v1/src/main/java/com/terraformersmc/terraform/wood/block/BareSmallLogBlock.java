@@ -167,7 +167,6 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack held = player.getStackInHand(hand);
 
@@ -272,7 +271,6 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
@@ -293,7 +291,6 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		switch (mirror) {
 			case LEFT_RIGHT:
@@ -306,7 +303,6 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean canPathfindThrough(BlockState state, BlockView view, BlockPos pos, NavigationType blockPlacementEnvironment_1) {
 		return false;
 	}
@@ -338,13 +334,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}

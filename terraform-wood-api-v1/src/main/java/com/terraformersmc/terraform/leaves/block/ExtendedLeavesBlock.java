@@ -42,7 +42,6 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (!state.get(PERSISTENT) && state.get(DISTANCE) == MAX_DISTANCE) {
 			dropStacks(state, world, pos);
@@ -52,20 +51,17 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), 3);
 	}
 
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getOpacity(BlockState state, BlockView view, BlockPos pos) {
 		return 0;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		int distance = getDistanceFromLog(neighborState) + 1;
 		if (distance != 1 || state.get(DISTANCE) != distance) {
@@ -105,7 +101,6 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isSideInvisible(BlockState state, BlockState neighborState, Direction offset) {
 		// OptiLeaves optimization: Cull faces with leaf block neighbors to reduce geometry in redwood forests
 		return neighborState.getBlock() instanceof ExtendedLeavesBlock;

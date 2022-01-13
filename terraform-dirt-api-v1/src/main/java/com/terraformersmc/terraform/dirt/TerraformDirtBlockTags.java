@@ -3,8 +3,7 @@ package com.terraformersmc.terraform.dirt;
 import net.minecraft.block.Block;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
-
-import net.fabricmc.fabric.api.tag.TagRegistry;
+import net.fabricmc.fabric.api.tag.TagFactory;
 
 public class TerraformDirtBlockTags {
 	/**
@@ -18,6 +17,6 @@ public class TerraformDirtBlockTags {
 	}
 
 	private static Tag<Block> register(String id) {
-		return TagRegistry.block(new Identifier("terraform", id));
+		return TagFactory.BLOCK.create(new Identifier("terraform", id));
 	}
 }

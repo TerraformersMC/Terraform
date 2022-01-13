@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.gen.feature.Feature;
 import org.spongepowered.asm.mixin.Mixin;

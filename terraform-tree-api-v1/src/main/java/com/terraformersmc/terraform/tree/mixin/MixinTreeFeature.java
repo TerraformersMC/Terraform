@@ -2,11 +2,9 @@ package com.terraformersmc.terraform.tree.mixin;
 
 import com.terraformersmc.terraform.tree.feature.ExtendedTreeGeneration;
 
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.TestableWorld;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
