@@ -36,6 +36,6 @@ public class LeafPileBlock extends Block {
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		BlockState down = world.getBlockState(pos.down());
 
-		return down.isOpaque() || down.getFluidState().getFluid().isIn(FluidTags.WATER);
+		return down.isOpaque() || down.getFluidState().isIn(FluidTags.WATER);
 	}
 }

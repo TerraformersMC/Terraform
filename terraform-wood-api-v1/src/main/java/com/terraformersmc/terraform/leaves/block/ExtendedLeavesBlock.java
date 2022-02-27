@@ -87,7 +87,7 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	private static int getDistanceFromLog(BlockState state) {
-		if (BlockTags.LOGS.contains(state.getBlock())) {
+		if (state.isIn(BlockTags.LOGS)) {
 			return 0;
 		} else {
 			return state.getBlock() instanceof ExtendedLeavesBlock ? state.get(DISTANCE) : MAX_DISTANCE;

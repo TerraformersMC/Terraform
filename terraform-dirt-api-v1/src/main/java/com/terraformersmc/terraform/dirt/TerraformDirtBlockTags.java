@@ -1,22 +1,22 @@
 package com.terraformersmc.terraform.dirt;
 
 import net.minecraft.block.Block;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.fabricmc.fabric.api.tag.TagFactory;
+import net.minecraft.util.registry.Registry;
 
 public class TerraformDirtBlockTags {
 	/**
 	 * Dirts, grass blocks, and podzol.
 	 */
-	public static final Tag<Block> SOIL = register("soil");
-	public static final Tag<Block> GRASS_BLOCKS = register("grass_blocks");
-	public static final Tag<Block> FARMLAND = register("farmland");
+	public static final TagKey<Block> SOIL = register("soil");
+	public static final TagKey<Block> GRASS_BLOCKS = register("grass_blocks");
+	public static final TagKey<Block> FARMLAND = register("farmland");
 
 	private TerraformDirtBlockTags() {
 	}
 
-	private static Tag<Block> register(String id) {
-		return TagFactory.BLOCK.create(new Identifier("terraform", id));
+	private static TagKey<Block> register(String id) {
+		return TagKey.of(Registry.BLOCK_KEY, new Identifier("terraform", id));
 	}
 }

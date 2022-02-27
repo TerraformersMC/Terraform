@@ -10,9 +10,6 @@
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
-  "depends": {
-    "fabric-tag-extensions-v0": "*"
-  },
   "authors": [
     "Prospector",
     "coderbot16",
