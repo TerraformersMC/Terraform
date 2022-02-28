@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.AttachedStemBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.FarmlandBlock;
@@ -19,8 +18,7 @@ import net.minecraft.world.BlockView;
 public class MixinPlantingOnFarmland {
 	@Inject(method = "canPlantOnTop", at = @At("HEAD"), cancellable = true)
 	private void onCanPlantOnTop(BlockState floor, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
-		Block block = floor.getBlock();
-		if (block instanceof FarmlandBlock && TerraformDirtBlockTags.FARMLAND.contains(block)) {
+		if (floor.getBlock() instanceof FarmlandBlock && floor.isIn(TerraformDirtBlockTags.FARMLAND)) {
 			callback.setReturnValue(true);
 		}
 	}
