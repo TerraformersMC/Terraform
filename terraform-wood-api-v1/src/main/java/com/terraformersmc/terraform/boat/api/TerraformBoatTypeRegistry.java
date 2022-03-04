@@ -27,5 +27,5 @@ public class TerraformBoatTypeRegistry {
 	 * @see com.terraformersmc.terraform.boat.api.TerraformBoatType.Builder The builder for boat types
 	 * @see com.terraformersmc.terraform.boat.api.client.TerraformBoatClientHelper Helpers for registering the boat on the client
 	 */
-	public static final Registry<TerraformBoatType> INSTANCE = new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.stable());
+	public static final Registry<TerraformBoatType> INSTANCE = new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.stable(), null);
 }

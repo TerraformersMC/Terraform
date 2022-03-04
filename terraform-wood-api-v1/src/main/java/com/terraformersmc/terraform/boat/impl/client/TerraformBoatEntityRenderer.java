@@ -25,7 +25,7 @@ public class TerraformBoatEntityRenderer extends BoatEntityRenderer {
 	public TerraformBoatEntityRenderer(EntityRendererFactory.Context context) {
 		super(context);
 
-		this.texturesAndModels = TerraformBoatTypeRegistry.INSTANCE.getEntries().stream().collect(ImmutableMap.toImmutableMap(entry -> {
+		this.texturesAndModels = TerraformBoatTypeRegistry.INSTANCE.getEntrySet().stream().collect(ImmutableMap.toImmutableMap(entry -> {
 			return entry.getValue();
 		}, entry -> {
 			Identifier id = entry.getKey().getValue();

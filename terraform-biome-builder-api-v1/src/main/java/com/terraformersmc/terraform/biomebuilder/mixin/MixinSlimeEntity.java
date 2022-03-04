@@ -32,7 +32,7 @@ public abstract class MixinSlimeEntity extends MobEntity implements Monster {
 			return; // Delegate back to vanilla
 		}
 
-		RegistryKey<Biome> biomeKey = world.getBiomeKey(pos).orElse(null);
+		RegistryKey<Biome> biomeKey = world.getBiome(pos).getKey().orElse(null);
 		boolean hasSurfaceSlimeSpawns = TerraformSlimeSpawnBiomes.getSlimeSpawnBiomes().contains(biomeKey);
 
 		// Handle spawning for biomes registered as slime-spawnable

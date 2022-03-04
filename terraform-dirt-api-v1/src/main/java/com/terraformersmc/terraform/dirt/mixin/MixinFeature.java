@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.gen.feature.Feature;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinFeature {
 	@Inject(method = "isSoil(Lnet/minecraft/block/BlockState;)Z", at = @At("HEAD"), cancellable = true)
 	private static void terraform$includeCustomSoil(BlockState state, CallbackInfoReturnable<Boolean> callback) {
-		if (TerraformDirtBlockTags.SOIL.contains(state.getBlock())) {
+		if (state.isIn(TerraformDirtBlockTags.SOIL)) {
 			callback.setReturnValue(true);
 		}
 	}

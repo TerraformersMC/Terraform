@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
-import net.minecraft.entity.passive.RabbitEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,7 +27,7 @@ public class MixinRabbitEntity {
 	@Inject(method = "isTargetPos(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Z", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info, BlockState state) {
 		Block block = state.getBlock();
-		if (block instanceof FarmlandBlock && TerraformDirtBlockTags.FARMLAND.contains(block) && this.wantsCarrots && !this.hasTarget) {
+		if (block instanceof FarmlandBlock && state.isIn(TerraformDirtBlockTags.FARMLAND) && this.wantsCarrots && !this.hasTarget) {
 			state = world.getBlockState(pos.up());
 			block = state.getBlock();
 

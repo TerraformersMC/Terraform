@@ -10,9 +10,6 @@
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
-  "depends": {
-    "fabric-tag-extensions-v0": "*"
-  },
   "authors": [
     "Prospector",
     "coderbot16",
@@ -21,7 +18,8 @@
   "contributors": [
     "SuperCoder79",
     "NeusFear",
-    "Vaerian"
+    "Vaerian",
+    "NebelNidas"
   ],
   "description": "Makes adding custom dirt/grass/podzol/etc blocks much simpler",
   "custom": {
