@@ -8,10 +8,10 @@ import net.minecraft.block.DirtPathBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TerraformGrassPathBlock extends DirtPathBlock {
+public class TerraformDirtPathBlock extends DirtPathBlock {
 	private Block dirt;
 
-	public TerraformGrassPathBlock(Block dirt, Settings settings) {
+	public TerraformDirtPathBlock(Block dirt, Settings settings) {
 		super(settings);
 
 		this.dirt = dirt;

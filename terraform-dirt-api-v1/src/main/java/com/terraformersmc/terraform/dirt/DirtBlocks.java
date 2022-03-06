@@ -1,8 +1,8 @@
 package com.terraformersmc.terraform.dirt;
 
+import com.terraformersmc.terraform.dirt.block.TerraformDirtPathBlock;
 import com.terraformersmc.terraform.dirt.block.TerraformFarmlandBlock;
 import com.terraformersmc.terraform.dirt.block.TerraformGrassBlock;
-import com.terraformersmc.terraform.dirt.block.TerraformGrassPathBlock;
 import com.terraformersmc.terraform.dirt.block.TerraformSnowyBlock;
 
 import net.minecraft.block.Block;
@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 public class DirtBlocks {
 	private Block dirt;
 	private TerraformGrassBlock grassBlock;
-	private TerraformGrassPathBlock grassPath;
+	private TerraformDirtPathBlock dirtPath;
 	private TerraformSnowyBlock podzol;
 	private TerraformFarmlandBlock farmland;
 
@@ -20,10 +20,10 @@ public class DirtBlocks {
 	/**
 	 * Creates a new collection of DirtBlocks. These blocks must have already been registered to the block registry.
 	 */
-	public DirtBlocks(Block dirt, TerraformGrassBlock grassBlock, TerraformGrassPathBlock grassPath, TerraformSnowyBlock podzol, TerraformFarmlandBlock farmland) {
+	public DirtBlocks(Block dirt, TerraformGrassBlock grassBlock, TerraformDirtPathBlock dirtPath, TerraformSnowyBlock podzol, TerraformFarmlandBlock farmland) {
 		this.dirt = dirt;
 		this.grassBlock = grassBlock;
-		this.grassPath = grassPath;
+		this.dirtPath = dirtPath;
 		this.podzol = podzol;
 		this.farmland = farmland;
 	}
@@ -36,8 +36,8 @@ public class DirtBlocks {
 		return grassBlock;
 	}
 
-	public TerraformGrassPathBlock getGrassPath() {
-		return grassPath;
+	public TerraformDirtPathBlock getDirtPath() {
+		return dirtPath;
 	}
 
 	public Block getPodzol() {
