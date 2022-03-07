@@ -216,14 +216,18 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		super.onPlaced(world, pos, state, entity, stack);
 
 		for (Direction direction : Direction.values()) {
-			if (world.getBlockState(pos.offset(direction)).getBlock() instanceof BareSmallLogBlock) {
-				world.setBlockState(pos.offset(direction),
-					getNeighborUpdateState(world.getBlockState(pos.offset(direction)),
-						direction.getOpposite(),
-						world.getBlockState(pos),
-						world,
-						pos.offset(direction),
-						pos));
+			BlockPos offsetPos = pos.offset(direction);
+			BlockState offsetState = world.getBlockState(offsetPos);
+
+			if (offsetState.getBlock() instanceof BareSmallLogBlock) {
+				world.setBlockState(offsetPos, getNeighborUpdateState(
+					offsetState,
+					direction.getOpposite(),
+					state,
+					world,
+					offsetPos,
+					pos
+				));
 			}
 		}
 	}
