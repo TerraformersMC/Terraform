@@ -41,7 +41,7 @@ public class TerraformDirtRegistry {
 
 		TillableBlockRegistry.add(blocks.getDirt(), blocks.getFarmland().getDefaultState());
 		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmland().getDefaultState());
-		TillableBlockRegistry.add(blocks.getGrassPath(), blocks.getFarmland().getDefaultState());
+		TillableBlockRegistry.add(blocks.getDirtPath(), blocks.getFarmland().getDefaultState());
 
 		return blocks;
 	}
