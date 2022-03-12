@@ -3,6 +3,7 @@
   "package": "com.terraformersmc.terraform.biometag.impl.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "MixinBoneMealItem",
     "MixinSlimeEntity"
   ],
   "injectors": {

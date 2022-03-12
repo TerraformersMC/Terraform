@@ -11,6 +11,11 @@ public final class TerraformBiomeTags {
 	 */
 	public static final TagKey<Biome> SURFACE_SLIME_SPAWNS = register("surface_slime_spawns");
 
+	/**
+	 * Contains biomes where bone meal used underwater can grow coral in addition to seagrass.
+	 */
+	public static final TagKey<Biome> WARM_UNDERWATER_FERTILIZATION = register("warm_underwater_fertilization");
+
 	private TerraformBiomeTags() {
 		return;
 	}
