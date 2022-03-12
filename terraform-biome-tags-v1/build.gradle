@@ -1,0 +1,6 @@
+archivesBaseName = "terraform-biome-tags-v1"
+version = formatVersion(project, "3.0.0")
+
+dependencies {
+	modImplementation fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
+}

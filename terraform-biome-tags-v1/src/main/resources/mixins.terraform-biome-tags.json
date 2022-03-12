@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.terraformersmc.terraform.biomebuilder.mixin",
+  "package": "com.terraformersmc.terraform.biometag.impl.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "MixinSlimeEntity"

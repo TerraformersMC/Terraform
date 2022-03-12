@@ -1,26 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "terraform-biome-builder-api-v1",
-  "name": "Terraform Biome Builder API (v1)",
+  "id": "terraform-biome-tags-v1",
+  "name": "Terraform Biome Tags (v1)",
   "version": "$version",
   "environment": "*",
   "license": "LGPL-3.0-only",
-  "icon": "assets/terraform-biome-builder-api-v1/icon.png",
+  "icon": "assets/terraform-biome-tags-v1/icon.png",
   "contact": {
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
+  "depends": {
+    "fabric-resource-loader-v0": "*"
+  },
   "authors": [
-    "Prospector",
-    "coderbot16",
+    "haykam821",
     "TerraformersMC"
   ],
-  "contributors": [
-    "SuperCoder79",
-    "NeusFear",
-    "Vaerian"
-  ],
-  "description": "Adds an API for adding biomes and making biomes generate",
+  "description": "Adds tags to extend biome functionality",
   "custom": {
     "modmenu:api": true,
     "modmenu": {
@@ -28,7 +25,7 @@
         "id": "terraform-api",
         "name": "Terraform API",
         "description": "Modular core library that expands on the hooks that Fabric API provides",
-        "icon": "assets/terraform-biome-builder-api-v1/icon.png",
+        "icon": "assets/terraform-biome-tags-v1/icon.png",
         "badges": [
           "library"
         ]
@@ -42,6 +39,6 @@
     }
   },
   "mixins": [
-    "mixins.terraform-biome-builder.json"
+    "mixins.terraform-biome-tags.json"
   ]
 }
