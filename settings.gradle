@@ -15,7 +15,6 @@ pluginManagement {
 
 rootProject.name = "terraform-api"
 
-include 'terraform-biome-builder-api-v1'
 include 'terraform-config-api-v1'
 include 'terraform-dirt-api-v1'
 include 'terraform-shapes-api-v1'
