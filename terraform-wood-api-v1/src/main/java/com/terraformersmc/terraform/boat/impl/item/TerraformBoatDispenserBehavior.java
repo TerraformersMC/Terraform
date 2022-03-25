@@ -3,11 +3,13 @@ package com.terraformersmc.terraform.boat.impl.item;
 import java.util.function.Supplier;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.impl.TerraformBoatEntity;
+import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
+import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPointer;
@@ -23,12 +25,15 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 	private static final float OFFSET_MULTIPLIER = 1.125F;
 
 	private final Supplier<TerraformBoatType> boatSupplier;
+	private final boolean chest;
 
 	/**
 	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this dispenser behavior
+	 * @param chest whether the boat contains a chest
 	 */
-	public TerraformBoatDispenserBehavior(Supplier<TerraformBoatType> boatSupplier) {
+	public TerraformBoatDispenserBehavior(Supplier<TerraformBoatType> boatSupplier, boolean chest) {
 		this.boatSupplier = boatSupplier;
+		this.chest = chest;
 	}
 
 	@Override
@@ -48,9 +53,19 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 			return FALLBACK_BEHAVIOR.dispense(pointer, stack);
 		}
 
-		TerraformBoatEntity boatEntity = new TerraformBoatEntity(world, x, y, z);
+		TerraformBoatType boatType = this.boatSupplier.get();
+		BoatEntity boatEntity;
 
-		boatEntity.setTerraformBoat(this.boatSupplier.get());
+		if (this.chest) {
+			TerraformChestBoatEntity chestBoat = new TerraformChestBoatEntity(world, x, y, z);
+			chestBoat.setTerraformBoat(boatType);
+			boatEntity = chestBoat;
+		} else {
+			TerraformBoatEntity boat = new TerraformBoatEntity(world, x, y, z);
+			boat.setTerraformBoat(boatType);
+			boatEntity = boat;
+		}
+
 		boatEntity.setYaw(facing.asRotation());
 
 		world.spawnEntity(boatEntity);

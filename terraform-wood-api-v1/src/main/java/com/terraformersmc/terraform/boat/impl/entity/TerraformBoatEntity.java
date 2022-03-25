@@ -1,7 +1,8 @@
-package com.terraformersmc.terraform.boat.impl;
+package com.terraformersmc.terraform.boat.impl.entity;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
+import com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer;
+import com.terraformersmc.terraform.boat.impl.TerraformBoatTrackedData;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
@@ -9,14 +10,12 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 /**
  * A {@linkplain BoatEntity boat entity} that stores a {@linkplain TerraformBoatType Terraform boat type}.
  */
-public class TerraformBoatEntity extends BoatEntity {
-	private static final String BOAT_KEY = "TerraformBoat";
+public class TerraformBoatEntity extends BoatEntity implements TerraformBoatHolder {
 	private static final TrackedData<TerraformBoatType> TERRAFORM_BOAT = DataTracker.registerData(TerraformBoatEntity.class, TerraformBoatTrackedData.HANDLER);
 
 	public TerraformBoatEntity(EntityType<? extends TerraformBoatEntity> type, World world) {
@@ -36,16 +35,14 @@ public class TerraformBoatEntity extends BoatEntity {
 		this.prevZ = z;
 	}
 
+	@Override
 	public TerraformBoatType getTerraformBoat() {
 		return this.dataTracker.get(TERRAFORM_BOAT);
 	}
 
+	@Override
 	public void setTerraformBoat(TerraformBoatType boat) {
 		this.dataTracker.set(TERRAFORM_BOAT, boat);
-	}
-
-	private boolean hasValidTerraformBoat() {
-		return this.getTerraformBoat() != null;
 	}
 
 	@Override
@@ -87,14 +84,7 @@ public class TerraformBoatEntity extends BoatEntity {
 	@Override
 	protected void readCustomDataFromNbt(NbtCompound nbt) {
 		super.readCustomDataFromNbt(nbt);
-
-		Identifier id = Identifier.tryParse(nbt.getString(BOAT_KEY));
-		if (id != null) {
-			TerraformBoatType boat = TerraformBoatTypeRegistry.INSTANCE.get(id);
-			if (boat != null) {
-				this.setTerraformBoat(boat);
-			}
-		}
+		this.readTerraformBoatFromNbt(nbt);
 
 		if (!this.hasValidTerraformBoat()) {
 			this.discard();
@@ -104,10 +94,6 @@ public class TerraformBoatEntity extends BoatEntity {
 	@Override
 	protected void writeCustomDataToNbt(NbtCompound nbt) {
 		super.writeCustomDataToNbt(nbt);
-
-		Identifier boatId = TerraformBoatTypeRegistry.INSTANCE.getId(this.getTerraformBoat());
-		if (boatId != null) {
-			nbt.putString(BOAT_KEY, boatId.toString());
-		}
+		this.writeTerraformBoatToNbt(nbt);
 	}
 }

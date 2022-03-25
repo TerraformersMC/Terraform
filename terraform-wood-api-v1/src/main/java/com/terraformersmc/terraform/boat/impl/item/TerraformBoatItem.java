@@ -5,10 +5,12 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.impl.TerraformBoatEntity;
+import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
+import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -28,14 +30,18 @@ import net.minecraft.world.event.GameEvent;
  */
 public class TerraformBoatItem extends Item {
 	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
+
 	private final Supplier<TerraformBoatType> boatSupplier;
+	private final boolean chest;
 
 	/**
 	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item
 	 */
-	public TerraformBoatItem(Supplier<TerraformBoatType> boatSupplier, Item.Settings settings) {
+	public TerraformBoatItem(Supplier<TerraformBoatType> boatSupplier, boolean chest, Item.Settings settings) {
 		super(settings);
+
 		this.boatSupplier = boatSupplier;
+		this.chest = chest;
 	}
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -62,9 +68,23 @@ public class TerraformBoatItem extends Item {
 
 		// Spawn boat entity
 		if (hitResult.getType() == HitResult.Type.BLOCK) {
-			TerraformBoatEntity boatEntity = new TerraformBoatEntity(world, hitResult.getPos().x, hitResult.getPos().y, hitResult.getPos().z);
+			double x = hitResult.getPos().x;
+			double y = hitResult.getPos().y;
+			double z = hitResult.getPos().z;
 
-			boatEntity.setTerraformBoat(this.boatSupplier.get());
+			TerraformBoatType boatType = this.boatSupplier.get();
+			BoatEntity boatEntity;
+
+			if (this.chest) {
+				TerraformChestBoatEntity chestBoat = new TerraformChestBoatEntity(world, x, y, z);
+				chestBoat.setTerraformBoat(boatType);
+				boatEntity = chestBoat;
+			} else {
+				TerraformBoatEntity boat = new TerraformBoatEntity(world, x, y, z);
+				boat.setTerraformBoat(boatType);
+				boatEntity = boat;
+			}
+
 			boatEntity.setYaw(user.getYaw());
 
 			if (!world.isSpaceEmpty(boatEntity, boatEntity.getBoundingBox().expand(-0.1d))) {
