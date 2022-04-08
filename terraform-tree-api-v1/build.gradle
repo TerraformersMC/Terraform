@@ -1,5 +1,5 @@
 archivesBaseName = "terraform-tree-api-v1"
-version = formatVersion(project, "4.0.0-alpha.1")
+version = formatVersion(project, "4.0.0-alpha.2")
 
 dependencies {
 	modImplementation fabricApi.module("fabric-object-builder-api-v1", project.fabric_version)
