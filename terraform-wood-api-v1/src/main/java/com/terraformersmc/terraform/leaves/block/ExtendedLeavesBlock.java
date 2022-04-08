@@ -14,13 +14,12 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-
-import java.util.Random;
 
 /**
  * A leaves block with extended range, permitting leaves to be as far as 13 blocks away from the tree rather than the
@@ -42,7 +41,7 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, AbstractRandom random) {
 		if (!state.get(PERSISTENT) && state.get(DISTANCE) == MAX_DISTANCE) {
 			dropStacks(state, world, pos);
 			world.removeBlock(pos, false);
@@ -51,7 +50,7 @@ public class ExtendedLeavesBlock extends Block {
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, AbstractRandom random) {
 		world.setBlockState(pos, updateDistanceFromLogs(state, world, pos), 3);
 	}
 
@@ -96,7 +95,7 @@ public class ExtendedLeavesBlock extends Block {
 
 	@Environment(EnvType.CLIENT)
 	@Override
-	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void randomDisplayTick(BlockState state, World world, BlockPos pos, AbstractRandom random) {
 		Blocks.OAK_LEAVES.randomDisplayTick(state, world, pos, random);
 	}
 

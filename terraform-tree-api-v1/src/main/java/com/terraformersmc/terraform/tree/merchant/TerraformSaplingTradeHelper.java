@@ -1,12 +1,11 @@
 package com.terraformersmc.terraform.tree.merchant;
 
-import java.util.Random;
-
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 
@@ -35,7 +34,7 @@ public final class TerraformSaplingTradeHelper {
 		}
 
 		@Override
-		public TradeOffer create(Entity entity, Random random) {
+		public TradeOffer create(Entity entity, AbstractRandom random) {
 			return new TradeOffer(new ItemStack(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
 		}
 	}
