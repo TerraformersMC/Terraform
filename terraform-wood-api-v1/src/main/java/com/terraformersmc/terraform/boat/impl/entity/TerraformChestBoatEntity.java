@@ -4,11 +4,11 @@ import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer;
 import com.terraformersmc.terraform.boat.impl.TerraformBoatTrackedData;
 
-import net.minecraft.class_7264;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle.ChestBoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 /**
  * A {@linkplain class_7264 chest boat entity} that stores a {@linkplain TerraformBoatType Terraform boat type}.
  */
-public class TerraformChestBoatEntity extends class_7264 implements TerraformBoatHolder {
+public class TerraformChestBoatEntity extends ChestBoatEntity implements TerraformBoatHolder {
 	private static final TrackedData<TerraformBoatType> TERRAFORM_BOAT = DataTracker.registerData(TerraformChestBoatEntity.class, TerraformBoatTrackedData.HANDLER);
 
 	public TerraformChestBoatEntity(EntityType<? extends TerraformChestBoatEntity> type, World world) {
