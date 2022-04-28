@@ -3,8 +3,8 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '0.10-SNAPSHOT'
-	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
+	id 'fabric-loom' version '0.11-SNAPSHOT'
+	// id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
 static def formatVersion(project, version) {
@@ -27,7 +27,7 @@ allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
-	apply plugin: 'io.github.juuxel.loom-quiltflower-mini'
+	// apply plugin: 'io.github.juuxel.loom-quiltflower-mini'
 
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
@@ -41,9 +41,9 @@ allprojects {
 		}
 	}
 
-	quiltflower {
-		addToRuntimeClasspath.set(true)
-	}
+	// quiltflower {
+	// 	addToRuntimeClasspath.set(true)
+	// }
 
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
@@ -66,15 +66,6 @@ allprojects {
 	}
 
 	afterEvaluate {
-		remapJar {
-			input = file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar")
-			archiveName = "${archivesBaseName}-${version}.jar"
-		}
-
-		artifacts {
-			dev file: file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar"), type: "jar", builtBy: jar
-		}
-
 		processResources {
 			inputs.property "version", project.version
 
