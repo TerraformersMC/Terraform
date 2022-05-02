@@ -10,6 +10,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 /**
@@ -43,6 +44,11 @@ public class TerraformBoatEntity extends BoatEntity implements TerraformBoatHold
 	@Override
 	public void setTerraformBoat(TerraformBoatType boat) {
 		this.dataTracker.set(TERRAFORM_BOAT, boat);
+	}
+
+	@Override
+	protected Text getDefaultName() {
+		return EntityType.BOAT.getName();
 	}
 
 	@Override

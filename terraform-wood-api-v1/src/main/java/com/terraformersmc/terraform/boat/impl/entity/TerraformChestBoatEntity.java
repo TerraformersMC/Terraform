@@ -11,6 +11,7 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.entity.vehicle.ChestBoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 /**
@@ -44,6 +45,11 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 	@Override
 	public void setTerraformBoat(TerraformBoatType boat) {
 		this.dataTracker.set(TERRAFORM_BOAT, boat);
+	}
+
+	@Override
+	protected Text getDefaultName() {
+		return EntityType.CHEST_BOAT.getName();
 	}
 
 	@Override
