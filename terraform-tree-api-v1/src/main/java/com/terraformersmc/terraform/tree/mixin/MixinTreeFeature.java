@@ -31,7 +31,7 @@ public abstract class MixinTreeFeature<FC extends FeatureConfig> extends Feature
 	@Redirect(method = "generate(Lnet/minecraft/world/StructureWorldAccess;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Ljava/util/function/BiConsumer;Ljava/util/function/BiConsumer;Lnet/minecraft/world/gen/feature/TreeFeatureConfig;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;canPlaceAt(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Z"))
 	private boolean terrestria$allowSandyTreeGeneration(BlockState state, WorldView world, BlockPos pos, StructureWorldAccess world2, Random random, BlockPos pos2, BiConsumer<BlockPos, BlockState> trunkReplacer, BiConsumer<BlockPos, BlockState> foliageReplacer, TreeFeatureConfig config) {
 		if ((this instanceof ExtendedTreeGeneration)) {
-			return ((ExtendedTreeGeneration) this).canGenerateOn(world2, pos);
+			return ((ExtendedTreeGeneration) this).canGenerateOn(world2, pos.down());
 		} else {
 			return state.canPlaceAt(world, pos);
 		}
