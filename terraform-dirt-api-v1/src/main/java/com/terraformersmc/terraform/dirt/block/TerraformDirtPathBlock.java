@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.DirtPathBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 
 public class TerraformDirtPathBlock extends DirtPathBlock {
 	private Block dirt;
@@ -17,7 +17,7 @@ public class TerraformDirtPathBlock extends DirtPathBlock {
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, AbstractRandom random) {
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(state, dirt.getDefaultState(), world, pos));
 	}
 }

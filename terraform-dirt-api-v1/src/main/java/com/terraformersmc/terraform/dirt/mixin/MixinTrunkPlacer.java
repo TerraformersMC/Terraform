@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.TestableWorld;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
@@ -23,7 +23,7 @@ import net.minecraft.world.gen.trunk.TrunkPlacer;
 @Mixin(TrunkPlacer.class)
 public class MixinTrunkPlacer {
 	@Inject(method = "setToDirt", at = @At("HEAD"), cancellable = true)
-	private static void notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, AbstractRandom random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
+	private static void notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
 		if (!world.testBlockState(pos, state -> state.isIn(TerraformDirtBlockTags.SOIL))) {
 			return;
 		}

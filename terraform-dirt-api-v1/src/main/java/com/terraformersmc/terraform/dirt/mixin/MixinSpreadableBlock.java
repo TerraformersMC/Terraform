@@ -6,7 +6,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SpreadableBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.AbstractRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldView;
 
 import com.terraformersmc.terraform.dirt.block.TerraformGrassBlock;
@@ -25,7 +25,7 @@ public abstract class MixinSpreadableBlock {
 	}
 
 	@Inject(method = "randomTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z"), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void onScheduledTick(BlockState state, ServerWorld world, BlockPos pos, AbstractRandom random, CallbackInfo info, BlockState defaultState, int i, BlockPos spreadingPos) {
+	private void onScheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info, BlockState defaultState, int i, BlockPos spreadingPos) {
 		Block grassBlock = TerraformGrassBlock.GRASS_SPREADS_TO.get(world.getBlockState(spreadingPos).getBlock());
 		if (grassBlock != null) {
 			BlockState grassDefaultState = grassBlock.getDefaultState();
