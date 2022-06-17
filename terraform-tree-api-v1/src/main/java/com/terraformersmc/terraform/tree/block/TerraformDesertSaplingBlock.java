@@ -1,12 +1,13 @@
 package com.terraformersmc.terraform.tree.block;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
-public class TerraformDesertSaplingBlock extends TerraformSaplingBlock {
+public class TerraformDesertSaplingBlock extends SaplingBlock {
 
 	private final boolean onlySand;
 
