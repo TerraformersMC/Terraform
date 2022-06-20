@@ -32,7 +32,7 @@ public final class TerraformBoatItemHelper {
 	 * <p>To register a boat item and its dispenser behavior:
 	 * 
 	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatItem(new Identifier("examplemod", "mahogany_boat"), () -> MAHOGANY_BOAT);
+	 *     TerraformBoatItemHelper.registerBoatItem(new Identifier("examplemod", "mahogany_boat"), () -> MAHOGANY_BOAT, false);
 	 * }</pre>
 	 * 
 	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
