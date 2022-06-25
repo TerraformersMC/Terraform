@@ -2,7 +2,7 @@ package com.terraformersmc.terraform.biomeremapper.api;
 
 public final class DataVersions {
 	private DataVersions() {
-		throw new UnsupportedOperationException();
+		return;
 	}
 
 	public static final int V_1_18   = 2846;
