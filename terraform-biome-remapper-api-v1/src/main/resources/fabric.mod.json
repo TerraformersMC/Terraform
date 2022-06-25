@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "terraform-biome-remapper-api-v1",
+  "name": "Terraform Biome Remapper API (v1)",
+  "version": "$version",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.terraformersmc.terraform.biomeremapper.impl.BiomeRemapper"
+    ]
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/terraform-biome-remapper-api-v1/icon.png",
+  "contact": {
+    "homepage": "https://github.com/TerraformersMC/Terraform",
+    "issues": "https://github.com/TerraformersMC/Terraform/issues"
+  },
+  "depends": {
+    "fabric-object-builder-api-v1": "*",
+    "fabric-networking-api-v1": "*",
+    "fabric-renderer-registries-v1": "*",
+    "fabric-resource-loader-v0": "*"
+  },
+  "authors": [
+    "Prospector",
+    "gniftygnome",
+    "TerraformersMC"
+  ],
+  "contributors": [
+  ],
+  "description": "Provides an API to remap (migrate) biomes at load time",
+  "custom": {
+    "modmenu:api": true,
+    "modmenu": {
+      "parent": {
+        "id": "terraform-api",
+        "name": "Terraform API",
+        "description": "Modular core library that expands on the hooks that Fabric API provides",
+        "icon": "assets/terraform-biome-remapper-api-v1/icon.png",
+        "badges": [
+          "library"
+        ]
+      },
+      "badges": [
+        "library"
+      ],
+      "links": {
+        "modmenu.discord": "https://discord.gg/jEGF5fb"
+      }
+    }
+  },
+  "mixins": [
+    "mixins.terraform-biome-remapper.json"
+  ]
+}

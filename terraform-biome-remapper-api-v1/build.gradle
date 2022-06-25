@@ -1,0 +1,6 @@
+archivesBaseName = "terraform-biome-remapper-api-v1"
+version = formatVersion(project, "4.0.0")
+
+dependencies {
+	modImplementation fabricApi.module("fabric-registry-sync-v0", project.fabric_version)
+}

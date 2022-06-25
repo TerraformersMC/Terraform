@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.biomeremapper.impl.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinChunkHeightAndBiomeFix",
+    "MixinLevelStorageSession",
+    "MixinSchemas"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
