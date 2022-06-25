@@ -10,6 +10,5 @@ public class BiomeRemapper implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Terraform Biome Remapper API present and accounted for.");
 	}
 }
