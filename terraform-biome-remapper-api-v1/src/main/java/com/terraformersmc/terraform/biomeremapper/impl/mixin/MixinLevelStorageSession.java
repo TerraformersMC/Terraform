@@ -25,7 +25,7 @@ import java.nio.file.Path;
 public class MixinLevelStorageSession {
 	@Shadow
 	@Final
-	private Path directory;
+	private LevelStorage.LevelSave directory;
 
 	@Unique
 	private boolean terraformBiomeRemapper$readIdMapFile(File file) throws IOException {
@@ -48,7 +48,7 @@ public class MixinLevelStorageSession {
 	@Inject(method = "readLevelProperties", at = @At("HEAD"))
 	public void terraformBiomeRemapper$readWorldProperties(CallbackInfoReturnable<SaveProperties> callbackInfo) {
 		try {
-			if (terraformBiomeRemapper$readIdMapFile(new File(new File(directory.toFile(), "data"), "fabricDynamicRegistry.dat"))) {
+			if (terraformBiomeRemapper$readIdMapFile(new File(new File(directory.path().toFile(), "data"), "fabricDynamicRegistry.dat"))) {
 				BiomeRemapper.LOGGER.info("[Registry Sync Fix] Loaded registry data");
 			}
 		} catch (FileNotFoundException e) {
