@@ -1,2 +1,1 @@
 archivesBaseName = "terraform-shapes-api-v1"
-version = formatVersion(project, "4.0.0")
