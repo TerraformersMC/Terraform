@@ -20,15 +20,14 @@ public class BiomeRemappings {
 				BiomeRemapper.LOGGER.error("Mod {} provides a broken implementation of BiomeRemapperApi", modId, e);
 			}
 		});
-
 	}
 
 	public static void register(String modId, int dataVersion, ImmutableMap<String, String> remapping) {
 		String key = dataVersion + "_" + modId;
 		if (BIOME_REMAPPING_REGISTRY.containsKey(key)) {
-			BiomeRemapper.LOGGER.warn("Ignored duplicate remapping: " + key);
+			BiomeRemapper.LOGGER.debug("Ignored duplicate remapping: " + key);
 		} else {
-			BiomeRemapper.LOGGER.info("Added remapping: " + key);
+			BiomeRemapper.LOGGER.debug("Added remapping: " + key);
 			BIOME_REMAPPING_REGISTRY.put(key, new RemappingRecord(modId, dataVersion, remapping));
 		}
 	}
