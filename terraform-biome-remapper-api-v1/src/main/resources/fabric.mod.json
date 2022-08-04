@@ -15,12 +15,6 @@
     "homepage": "https://github.com/TerraformersMC/Terraform",
     "issues": "https://github.com/TerraformersMC/Terraform/issues"
   },
-  "depends": {
-    "fabric-object-builder-api-v1": "*",
-    "fabric-networking-api-v1": "*",
-    "fabric-renderer-registries-v1": "*",
-    "fabric-resource-loader-v0": "*"
-  },
   "authors": [
     "Prospector",
     "gniftygnome",
