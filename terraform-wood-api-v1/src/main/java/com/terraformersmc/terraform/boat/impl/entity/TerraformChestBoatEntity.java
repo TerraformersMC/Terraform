@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 /**
- * A {@linkplain class_7264 chest boat entity} that stores a {@linkplain TerraformBoatType Terraform boat type}.
+ * A {@linkplain ChestBoatEntity chest boat entity} that stores a {@linkplain TerraformBoatType Terraform boat type}.
  */
 public class TerraformChestBoatEntity extends ChestBoatEntity implements TerraformBoatHolder {
 	private static final TrackedData<TerraformBoatType> TERRAFORM_BOAT = DataTracker.registerData(TerraformChestBoatEntity.class, TerraformBoatTrackedData.HANDLER);

@@ -29,7 +29,7 @@ import net.minecraft.world.event.GameEvent;
  * An {@linkplain Item item} that spawns a {@linkplain TerraformBoatEntity boat entity} with a given {@linkplain TerraformBoatType Terraform boat type}.
  */
 public class TerraformBoatItem extends Item {
-	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
+	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::canHit);
 
 	private final Supplier<TerraformBoatType> boatSupplier;
 	private final boolean chest;
