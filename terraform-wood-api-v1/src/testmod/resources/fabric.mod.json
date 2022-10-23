@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "terraform-wood-api-v1-test-mod",
+  "version": "$version",
+  "name": "Terraform Wood API (v1) Test Mod",
+  "entrypoints": {
+    "main": [
+      "com.terraformersmc.terraform.wood.test.TerraformWoodTest"
+    ],
+    "client": [
+      "com.terraformersmc.terraform.wood.test.TerraformWoodTestClient"
+    ]
+  }
+}
