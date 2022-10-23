@@ -5,6 +5,7 @@ import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 
 /**
  * An interface representing a Terraform boat.
@@ -21,6 +22,13 @@ public interface TerraformBoatType {
 	Item getChestItem();
 
 	/**
+	 * {@return the planks {@linkplain Item item} dropped when the {@linkplain TerraformBoatEntity boat entity} or {@linkplain TerraformChestBoatEntity chest boat entity} is destroyed into planks and sticks}
+	 */
+	default Item getPlanks() {
+		return Items.OAK_PLANKS;
+	}
+
+	/**
 	 * A builder for {@linkplain TerraformBoatType Terraform boat types}.
 	 * 
 	 * <p>To build a Terraform boat type:
@@ -34,9 +42,10 @@ public interface TerraformBoatType {
 	public static class Builder {
 		private Item item;
 		private Item chestItem;
+		private Item planks = Items.OAK_PLANKS;
 
 		public TerraformBoatType build() {
-			return new TerraformBoatTypeImpl(this.item, this.chestItem);
+			return new TerraformBoatTypeImpl(this.item, this.chestItem, this.planks);
 		}
 
 		/**
@@ -52,6 +61,14 @@ public interface TerraformBoatType {
 		 */
 		public Builder chestItem(Item chestItem) {
 			this.chestItem = chestItem;
+			return this;
+		}
+
+		/**
+		 * @see TerraformBoatType#getPlanks
+		 */
+		public Builder planks(Item planks) {
+			this.planks = planks;
 			return this;
 		}
 	}

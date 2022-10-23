@@ -10,10 +10,12 @@ import net.minecraft.item.Item;
 public class TerraformBoatTypeImpl implements TerraformBoatType {
 	private final Item item;
 	private final Item chestItem;
+	private final Item planks;
 
-	public TerraformBoatTypeImpl(Item item, Item chestItem) {
+	public TerraformBoatTypeImpl(Item item, Item chestItem, Item planks) {
 		this.item = item;
 		this.chestItem = chestItem;
+		this.planks = planks;
 	}
 
 	@Override
@@ -24,5 +26,10 @@ public class TerraformBoatTypeImpl implements TerraformBoatType {
 	@Override
 	public Item getChestItem() {
 		return this.chestItem;
+	}
+
+	@Override
+	public Item getPlanks() {
+		return this.planks;
 	}
 }

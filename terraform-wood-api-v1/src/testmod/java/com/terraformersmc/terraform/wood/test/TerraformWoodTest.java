@@ -19,6 +19,8 @@ import net.minecraft.util.registry.Registry;
 public class TerraformWoodTest implements ModInitializer {
 	private static final String MOD_ID = "terraform";
 
+	private static final Identifier CUSTOM_PLANKS_ID = new Identifier(MOD_ID, "custom_planks");
+
 	private static final Identifier CUSTOM_BOAT_ID = new Identifier(MOD_ID, "custom_boat");
 	private static final Identifier CUSTOM_CHEST_BOAT_ID = new Identifier(MOD_ID, "custom_chest_boat");
 	static final Identifier CUSTOM_ID = new Identifier(MOD_ID, "custom");
@@ -31,6 +33,8 @@ public class TerraformWoodTest implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Item planks = new Item(new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
 		// Boats
 		Item item = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOAT_ID, () -> boat, false);
 		Item chestItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_BOAT_ID, () -> boat, true);
@@ -38,6 +42,7 @@ public class TerraformWoodTest implements ModInitializer {
 		boat = new TerraformBoatType.Builder()
 			.item(item)
 			.chestItem(chestItem)
+			.planks(planks)
 			.build();
 
 		// Signs
@@ -52,6 +57,7 @@ public class TerraformWoodTest implements ModInitializer {
 		Registry.register(Registry.BLOCK, CUSTOM_SIGN_ID, sign);
 		Registry.register(Registry.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
 
+		Registry.register(Registry.ITEM, CUSTOM_PLANKS_ID, planks);
 		Registry.register(Registry.ITEM, CUSTOM_SIGN_ID, signItem);
 	}
 }
