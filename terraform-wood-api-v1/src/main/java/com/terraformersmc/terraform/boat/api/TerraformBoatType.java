@@ -5,12 +5,16 @@ import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 
 /**
  * An interface representing a Terraform boat.
  */
 public interface TerraformBoatType {
+	/**
+	 * {@return whether this boat is a raft with a lower {@linkplain net.minecraft.entity.vehicle.BoatEntity#getMountedHeightOffset() mounted height offset}}
+	 */
+	boolean isRaft();
+
 	/**
 	 * {@return the {@linkplain net.minecraft.entity.vehicle.BoatEntity#getPickBlockStack() pick stack} and {@linkplain Item item} dropped when the {@linkplain TerraformBoatEntity boat entity} is broken}
 	 */
@@ -24,9 +28,7 @@ public interface TerraformBoatType {
 	/**
 	 * {@return the planks {@linkplain Item item} dropped when the {@linkplain TerraformBoatEntity boat entity} or {@linkplain TerraformChestBoatEntity chest boat entity} is destroyed into planks and sticks}
 	 */
-	default Item getPlanks() {
-		return Items.OAK_PLANKS;
-	}
+	Item getPlanks();
 
 	/**
 	 * A builder for {@linkplain TerraformBoatType Terraform boat types}.
@@ -40,12 +42,21 @@ public interface TerraformBoatType {
 	 * }</pre>
 	 */
 	public static class Builder {
+		private boolean raft;
 		private Item item;
 		private Item chestItem;
-		private Item planks = Items.OAK_PLANKS;
+		private Item planks;
 
 		public TerraformBoatType build() {
-			return new TerraformBoatTypeImpl(this.item, this.chestItem, this.planks);
+			return new TerraformBoatTypeImpl(this.raft, this.item, this.chestItem, this.planks);
+		}
+
+		/**
+		 * @see TerraformBoatType#isRaft
+		 */
+		public Builder raft() {
+			this.raft = true;
+			return this;
 		}
 
 		/**

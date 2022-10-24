@@ -8,4 +8,5 @@ dependencies {
 	modImplementation fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
 
 	testmodImplementation project(path: ":terraform-wood-api-v1", configuration: "namedElements")
+	modTestmodImplementation fabricApi.module("fabric-item-group-api-v1", project.fabric_version)
 }

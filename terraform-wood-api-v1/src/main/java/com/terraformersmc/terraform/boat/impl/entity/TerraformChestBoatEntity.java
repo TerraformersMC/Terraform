@@ -78,7 +78,7 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 
 	@Override
 	public BoatEntity.Type getBoatType() {
-		return BoatEntity.Type.OAK;
+		return this.getImpersonatedBoatType();
 	}
 
 	@Override

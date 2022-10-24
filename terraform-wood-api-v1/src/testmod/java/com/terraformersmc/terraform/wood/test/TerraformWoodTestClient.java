@@ -10,7 +10,9 @@ import net.minecraft.client.util.SpriteIdentifier;
 public class TerraformWoodTestClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_ID);
+		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_BOAT_ID, false);
+		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_RAFT_ID, true);
+
 		SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, TerraformWoodTest.SIGN_TEXTURE_ID));
 	}
 }

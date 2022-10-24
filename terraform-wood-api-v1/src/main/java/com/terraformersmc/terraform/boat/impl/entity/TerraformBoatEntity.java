@@ -77,7 +77,7 @@ public class TerraformBoatEntity extends BoatEntity implements TerraformBoatHold
 
 	@Override
 	public BoatEntity.Type getBoatType() {
-		return BoatEntity.Type.OAK;
+		return this.getImpersonatedBoatType();
 	}
 
 	@Override

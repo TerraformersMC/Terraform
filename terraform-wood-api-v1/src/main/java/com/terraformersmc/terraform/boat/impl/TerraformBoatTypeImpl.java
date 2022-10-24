@@ -8,14 +8,21 @@ import net.minecraft.item.Item;
  * A simple implementation of {@link TerraformBoatType}.
  */
 public class TerraformBoatTypeImpl implements TerraformBoatType {
+	private final boolean raft;
 	private final Item item;
 	private final Item chestItem;
 	private final Item planks;
 
-	public TerraformBoatTypeImpl(Item item, Item chestItem, Item planks) {
+	public TerraformBoatTypeImpl(boolean raft, Item item, Item chestItem, Item planks) {
+		this.raft = raft;
 		this.item = item;
 		this.chestItem = chestItem;
 		this.planks = planks;
+	}
+
+	@Override
+	public boolean isRaft() {
+		return this.raft;
 	}
 
 	@Override

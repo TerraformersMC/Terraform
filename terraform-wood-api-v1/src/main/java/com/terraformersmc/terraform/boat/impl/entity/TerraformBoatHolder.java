@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.boat.impl.entity;
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -32,5 +33,9 @@ public interface TerraformBoatHolder {
 		if (boatId != null) {
 			nbt.putString(BOAT_KEY, boatId.toString());
 		}
+	}
+
+	default BoatEntity.Type getImpersonatedBoatType() {
+		return this.getTerraformBoat().isRaft() ? BoatEntity.Type.BAMBOO : BoatEntity.Type.OAK;
 	}
 }

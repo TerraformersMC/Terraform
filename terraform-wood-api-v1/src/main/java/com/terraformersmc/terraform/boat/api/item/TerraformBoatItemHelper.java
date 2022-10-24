@@ -9,7 +9,6 @@ import com.terraformersmc.terraform.boat.impl.item.TerraformBoatItem;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -18,15 +17,12 @@ import net.minecraft.util.registry.Registry;
  * such as {@linkplain #registerBoatItem(Identifier, Supplier, boolean, Item.Settings) registering them and their dispenser behavior}.
  */
 public final class TerraformBoatItemHelper {
-	private static final ItemGroup DEFAULT_ITEM_GROUP = ItemGroup.TRANSPORTATION;
-
 	private TerraformBoatItemHelper() {
 		return;
 	}
 
 	/**
 	 * Registers a {@linkplain TerraformBoatItem boat item}
-	 * with the default item group ({@link ItemGroup#TRANSPORTATION})
 	 * and its corresponding {@link #registerBoatDispenserBehavior dispenser behavior}.
 	 * 
 	 * <p>To register a boat item and its dispenser behavior:
@@ -37,7 +33,8 @@ public final class TerraformBoatItemHelper {
 	 * 
 	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
 	 * 
-	 * @see #registerBoatItem(Identifier, Supplier, boolean, ItemGroup) Helper that allows specifying a custom item group
+	 * <p>This method does not define item groups for the item.
+	 * 
 	 * @see #registerBoatItem(Identifier, Supplier, boolean, Item.Settings) Helper that allows specifying a custom item settings
 	 * 
 	 * @param id the {@linkplain Identifier identifier} to register the item with 
@@ -45,29 +42,7 @@ public final class TerraformBoatItemHelper {
 	 * @param chest whether the boat contains a chest
 	 */
 	public static Item registerBoatItem(Identifier id, Supplier<TerraformBoatType> boatSupplier, boolean chest) {
-		return registerBoatItem(id, boatSupplier, chest, DEFAULT_ITEM_GROUP);
-	}
-
-	/**
-	 * Registers a {@linkplain TerraformBoatItem boat item}
-	 * with a specified item group
-	 * and its corresponding {@link #registerBoatDispenserBehavior dispenser behavior}.
-	 * 
-	 * <p>To register a boat item and its dispenser behavior:
-	 * 
-	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatItem(new Identifier("examplemod", "mahogany_boat"), () -> MAHOGANY_BOAT, false, ItemGroup.TRANSPORTATION);
-	 * }</pre>
-	 * 
-	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
-	 * 
-	 * @see #registerBoatItem(Identifier, Supplier, false, Item.Settings) Helper that allows specifying a custom item settings
-	 * 
-	 * @param id the {@linkplain Identifier identifier} to register the item with
-	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item and dispenser behavior
-	 */
-	public static Item registerBoatItem(Identifier id, Supplier<TerraformBoatType> boatSupplier, boolean chest, ItemGroup group) {
-		return registerBoatItem(id, boatSupplier, chest, new Item.Settings().maxCount(1).group(group));
+		return registerBoatItem(id, boatSupplier, chest, new Item.Settings().maxCount(1));
 	}
 
 	/**
@@ -76,10 +51,12 @@ public final class TerraformBoatItemHelper {
 	 * <p>To register a boat item and its dispenser behavior:
 	 * 
 	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatItem(new Identifier("examplemod", "mahogany_boat"), () -> MAHOGANY_BOAT, false, new Item.Settings().maxCount(1).group(ItemGroup.TRANSPORTATION));
+	 *     TerraformBoatItemHelper.registerBoatItem(new Identifier("examplemod", "mahogany_boat"), () -> MAHOGANY_BOAT, false, new Item.Settings().maxCount(1));
 	 * }</pre>
 	 * 
 	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
+	 * 
+	 * <p>This method does not define item groups for the item.
 	 * 
 	 * @param id the {@linkplain Identifier identifier} to register the item with
 	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item and dispenser behavior
