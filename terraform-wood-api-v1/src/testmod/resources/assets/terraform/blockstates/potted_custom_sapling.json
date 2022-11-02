@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "terraform:block/potted_custom_sapling" }
+  }
+}

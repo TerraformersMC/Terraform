@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "terraform:block/stripped_custom_log",
+    "side": "terraform:block/stripped_custom_log"
+  }
+}

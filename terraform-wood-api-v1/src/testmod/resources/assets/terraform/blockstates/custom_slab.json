@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "terraform:block/custom_slab" },
+    "type=top": { "model": "terraform:block/custom_slab_top" },
+    "type=double": { "model": "terraform:block/custom_planks" }
+  }
+}

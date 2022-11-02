@@ -1,0 +1,8 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "terraform:block/custom_planks",
+    "top": "terraform:block/custom_planks",
+    "side": "terraform:block/custom_planks"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "terraform:block/custom_door_bottom",
+    "top": "terraform:block/custom_door_top"
+  }
+}

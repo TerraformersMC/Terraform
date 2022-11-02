@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "terraform:block/custom_planks"
+    }
+  }
+}
