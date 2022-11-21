@@ -1,5 +1,8 @@
 package com.terraformersmc.terraform.shapes.api;
 
+import org.joml.Quaterniondc;
+import org.joml.Quaternionfc;
+
 public interface Quaternion {
 
     static Quaternion of(double ofW, double ofI, double ofJ, double ofK) {
@@ -74,9 +77,13 @@ public interface Quaternion {
         return of(wNew, xNew, yNew, zNew);
     }
 
-    static Quaternion of(net.minecraft.util.math.Quaternion q) {
-        return of(q.getW(), q.getX(), q.getY(), q.getZ());
-    }
+	static Quaternion of(Quaterniondc q) {
+		return of(q.w(), q.x(), q.y(), q.z());
+	}
+
+	static Quaternion of(Quaternionfc q) {
+		return of(q.w(), q.x(), q.y(), q.z());
+	}
 
     static Quaternion of(Quaternion q) {
         return of(q.getW(), q.getI(), q.getJ(), q.getK());
