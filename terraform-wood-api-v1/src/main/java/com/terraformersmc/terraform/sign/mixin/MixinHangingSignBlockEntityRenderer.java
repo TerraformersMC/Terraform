@@ -38,7 +38,7 @@ public abstract class MixinHangingSignBlockEntityRenderer {
 		if (mixin.terraform$renderedBlockEntity != null) {
 			Block block = mixin.terraform$renderedBlockEntity.getCachedState().getBlock();
 			if (block instanceof TerraformSign) {
-				ci.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.HANGING_SIGNS_ATLAS_TEXTURE, ((TerraformSign) block).getTexture()));
+				ci.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, ((TerraformSign) block).getTexture()));
 			}
 		}
 	}

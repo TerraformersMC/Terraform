@@ -1,8 +1,8 @@
 package com.terraformersmc.terraform.boat.api;
 
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * @see TerraformBoatTypeRegistry#INSTANCE

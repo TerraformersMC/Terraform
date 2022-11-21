@@ -47,9 +47,9 @@ public final class TerraformBoatClientHelper {
 
 	private static TexturedModelDataProvider getTexturedModelDataProvider(boolean raft, boolean chest) {
 		if (raft) {
-			return chest ? ChestRaftEntityModel::method_45709 : RaftEntityModel::getTexturedModelData;
+			return chest ? ChestRaftEntityModel::getTexturedModelData : RaftEntityModel::getTexturedModelData;
 		} else {
-			return chest ? ChestBoatEntityModel::method_45708 : BoatEntityModel::getTexturedModelData;
+			return chest ? ChestBoatEntityModel::getTexturedModelData : BoatEntityModel::getTexturedModelData;
 		}
 	}
 

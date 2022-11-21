@@ -8,8 +8,9 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public final class TerraformBoatInitializer implements ModInitializer {
 	private static final EntityDimensions DIMENSIONS = EntityDimensions.fixed(1.375f, 0.5625f);
@@ -27,7 +28,7 @@ public final class TerraformBoatInitializer implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		TerraformBoatTrackedData.register();
-		Registry.register(Registry.ENTITY_TYPE, BOAT_ID, BOAT);
-		Registry.register(Registry.ENTITY_TYPE, CHEST_BOAT_ID, CHEST_BOAT);
+		Registry.register(Registries.ENTITY_TYPE, BOAT_ID, BOAT);
+		Registry.register(Registries.ENTITY_TYPE, CHEST_BOAT_ID, CHEST_BOAT);
 	}
 }
