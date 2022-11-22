@@ -1,8 +1,7 @@
 package com.terraformersmc.terraform.boat.impl.item;
 
-import java.util.function.Supplier;
-
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
+import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
@@ -11,6 +10,7 @@ import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -24,15 +24,15 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 	private static final DispenserBehavior FALLBACK_BEHAVIOR = new ItemDispenserBehavior();
 	private static final float OFFSET_MULTIPLIER = 1.125F;
 
-	private final Supplier<TerraformBoatType> boatSupplier;
+	private final RegistryKey<TerraformBoatType> boatKey;
 	private final boolean chest;
 
 	/**
-	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this dispenser behavior
+	 * @param boatKey a {@linkplain RegistryKey registry key} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this dispenser behavior
 	 * @param chest whether the boat contains a chest
 	 */
-	public TerraformBoatDispenserBehavior(Supplier<TerraformBoatType> boatSupplier, boolean chest) {
-		this.boatSupplier = boatSupplier;
+	public TerraformBoatDispenserBehavior(RegistryKey<TerraformBoatType> boatKey, boolean chest) {
+		this.boatKey = boatKey;
 		this.chest = chest;
 	}
 
@@ -53,7 +53,7 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 			return FALLBACK_BEHAVIOR.dispense(pointer, stack);
 		}
 
-		TerraformBoatType boatType = this.boatSupplier.get();
+		TerraformBoatType boatType = TerraformBoatTypeRegistry.INSTANCE.getOrThrow(this.boatKey);
 		BoatEntity boatEntity;
 
 		if (this.chest) {

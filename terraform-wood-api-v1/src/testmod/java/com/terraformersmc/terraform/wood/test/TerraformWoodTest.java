@@ -20,6 +20,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SignItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 public class TerraformWoodTest implements ModInitializer {
@@ -32,33 +33,33 @@ public class TerraformWoodTest implements ModInitializer {
 	protected static final Identifier CUSTOM_RAFT_ID = new Identifier(MOD_ID, "custom_raft");
 	private static final Identifier CUSTOM_CHEST_RAFT_ID = new Identifier(MOD_ID, "custom_chest_raft");
 
+	private static final RegistryKey<TerraformBoatType> CUSTOM_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_BOAT_ID);
+	private static final RegistryKey<TerraformBoatType> CUSTOM_RAFT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_RAFT_ID);
+
 	protected static final Identifier SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/sign/custom");
 	private static final Identifier CUSTOM_SIGN_ID = new Identifier(MOD_ID, "custom_sign");
 	private static final Identifier CUSTOM_WALL_SIGN_ID = new Identifier(MOD_ID, "custom_wall_sign");
 	private static final Identifier CUSTOM_HANGING_SIGN_ID = new Identifier(MOD_ID, "custom_hanging_sign");
 	private static final Identifier CUSTOM_WALL_HANGING_SIGN_ID = new Identifier(MOD_ID, "custom_wall_hanging_sign");
 
-	private static TerraformBoatType boat;
-	private static TerraformBoatType raft;
-
 	@Override
 	public void onInitialize() {
 		Item planks = new Item(new Item.Settings());
 
 		// Boats
-		Item boatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOAT_ID, () -> boat, false);
-		Item chestBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_BOAT_ID, () -> boat, true);
+		Item boatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOAT_ID, CUSTOM_BOAT_KEY, false);
+		Item chestBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_BOAT_ID, CUSTOM_BOAT_KEY, true);
 
-		Item raftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_RAFT_ID, () -> raft, false);
-		Item chestRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_RAFT_ID, () -> raft, true);
+		Item raftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_RAFT_ID, CUSTOM_RAFT_KEY, false);
+		Item chestRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_RAFT_ID, CUSTOM_RAFT_KEY, true);
 
-		boat = new TerraformBoatType.Builder()
+		TerraformBoatType boat = new TerraformBoatType.Builder()
 			.item(boatItem)
 			.chestItem(chestBoatItem)
 			.planks(planks)
 			.build();
 
-		raft = new TerraformBoatType.Builder()
+		TerraformBoatType raft = new TerraformBoatType.Builder()
 			.raft()
 			.item(raftItem)
 			.chestItem(chestRaftItem)
@@ -76,8 +77,8 @@ public class TerraformWoodTest implements ModInitializer {
 		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16));
 
 		// Register
-		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_BOAT_ID, boat);
-		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_RAFT_ID, raft);
+		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_BOAT_KEY, boat);
+		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_RAFT_KEY, raft);
 
 		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);

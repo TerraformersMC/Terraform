@@ -2,9 +2,9 @@ package com.terraformersmc.terraform.boat.impl.item;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
+import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
@@ -14,6 +14,7 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -31,16 +32,16 @@ import net.minecraft.world.event.GameEvent;
 public class TerraformBoatItem extends Item {
 	private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::canHit);
 
-	private final Supplier<TerraformBoatType> boatSupplier;
+	private final RegistryKey<TerraformBoatType> boatKey;
 	private final boolean chest;
 
 	/**
-	 * @param boatSupplier a {@linkplain Supplier supplier} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item
+	 * @param boatKey a {@linkplain RegistryKey registry key} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item
 	 */
-	public TerraformBoatItem(Supplier<TerraformBoatType> boatSupplier, boolean chest, Item.Settings settings) {
+	public TerraformBoatItem(RegistryKey<TerraformBoatType> boatKey, boolean chest, Item.Settings settings) {
 		super(settings);
 
-		this.boatSupplier = boatSupplier;
+		this.boatKey = boatKey;
 		this.chest = chest;
 	}
 
@@ -72,7 +73,7 @@ public class TerraformBoatItem extends Item {
 			double y = hitResult.getPos().y;
 			double z = hitResult.getPos().z;
 
-			TerraformBoatType boatType = this.boatSupplier.get();
+			TerraformBoatType boatType = TerraformBoatTypeRegistry.INSTANCE.getOrThrow(this.boatKey);
 			BoatEntity boatEntity;
 
 			if (this.chest) {
