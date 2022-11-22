@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.boat.impl;
 
+import java.util.Optional;
+
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 
@@ -12,19 +14,15 @@ public final class TerraformBoatTrackedData {
 		return;
 	}
 
-	public static final TrackedDataHandler<TerraformBoatType> HANDLER = new TrackedDataHandler<TerraformBoatType>() {
-		public void write(PacketByteBuf buf, TerraformBoatType boat) {
-			buf.writeIdentifier(TerraformBoatTypeRegistry.INSTANCE.getId(boat));
-		}
+	public static final TrackedDataHandler<Optional<TerraformBoatType>> HANDLER = TrackedDataHandler.ofOptional(TerraformBoatTrackedData::write, TerraformBoatTrackedData::read);
 
-		public TerraformBoatType read(PacketByteBuf buf) {
-			return TerraformBoatTypeRegistry.INSTANCE.get(buf.readIdentifier());
-		}
+	private static void write(PacketByteBuf buf, TerraformBoatType boat) {
+		buf.writeRegistryValue(TerraformBoatTypeRegistry.INSTANCE, boat);
+	}
 
-		public TerraformBoatType copy(TerraformBoatType boat) {
-			return boat;
-		}
-	};
+	private static TerraformBoatType read(PacketByteBuf buf) {
+		return buf.readRegistryValue(TerraformBoatTypeRegistry.INSTANCE);
+	}
 
 	protected static void register() {
 		TrackedDataHandlerRegistry.register(HANDLER);

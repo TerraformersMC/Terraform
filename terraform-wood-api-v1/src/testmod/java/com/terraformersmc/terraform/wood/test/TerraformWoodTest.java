@@ -18,8 +18,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
 import net.minecraft.item.SignItem;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class TerraformWoodTest implements ModInitializer {
 	private static final String MOD_ID = "terraform";
@@ -78,14 +79,14 @@ public class TerraformWoodTest implements ModInitializer {
 		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_BOAT_ID, boat);
 		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_RAFT_ID, raft);
 
-		Registry.register(Registry.BLOCK, CUSTOM_SIGN_ID, sign);
-		Registry.register(Registry.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
-		Registry.register(Registry.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
-		Registry.register(Registry.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
+		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
+		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
+		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
+		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
-		Registry.register(Registry.ITEM, CUSTOM_PLANKS_ID, planks);
-		Registry.register(Registry.ITEM, CUSTOM_SIGN_ID, signItem);
-		Registry.register(Registry.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
+		Registry.register(Registries.ITEM, CUSTOM_PLANKS_ID, planks);
+		Registry.register(Registries.ITEM, CUSTOM_SIGN_ID, signItem);
+		Registry.register(Registries.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.MANGROVE_PLANKS, planks);
