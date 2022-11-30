@@ -38,6 +38,7 @@ public class TerraformWoodTest implements ModInitializer {
 
 	protected static final Identifier SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/custom");
 	protected static final Identifier HANGING_SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/hanging/custom");
+	protected static final Identifier HANGING_SIGN_GUI_TEXTURE_ID = new Identifier(MOD_ID, "textures/gui/hanging_signs/custom");
 	private static final Identifier CUSTOM_SIGN_ID = new Identifier(MOD_ID, "custom_sign");
 	private static final Identifier CUSTOM_WALL_SIGN_ID = new Identifier(MOD_ID, "custom_wall_sign");
 	private static final Identifier CUSTOM_HANGING_SIGN_ID = new Identifier(MOD_ID, "custom_hanging_sign");
@@ -71,8 +72,8 @@ public class TerraformWoodTest implements ModInitializer {
 		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_SIGN));
 		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN));
 
-		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_HANGING_SIGN));
-		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_HANGING_SIGN));
+		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_HANGING_SIGN));
+		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_HANGING_SIGN));
 
 		Item signItem = new SignItem(new Item.Settings().maxCount(16), sign, wallSign);
 		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16));

@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.sign.mixin;
 
-import com.terraformersmc.terraform.sign.TerraformSign;
+import com.terraformersmc.terraform.sign.TerraformHangingSign;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.SignBlockEntity;
@@ -22,8 +22,9 @@ public class MixinHangingSignEditScreen {
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void initSignTextureId(SignBlockEntity signBlockEntity, boolean filtered, CallbackInfo ci) {
-		if (signBlockEntity.getCachedState().getBlock() instanceof TerraformSign) {
-			this.texture = ((TerraformSign) signBlockEntity.getCachedState().getBlock()).getTexture();
+		if (signBlockEntity.getCachedState().getBlock() instanceof TerraformHangingSign) {
+			Identifier guiTexture = ((TerraformHangingSign) signBlockEntity.getCachedState().getBlock()).getGuiTexture();
+			this.texture = new Identifier(guiTexture.getNamespace(), guiTexture.getPath() + ".png");
 		}
 	}
 }
