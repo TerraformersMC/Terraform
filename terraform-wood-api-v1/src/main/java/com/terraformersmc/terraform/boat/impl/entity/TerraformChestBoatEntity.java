@@ -74,12 +74,12 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 	}
 
 	@Override
-	public void method_47826(BoatEntity.Type type) {
+	public void setVariant(BoatEntity.Type type) {
 		return;
 	}
 
 	@Override
-	public BoatEntity.Type method_47827() {
+	public BoatEntity.Type getVariant() {
 		return this.getImpersonatedBoatType();
 	}
 

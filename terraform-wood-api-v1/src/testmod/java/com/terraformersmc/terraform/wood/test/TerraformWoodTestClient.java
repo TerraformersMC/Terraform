@@ -14,6 +14,6 @@ public class TerraformWoodTestClient implements ClientModInitializer {
 		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_RAFT_ID, true);
 
 		SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, TerraformWoodTest.SIGN_TEXTURE_ID));
-		SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.HANGING_SIGNS_ATLAS_TEXTURE, TerraformWoodTest.HANGING_SIGN_TEXTURE_ID));
+		SpriteIdentifierRegistry.INSTANCE.addIdentifier(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, TerraformWoodTest.HANGING_SIGN_TEXTURE_ID));
 	}
 }
