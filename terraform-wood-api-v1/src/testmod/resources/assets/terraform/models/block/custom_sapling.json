@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "terraform:block/custom_sapling"
+  }
+}

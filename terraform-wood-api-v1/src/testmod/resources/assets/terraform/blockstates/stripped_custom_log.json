@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "terraform:block/stripped_custom_log"
+    },
+    "axis=z": {
+      "model": "terraform:block/stripped_custom_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "terraform:block/stripped_custom_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

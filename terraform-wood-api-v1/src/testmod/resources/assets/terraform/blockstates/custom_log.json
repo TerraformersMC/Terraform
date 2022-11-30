@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "terraform:block/custom_log"
+    },
+    "axis=z": {
+      "model": "terraform:block/custom_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "terraform:block/custom_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

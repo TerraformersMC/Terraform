@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "terraform:block/stripped_custom_wood"
+    },
+    "axis=z": {
+      "model": "terraform:block/stripped_custom_wood",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "terraform:block/stripped_custom_wood",
+      "x": 90,
+      "y": 90
+    }
+  }
+}
