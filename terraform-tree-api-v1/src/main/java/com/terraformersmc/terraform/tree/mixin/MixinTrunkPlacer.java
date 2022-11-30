@@ -2,7 +2,7 @@ package com.terraformersmc.terraform.tree.mixin;
 
 import java.util.function.BiConsumer;
 import net.minecraft.block.BlockState;
-import net.minecraft.tag.BlockTags;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.TestableWorld;

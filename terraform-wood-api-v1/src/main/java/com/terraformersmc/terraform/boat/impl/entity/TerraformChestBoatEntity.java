@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.boat.impl.entity;
 
+import java.util.Optional;
+
 import com.terraformersmc.terraform.boat.api.TerraformBoatType;
 import com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer;
 import com.terraformersmc.terraform.boat.impl.TerraformBoatTrackedData;
@@ -18,7 +20,7 @@ import net.minecraft.world.World;
  * A {@linkplain ChestBoatEntity chest boat entity} that stores a {@linkplain TerraformBoatType Terraform boat type}.
  */
 public class TerraformChestBoatEntity extends ChestBoatEntity implements TerraformBoatHolder {
-	private static final TrackedData<TerraformBoatType> TERRAFORM_BOAT = DataTracker.registerData(TerraformChestBoatEntity.class, TerraformBoatTrackedData.HANDLER);
+	private static final TrackedData<Optional<TerraformBoatType>> TERRAFORM_BOAT = DataTracker.registerData(TerraformChestBoatEntity.class, TerraformBoatTrackedData.HANDLER);
 
 	public TerraformChestBoatEntity(EntityType<? extends TerraformChestBoatEntity> type, World world) {
 		super(type, world);
@@ -39,12 +41,12 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 
 	@Override
 	public TerraformBoatType getTerraformBoat() {
-		return this.dataTracker.get(TERRAFORM_BOAT);
+		return this.dataTracker.get(TERRAFORM_BOAT).orElse(null);
 	}
 
 	@Override
 	public void setTerraformBoat(TerraformBoatType boat) {
-		this.dataTracker.set(TERRAFORM_BOAT, boat);
+		this.dataTracker.set(TERRAFORM_BOAT, Optional.of(boat));
 	}
 
 	@Override
@@ -72,19 +74,19 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 	}
 
 	@Override
-	public void setBoatType(BoatEntity.Type type) {
+	public void method_47826(BoatEntity.Type type) {
 		return;
 	}
 
 	@Override
-	public BoatEntity.Type getBoatType() {
+	public BoatEntity.Type method_47827() {
 		return this.getImpersonatedBoatType();
 	}
 
 	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
-		this.dataTracker.startTracking(TERRAFORM_BOAT, null);
+		this.dataTracker.startTracking(TERRAFORM_BOAT, Optional.empty());
 	}
 
 	// Serialization

@@ -1,9 +1,9 @@
 package com.terraformersmc.terraform.dirt;
 
 import net.minecraft.block.Block;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class TerraformDirtBlockTags {
 	/**
@@ -17,6 +17,6 @@ public class TerraformDirtBlockTags {
 	}
 
 	private static TagKey<Block> register(String id) {
-		return TagKey.of(Registry.BLOCK_KEY, new Identifier("terraform", id));
+		return TagKey.of(RegistryKeys.BLOCK, new Identifier("terraform", id));
 	}
 }
