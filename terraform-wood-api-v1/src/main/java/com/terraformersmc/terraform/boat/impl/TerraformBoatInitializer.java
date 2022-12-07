@@ -1,5 +1,7 @@
 package com.terraformersmc.terraform.boat.impl;
 
+import com.terraformersmc.terraform.boat.api.TerraformBoatType;
+import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
@@ -14,6 +16,10 @@ import net.minecraft.util.Identifier;
 
 public final class TerraformBoatInitializer implements ModInitializer {
 	private static final EntityDimensions DIMENSIONS = EntityDimensions.fixed(1.375f, 0.5625f);
+
+	// Hack that prevents the following crash during client startup:
+	// Caused by: java.lang.NoClassDefFoundError: Could not initialize class com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry
+	private static final Registry<TerraformBoatType> registryInstance = TerraformBoatTypeRegistry.INSTANCE;
 
 	private static final Identifier BOAT_ID = new Identifier("terraform", "boat");
 	public static final EntityType<TerraformBoatEntity> BOAT = FabricEntityTypeBuilder.<TerraformBoatEntity>create(SpawnGroup.MISC, TerraformBoatEntity::new)
