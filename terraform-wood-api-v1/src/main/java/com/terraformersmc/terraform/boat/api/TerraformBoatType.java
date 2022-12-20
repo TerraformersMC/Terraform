@@ -4,7 +4,7 @@ import com.terraformersmc.terraform.boat.impl.TerraformBoatTypeImpl;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
 import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 
 /**
  * An interface representing a Terraform boat.
@@ -16,19 +16,19 @@ public interface TerraformBoatType {
 	boolean isRaft();
 
 	/**
-	 * {@return the {@linkplain net.minecraft.entity.vehicle.BoatEntity#getPickBlockStack() pick stack} and {@linkplain Item item} dropped when the {@linkplain TerraformBoatEntity boat entity} is broken}
+	 * {@return the {@linkplain net.minecraft.entity.vehicle.BoatEntity#getPickBlockStack() pick stack} and {@linkplain ItemConvertible item} dropped when the {@linkplain TerraformBoatEntity boat entity} is broken}
 	 */
-	Item getItem();
+	ItemConvertible getItem();
 
 	/**
-	 * {@return the {@linkplain net.minecraft.entity.vehicle.BoatEntity#getPickBlockStack() pick stack} and {@linkplain Item item} dropped when the {@linkplain TerraformChestBoatEntity chest boat entity} is broken}
+	 * {@return the {@linkplain net.minecraft.entity.vehicle.BoatEntity#getPickBlockStack() pick stack} and {@linkplain ItemConvertible item} dropped when the {@linkplain TerraformChestBoatEntity chest boat entity} is broken}
 	 */
-	Item getChestItem();
+	ItemConvertible getChestItem();
 
 	/**
-	 * {@return the planks {@linkplain Item item} dropped when the {@linkplain TerraformBoatEntity boat entity} or {@linkplain TerraformChestBoatEntity chest boat entity} is destroyed into planks and sticks}
+	 * {@return the planks {@linkplain ItemConvertible item} dropped when the {@linkplain TerraformBoatEntity boat entity} or {@linkplain TerraformChestBoatEntity chest boat entity} is destroyed into planks and sticks}
 	 */
-	Item getPlanks();
+	ItemConvertible getPlanks();
 
 	/**
 	 * A builder for {@linkplain TerraformBoatType Terraform boat types}.
@@ -43,9 +43,9 @@ public interface TerraformBoatType {
 	 */
 	public static class Builder {
 		private boolean raft;
-		private Item item;
-		private Item chestItem;
-		private Item planks;
+		private ItemConvertible item;
+		private ItemConvertible chestItem;
+		private ItemConvertible planks;
 
 		public TerraformBoatType build() {
 			return new TerraformBoatTypeImpl(this.raft, this.item, this.chestItem, this.planks);
@@ -62,7 +62,7 @@ public interface TerraformBoatType {
 		/**
 		 * @see TerraformBoatType#getItem
 		 */
-		public Builder item(Item item) {
+		public Builder item(ItemConvertible item) {
 			this.item = item;
 			return this;
 		}
@@ -70,7 +70,7 @@ public interface TerraformBoatType {
 		/**
 		 * @see TerraformBoatType#getChestItem
 		 */
-		public Builder chestItem(Item chestItem) {
+		public Builder chestItem(ItemConvertible chestItem) {
 			this.chestItem = chestItem;
 			return this;
 		}
@@ -78,7 +78,7 @@ public interface TerraformBoatType {
 		/**
 		 * @see TerraformBoatType#getPlanks
 		 */
-		public Builder planks(Item planks) {
+		public Builder planks(ItemConvertible planks) {
 			this.planks = planks;
 			return this;
 		}

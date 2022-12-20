@@ -56,7 +56,7 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 
 	@Override
 	public Item asItem() {
-		return this.getTerraformBoat().getChestItem();
+		return this.getTerraformBoat().getChestItem().asItem();
 	}
 
 	@Override
