@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(SignEditScreen.class)
 @Environment(EnvType.CLIENT)
 public class MixinSignEditScreen {
-	@ModifyVariable(method = "renderSignBackground", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/render/TexturedRenderLayers;getSignTextureId(Lnet/minecraft/util/SignType;)Lnet/minecraft/client/util/SpriteIdentifier;"))
+	@ModifyVariable(method = "renderSignBackground", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/render/TexturedRenderLayers;getSignTextureId(Lnet/minecraft/block/WoodType;)Lnet/minecraft/client/util/SpriteIdentifier;"))
 	private SpriteIdentifier getSignTextureId(SpriteIdentifier spriteIdentifier, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, BlockState state) {
 		if (state.getBlock() instanceof TerraformSign) {
 			return new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, ((TerraformSign) state.getBlock()).getTexture());

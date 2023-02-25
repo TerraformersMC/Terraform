@@ -81,7 +81,7 @@ public interface Position {
     }
 
     default BlockPos toBlockPos() {
-        return new BlockPos(this.getX(), this.getY(), this.getZ());
+        return BlockPos.ofFloored(this.getX(), this.getY(), this.getZ());
     }
 
     static Stream<Position> stream(Position start, Position end) {

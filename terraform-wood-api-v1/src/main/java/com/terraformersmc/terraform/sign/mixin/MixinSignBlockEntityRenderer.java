@@ -4,6 +4,7 @@ import com.terraformersmc.terraform.sign.TerraformSign;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.block.WoodType;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.TexturedRenderLayers;
@@ -11,7 +12,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.SignBlockEntityRenderer;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.SignType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,10 +27,10 @@ public abstract class MixinSignBlockEntityRenderer {
 	protected SignBlockEntity terraform$renderedBlockEntity;
 
 	@Shadow
-	public abstract void renderSign(MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, float scale, SignType type, Model model);
+	public abstract void renderSign(MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, float scale, WoodType type, Model model);
 
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/entity/SignBlockEntityRenderer;renderSign(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IIFLnet/minecraft/util/SignType;Lnet/minecraft/client/model/Model;)V"))
-	private void setRenderedBlockEntity(SignBlockEntityRenderer renderer, MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, float scale, SignType type, Model model, SignBlockEntity signBlockEntity) {
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/entity/SignBlockEntityRenderer;renderSign(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IIFLnet/minecraft/block/WoodType;Lnet/minecraft/client/model/Model;)V"))
+	private void setRenderedBlockEntity(SignBlockEntityRenderer renderer, MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, float scale, WoodType type, Model model, SignBlockEntity signBlockEntity) {
 		MixinSignBlockEntityRenderer mixin = (MixinSignBlockEntityRenderer) (Object) renderer;
 
 		mixin.terraform$renderedBlockEntity = signBlockEntity;

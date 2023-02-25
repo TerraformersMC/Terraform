@@ -333,7 +333,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	public boolean isTranslucent(BlockState state, BlockView view, BlockPos pos) {
+	public boolean isTransparent(BlockState state, BlockView world, BlockPos pos) {
 		return !state.get(WATERLOGGED);
 	}
 

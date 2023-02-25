@@ -94,7 +94,7 @@ public class TerraformBoatItem extends Item {
 			
 			if (!world.isClient()) {
 				world.spawnEntity(boatEntity);
-				world.emitGameEvent(user, GameEvent.ENTITY_PLACE, new BlockPos(hitResult.getPos()));
+				world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hitResult.getPos()));
 
 				if (!user.getAbilities().creativeMode) {
 					stack.decrement(1);
