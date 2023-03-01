@@ -24,9 +24,10 @@ import java.io.IOException;
 public class MixinLevelStorageSession {
 	@Shadow
 	@Final
-	private LevelStorage.LevelSave directory;
+	LevelStorage.LevelSave directory;
 
 	@Unique
+	@SuppressWarnings("UnstableApiUsage")
 	private boolean terraformBiomeRemapper$readIdMapFile(File file) throws IOException {
 		BiomeRemapper.LOGGER.debug("Reading registry data from " + file.toString());
 

@@ -12,6 +12,7 @@ import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
  * situations.  For example, if the mod remaps mod:biome1 to mod:biome2 in 1.18 and then the mod also
  * remaps mod:biome3 to mod:biome1 in 1.19, two remappings may be required.
  */
+@SuppressWarnings("unused")
 public interface BiomeRemapperApi {
 
 	/**
