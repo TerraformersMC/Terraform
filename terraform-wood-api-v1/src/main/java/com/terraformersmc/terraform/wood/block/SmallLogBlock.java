@@ -4,19 +4,16 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.ShapeContext;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.block.*;
+import net.minecraft.client.util.ParticleUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -55,33 +52,101 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	private final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
 	private final Block leaves;
-	private final Supplier<Block> stripped;
 
-	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Settings settings) {
-		super(stripped, settings);
+	public SmallLogBlock(Block leaves, Settings settings) {
+		super(settings);
 		this.setDefaultState(this.getStateManager().getDefaultState()
-			.with(UP, false)
-			.with(DOWN, false)
-			.with(WEST, false)
-			.with(EAST, false)
-			.with(NORTH, false)
-			.with(SOUTH, false)
-			.with(WATERLOGGED, false)
-			.with(HAS_LEAVES, false)
+				.with(UP, false)
+				.with(DOWN, false)
+				.with(WEST, false)
+				.with(EAST, false)
+				.with(NORTH, false)
+				.with(SOUTH, false)
+				.with(WATERLOGGED, false)
+				.with(HAS_LEAVES, false)
 		);
 
 		this.collisionShapes = this.createShapes(5);
 		this.boundingShapes = this.createShapes(5);
 		this.leaves = leaves;
-		this.stripped= stripped;
+	}
+
+	/**
+	 * <p>This constructor is deprecated in favor of using the new SmallLogBlock.of() factories
+	 * and Fabric's StrippableBlockRegistry.</p>
+	 *
+	 * <pre>{@code
+	 *     logBlock = SmallLogBlock.of(leaves, settings, color);
+	 *     strippedBlock = SmallLogBlock.of(leaves, settings, color);
+	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
+	 * }</pre>
+	 *
+	 * @param leaves Block used for leaves on log
+	 * @param stripped Supplier of default BlockState for stripped variant
+	 * @param settings Block Settings for log
+	 */
+	@Deprecated(forRemoval = true)
+	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Settings settings) {
+		this(leaves, settings);
+
+		if (stripped != null) {
+			StrippableBlockRegistry.register(this, stripped.get());
+		}
+	}
+
+	/**
+	 * Factory to create a SmallLogBlock with the provided settings and
+	 * the same map color on the top/bottom and sides.
+	 *
+	 * @param leaves Block used for leaves on log
+	 * @param settings Block Settings for log
+	 * @param color Map color for all faces of log
+	 * @return New SmallLogBlock
+	 */
+	public static SmallLogBlock of(Block leaves, Block.Settings settings, MapColor color) {
+		return new SmallLogBlock(leaves, settings.mapColor(color));
+	}
+
+	/**
+	 * Factory to create a SmallLogBlock with default settings and
+	 * different map colors on the top/bottom versus the sides.
+	 *
+	 * @param leaves Block used for leaves on log
+	 * @param wood Map color for non-bark faces of log (ends)
+	 * @param bark Map color for bark faces of log (sides)
+	 * @return New SmallLogBlock
+	 */
+	public static SmallLogBlock of(Block leaves, MapColor wood, MapColor bark) {
+		return new SmallLogBlock(leaves,
+				Block.Settings.of(
+						Material.WOOD,
+						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() :
+								Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+		);
 	}
 
 	@Environment(EnvType.CLIENT)
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		if (state.get(HAS_LEAVES)) {
-			Blocks.OAK_LEAVES.randomDisplayTick(state, world, pos, random);
+		if (!state.get(HAS_LEAVES)) {
+			return;
 		}
+		// Below here this is a copy of LeavesBlock.randomDisplayTick() from vanilla.
+		// This is because some other mods crash when we call the vanilla method on a non-LeavesBlock.
+		// To merge changes, you should typically be able to just replace vv with a copy from vanilla.
+		if (!world.hasRain(pos.up())) {
+			return;
+		}
+		if (random.nextInt(15) != 1) {
+			return;
+		}
+		BlockPos lv = pos.down();
+		BlockState lv2 = world.getBlockState(lv);
+		if (lv2.isOpaque() && lv2.isSideSolidFullSquare(world, lv, Direction.UP)) {
+			return;
+		}
+		ParticleUtil.spawnParticle(world, pos, random, ParticleTypes.DRIPPING_WATER);
 	}
 
 	@Override
@@ -127,30 +192,6 @@ public class SmallLogBlock extends BareSmallLogBlock {
 			world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(previous, state, world, pos));
 
 			return ActionResult.SUCCESS;
-		} else if(stripped != null && held.getItem() instanceof MiningToolItem) {
-			MiningToolItem tool = (MiningToolItem) held.getItem();
-
-			if(tool.getMiningSpeedMultiplier(held, state) > 1.0F) {
-				world.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-				if(!world.isClient) {
-					BlockState target = stripped.get().getDefaultState()
-						.with(BareSmallLogBlock.UP, state.get(BareSmallLogBlock.UP))
-						.with(BareSmallLogBlock.DOWN, state.get(BareSmallLogBlock.DOWN))
-						.with(BareSmallLogBlock.NORTH, state.get(BareSmallLogBlock.NORTH))
-						.with(BareSmallLogBlock.SOUTH, state.get(BareSmallLogBlock.SOUTH))
-						.with(BareSmallLogBlock.EAST, state.get(BareSmallLogBlock.EAST))
-						.with(BareSmallLogBlock.WEST, state.get(BareSmallLogBlock.WEST))
-						.with(BareSmallLogBlock.WATERLOGGED, state.get(BareSmallLogBlock.WATERLOGGED))
-						.with(SmallLogBlock.HAS_LEAVES, state.get(SmallLogBlock.HAS_LEAVES));
-
-					world.setBlockState(pos, target);
-
-					held.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
-				}
-
-				return ActionResult.SUCCESS;
-			}
 		}
 
 		return ActionResult.FAIL;
