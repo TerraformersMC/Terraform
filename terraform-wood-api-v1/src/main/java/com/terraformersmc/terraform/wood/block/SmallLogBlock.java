@@ -1,7 +1,5 @@
 package com.terraformersmc.terraform.wood.block;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
@@ -37,25 +35,14 @@ import java.util.function.Supplier;
  * Used for things like the Sakura tree.
  */
 public class SmallLogBlock extends BareSmallLogBlock {
-
 	public static final BooleanProperty HAS_LEAVES = BooleanProperty.of("has_leaves");
-
-	private static final int UP_MASK = 1 << Direction.UP.ordinal();
-	private static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
-	private static final int NORTH_MASK = 1 << Direction.NORTH.ordinal();
-	private static final int EAST_MASK = 1 << Direction.EAST.ordinal();
-	private static final int SOUTH_MASK = 1 << Direction.SOUTH.ordinal();
-	private static final int WEST_MASK = 1 << Direction.WEST.ordinal();
-
-	protected final VoxelShape[] collisionShapes;
-	protected final VoxelShape[] boundingShapes;
-	private final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
 	private final Block leaves;
 
 	public SmallLogBlock(Block leaves, Settings settings) {
 		super(settings);
-		this.setDefaultState(this.getStateManager().getDefaultState()
+		this.setDefaultState(this.stateManager.getDefaultState()
+				.with(AXIS, Direction.Axis.Y)
 				.with(UP, false)
 				.with(DOWN, false)
 				.with(WEST, false)
@@ -66,8 +53,6 @@ public class SmallLogBlock extends BareSmallLogBlock {
 				.with(HAS_LEAVES, false)
 		);
 
-		this.collisionShapes = this.createShapes(5);
-		this.boundingShapes = this.createShapes(5);
 		this.leaves = leaves;
 	}
 
@@ -121,7 +106,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 				Block.Settings.of(
 						Material.WOOD,
 						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() :
-								Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
+								state.get(UP) ? wood : bark
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);
 	}
@@ -204,7 +189,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 		builder.add(HAS_LEAVES);
 	}
 
-	private boolean shouldConnectTo(BlockState state, boolean solid, boolean leaves) {
+	protected boolean shouldConnectTo(BlockState state, boolean solid, boolean leaves) {
 		Block block = state.getBlock();
 
 		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof BareSmallLogBlock;
@@ -233,39 +218,6 @@ public class SmallLogBlock extends BareSmallLogBlock {
 				.with(SOUTH, south)
 				.with(WEST, west);
 	}
-
-	private int getShapeIndex(BlockState requested) {
-		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
-			int mask = 0;
-
-			if (state.get(UP)) {
-				mask |= UP_MASK;
-			}
-
-			if (state.get(DOWN)) {
-				mask |= DOWN_MASK;
-			}
-
-			if (state.get(NORTH)) {
-				mask |= NORTH_MASK;
-			}
-
-			if (state.get(EAST)) {
-				mask |= EAST_MASK;
-			}
-
-			if (state.get(SOUTH)) {
-				mask |= SOUTH_MASK;
-			}
-
-			if (state.get(WEST)) {
-				mask |= WEST_MASK;
-			}
-
-			return mask;
-		});
-	}
-
 
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {

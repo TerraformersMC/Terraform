@@ -22,6 +22,10 @@ public class QuarterLogBlock extends PillarBlock {
 
 	public QuarterLogBlock(Block.Settings settings) {
 		super(settings);
+
+		this.setDefaultState(this.stateManager.getDefaultState()
+				.with(AXIS, Direction.Axis.Y)
+				.with(BARK_SIDE, BarkSide.NORTHEAST));
 	}
 
 	/**

@@ -44,20 +44,22 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	public static final BooleanProperty WEST = Properties.WEST;
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
-	private static final int UP_MASK = 1 << Direction.UP.ordinal();
-	private static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
-	private static final int NORTH_MASK = 1 << Direction.NORTH.ordinal();
-	private static final int EAST_MASK = 1 << Direction.EAST.ordinal();
-	private static final int SOUTH_MASK = 1 << Direction.SOUTH.ordinal();
-	private static final int WEST_MASK = 1 << Direction.WEST.ordinal();
+	protected static final int UP_MASK = 1 << Direction.UP.ordinal();
+	protected static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
+	protected static final int NORTH_MASK = 1 << Direction.NORTH.ordinal();
+	protected static final int EAST_MASK = 1 << Direction.EAST.ordinal();
+	protected static final int SOUTH_MASK = 1 << Direction.SOUTH.ordinal();
+	protected static final int WEST_MASK = 1 << Direction.WEST.ordinal();
+
+	protected final int LOG_RADIUS = 5;
 
 	protected final VoxelShape[] collisionShapes;
 	protected final VoxelShape[] boundingShapes;
-	private final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
+	protected final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
 	public BareSmallLogBlock(Block.Settings settings) {
 		super(settings);
-		this.setDefaultState(this.getStateManager().getDefaultState()
+		this.setDefaultState(this.stateManager.getDefaultState()
 				.with(AXIS, Direction.Axis.Y)
 				.with(UP, false)
 				.with(DOWN, false)
@@ -68,8 +70,8 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 				.with(WATERLOGGED, false)
 		);
 
-		this.collisionShapes = this.createShapes(5);
-		this.boundingShapes = this.createShapes(5);
+		this.collisionShapes = this.createShapes(LOG_RADIUS);
+		this.boundingShapes = this.createShapes(LOG_RADIUS);
 	}
 
 	/**
@@ -118,12 +120,12 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		return new BareSmallLogBlock(
 				Block.Settings.of(
 						Material.WOOD,
-						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
+						(state) -> state.get(UP) ? wood : bark
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);
 	}
 
-	private int getShapeIndex(BlockState requested) {
+	protected int getShapeIndex(BlockState requested) {
 		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
 			int mask = 0;
 
@@ -354,5 +356,23 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
+	}
+
+	/**
+	 * You can call this method on Terraformers API small logs to get the trunk radius.
+	 * The trunk will occupy 2*getTrunkRadius() centered in the block.
+	 *
+	 * <pre>{@code
+	 *     int trunkRadius = 8;
+	 *     if (block instanceof BareSmallLogBlock smallLogBlock) {
+	 *         trunkRadius = smallLogBlock.getLogRadius();
+	 *     }
+	 * }</pre>
+	 *
+	 * @return The radius of the log
+	 */
+	@SuppressWarnings("unused")
+	public int getLogRadius() {
+		return LOG_RADIUS;
 	}
 }

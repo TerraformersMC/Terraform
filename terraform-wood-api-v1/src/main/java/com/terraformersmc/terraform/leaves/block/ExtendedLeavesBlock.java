@@ -9,7 +9,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -28,7 +27,11 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 
 	public ExtendedLeavesBlock(AbstractBlock.Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState().with(DISTANCE, MAX_DISTANCE).with(PERSISTENT, false).with(WATERLOGGED, false));
+
+		this.setDefaultState(this.stateManager.getDefaultState()
+				.with(DISTANCE, MAX_DISTANCE)
+				.with(PERSISTENT, false)
+				.with(WATERLOGGED, false));
 	}
 
 	@Override
@@ -102,11 +105,6 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 		}
 
 		return MAX_DISTANCE;
-	}
-
-	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(DISTANCE, PERSISTENT, WATERLOGGED);
 	}
 
 	@Override
