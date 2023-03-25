@@ -1,10 +1,9 @@
 {
   "required": true,
-  "package": "com.terraformersmc.terraform.leaves.mixin",
+  "package": "com.terraformersmc.terraform.wood.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "MixinProperties",
-    "MixinRenderLayers"
+    "MixinAxeItem"
   ],
   "injectors": {
     "defaultRequire": 1
