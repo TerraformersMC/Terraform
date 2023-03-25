@@ -33,8 +33,8 @@ public class QuarterLogBlock extends PillarBlock {
 	 * and Fabric's StrippableBlockRegistry.</p>
 	 *
 	 * <pre>{@code
-	 *     logBlock = QuarterLogBlock.of(settings, color);
-	 *     strippedBlock = QuarterLogBlock.of(settings, color);
+	 *     QuarterLogBlock logBlock = QuarterLogBlock.of(woodColor, barkColor);
+	 *     QuarterLogBlock strippedBlock = QuarterLogBlock.of(woodColor);
 	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
 	 * }</pre>
 	 *
@@ -42,7 +42,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @param color Ignored (never implemented)
 	 * @param settings Block Settings for log
 	 */
-	@Deprecated(forRemoval = true)
+	@Deprecated(forRemoval = true, since = "6.1.0")
 	public QuarterLogBlock(Supplier<Block> stripped, MapColor color, Block.Settings settings) {
 		this(settings);
 
@@ -52,15 +52,19 @@ public class QuarterLogBlock extends PillarBlock {
 	}
 
 	/**
-	 * Factory to create a QuarterLogBlock with the provided settings and
-	 * the same map color on the top/bottom and sides.
+	 * Factory to create a QuarterLogBlock with default settings and
+	 * the same map color on all block faces.
 	 *
-	 * @param settings Block Settings for log
 	 * @param color Map color for all faces of log
 	 * @return New QuarterLogBlock
 	 */
-	public static QuarterLogBlock of(Block.Settings settings, MapColor color) {
-		return new QuarterLogBlock(settings.mapColor(color));
+	public static QuarterLogBlock of(MapColor color) {
+		return new QuarterLogBlock(
+				Block.Settings.of(
+						Material.WOOD,
+						color
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+		);
 	}
 
 	/**

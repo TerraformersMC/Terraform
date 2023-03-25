@@ -10,14 +10,14 @@ import net.minecraft.block.PillarBlock;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Direction;
 
-@Deprecated(forRemoval = true)
 public class StrippableLogBlock extends PillarBlock {
 	/**
-	 * <p>This class is deprecated in favor of using PillarBlock and Fabric's StrippableBlockRegistry.</p>
+	 * <p>This class is deprecated in favor of using PillarBlock and Fabric's StrippableBlockRegistry.
+	 * However, we will keep the new factory methods unless Mojang makes map colors easier.</p>
 	 *
 	 * <pre>{@code
-	 *     logBlock = new PillarBlock(settings);
-	 *     strippedBlock = new PillarBlock(settings);
+	 *     PillarBlock logBlock = StrippableLogBlock.of(woodColor, barkColor);
+	 *     PillarBlock strippedBlock = StrippableLogBlock.of(woodColor);
 	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
 	 * }</pre>
 	 *
@@ -25,6 +25,7 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @param top Ignored (not implemented)
 	 * @param settings Block Settings for log 
 	 */
+	@Deprecated(forRemoval = true, since = "6.1.0")
 	public StrippableLogBlock(Supplier<Block> stripped, MapColor top, Settings settings) {
 		super(settings);
 
@@ -34,15 +35,19 @@ public class StrippableLogBlock extends PillarBlock {
 	}
 
 	/**
-	 * Factory to create a PillarBlock with the provided settings and
-	 * the same map color on the top/bottom and sides.
+	 * Factory to create a PillarBlock with default settings and
+	 * the same map color on all block faces.
 	 *
-	 * @param settings Block Settings for log
 	 * @param color Map color for all faces of log
 	 * @return New PillarBlock
 	 */
-	public static PillarBlock of(Block.Settings settings, MapColor color) {
-		return new PillarBlock(settings.mapColor(color));
+	public static PillarBlock of(MapColor color) {
+		return new PillarBlock(
+				Block.Settings.of(
+						Material.WOOD,
+						color
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+		);
 	}
 
 	/**

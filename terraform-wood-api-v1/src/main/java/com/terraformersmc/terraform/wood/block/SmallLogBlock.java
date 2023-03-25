@@ -61,8 +61,8 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * and Fabric's StrippableBlockRegistry.</p>
 	 *
 	 * <pre>{@code
-	 *     logBlock = SmallLogBlock.of(leaves, settings, color);
-	 *     strippedBlock = SmallLogBlock.of(leaves, settings, color);
+	 *     SmallLogBlock logBlock = SmallLogBlock.of(leaves, woodColor, barkColor);
+	 *     SmallLogBlock strippedBlock = SmallLogBlock.of(leaves, woodColor);
 	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
 	 * }</pre>
 	 *
@@ -70,7 +70,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * @param stripped Supplier of default BlockState for stripped variant
 	 * @param settings Block Settings for log
 	 */
-	@Deprecated(forRemoval = true)
+	@Deprecated(forRemoval = true, since = "6.1.0")
 	public SmallLogBlock(Block leaves, Supplier<Block> stripped, Settings settings) {
 		this(leaves, settings);
 
@@ -80,16 +80,20 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	/**
-	 * Factory to create a SmallLogBlock with the provided settings and
-	 * the same map color on the top/bottom and sides.
+	 * Factory to create a SmallLogBlock with default settings and
+	 * the same map color on all block faces.
 	 *
 	 * @param leaves Block used for leaves on log
-	 * @param settings Block Settings for log
 	 * @param color Map color for all faces of log
 	 * @return New SmallLogBlock
 	 */
-	public static SmallLogBlock of(Block leaves, Block.Settings settings, MapColor color) {
-		return new SmallLogBlock(leaves, settings.mapColor(color));
+	public static SmallLogBlock of(Block leaves, MapColor color) {
+		return new SmallLogBlock(leaves,
+				Block.Settings.of(
+						Material.WOOD,
+						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+		);
 	}
 
 	/**

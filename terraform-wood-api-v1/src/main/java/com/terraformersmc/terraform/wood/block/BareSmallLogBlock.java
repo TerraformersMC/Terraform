@@ -79,15 +79,15 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * and Fabric's StrippableBlockRegistry.</p>
 	 *
 	 * <pre>{@code
-	 *     logBlock = BareSmallLogBlock.of(settings, color);
-	 *     strippedBlock = BareSmallLogBlock.of(settings, color);
+	 *     BareSmallLogBlock logBlock = BareSmallLogBlock.of(woodColor, barkColor);
+	 *     BareSmallLogBlock strippedBlock = BareSmallLogBlock.of(woodColor);
 	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
 	 * }</pre>
 	 *
 	 * @param stripped Supplier of default BlockState for stripped variant
 	 * @param settings Block Settings for log
 	 */
-	@Deprecated(forRemoval = true)
+	@Deprecated(forRemoval = true, since = "6.1.0")
 	public BareSmallLogBlock(Supplier<Block> stripped, Block.Settings settings) {
 		this(settings);
 
@@ -97,15 +97,19 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	/**
-	 * Factory to create a BareSmallLogBlock with the provided settings and
-	 * the same map color on the top/bottom and sides.
+	 * Factory to create a BareSmallLogBlock with default settings and
+	 * the same map color on all block faces.
 	 *
-	 * @param settings Block Settings for log
 	 * @param color Map color for all faces of log
 	 * @return New BareSmallLogBlock
 	 */
-	public static BareSmallLogBlock of(Block.Settings settings, MapColor color) {
-		return new BareSmallLogBlock(settings.mapColor(color));
+	public static BareSmallLogBlock of(MapColor color) {
+		return new BareSmallLogBlock(
+				Block.Settings.of(
+						Material.WOOD,
+						color
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+		);
 	}
 
 	/**
