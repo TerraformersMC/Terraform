@@ -19,9 +19,15 @@
     "SuperCoder79",
     "NeusFear",
     "Vaerian",
-    "NebelNidas"
+    "NebelNidas",
+    "gniftygnome"
   ],
   "description": "Makes adding custom dirt/grass/podzol/etc blocks much simpler",
+  "entrypoints": {
+    "preLaunch": [
+      "com.terraformersmc.terraform.dirt.DirtPreLaunch"
+    ]
+  },
   "custom": {
     "modmenu:api": true,
     "modmenu": {
@@ -41,6 +47,9 @@
         "modmenu.discord": "https://discord.gg/jEGF5fb"
       }
     }
+  },
+  "breaks": {
+    "moretags": "*"
   },
   "mixins": [
     "mixins.terraform-dirt.json"

@@ -363,13 +363,13 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	/**
-	 * You can call this method on Terraformers API small logs to get the trunk radius.
-	 * The trunk will occupy 2*getTrunkRadius() centered in the block.
+	 * You can call this method on Terraformers API small logs to get the log radius.
+	 * The trunk will occupy 2*getLogRadius() centered in the block.
 	 *
 	 * <pre>{@code
-	 *     int trunkRadius = 8;
+	 *     int logRadius = 8;
 	 *     if (block instanceof BareSmallLogBlock smallLogBlock) {
-	 *         trunkRadius = smallLogBlock.getLogRadius();
+	 *         logRadius = smallLogBlock.getLogRadius();
 	 *     }
 	 * }</pre>
 	 *

@@ -74,6 +74,9 @@ allprojects {
 
 	repositories {
 		mavenLocal()
+
+		// mixin extras
+		maven { url 'https://jitpack.io' }
 	}
 
 	jar {
