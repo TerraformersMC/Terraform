@@ -1,6 +1,6 @@
 archivesBaseName = "terraform-dirt-api-v1"
 
 dependencies {
-	include(modImplementation("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}"))
+	include(modApiMapped("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}"))
 	annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 }
