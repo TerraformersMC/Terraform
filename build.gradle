@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '1.0.+'
+	id 'fabric-loom' version '1.1.+'
 	// id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
@@ -73,10 +73,10 @@ allprojects {
 	}
 
 	repositories {
-		mavenLocal()
-
-		// mixin extras
-		maven { url 'https://jitpack.io' }
+		maven {
+			name = 'TerraformersMC'
+			url = 'https://maven.terraformersmc.com/'
+		}
 	}
 
 	jar {
