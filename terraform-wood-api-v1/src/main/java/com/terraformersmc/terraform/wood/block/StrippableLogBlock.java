@@ -10,14 +10,25 @@ import net.minecraft.block.PillarBlock;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Direction;
 
+/**
+ * <p>This class is deprecated in favor of using PillarBlock and Fabric's StrippableBlockRegistry.
+ * However, we are providing factory methods in PillarLogHelper until Mojang makes map colors easier.</p>
+ *
+ * <pre>{@code
+ *     PillarBlock logBlock = PillarLogHelper.of(woodColor, barkColor);
+ *     PillarBlock strippedBlock = PillarLogHelper.of(woodColor);
+ *     StrippableBlockRegistry.register(logBlock, strippedBlock);
+ * }</pre>
+ */
+@Deprecated(forRemoval = true, since = "6.1.0")
 public class StrippableLogBlock extends PillarBlock {
 	/**
 	 * <p>This class is deprecated in favor of using PillarBlock and Fabric's StrippableBlockRegistry.
-	 * However, we will keep the new factory methods unless Mojang makes map colors easier.</p>
+	 * However, we are providing factory methods in PillarLogHelper until Mojang makes map colors easier.</p>
 	 *
 	 * <pre>{@code
-	 *     PillarBlock logBlock = StrippableLogBlock.of(woodColor, barkColor);
-	 *     PillarBlock strippedBlock = StrippableLogBlock.of(woodColor);
+	 *     PillarBlock logBlock = PillarLogHelper.of(woodColor, barkColor);
+	 *     PillarBlock strippedBlock = PillarLogHelper.of(woodColor);
 	 *     StrippableBlockRegistry.register(logBlock, strippedBlock);
 	 * }</pre>
 	 *
@@ -25,7 +36,6 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @param top Ignored (not implemented)
 	 * @param settings Block Settings for log 
 	 */
-	@Deprecated(forRemoval = true, since = "6.1.0")
 	public StrippableLogBlock(Supplier<Block> stripped, MapColor top, Settings settings) {
 		super(settings);
 
@@ -35,8 +45,7 @@ public class StrippableLogBlock extends PillarBlock {
 	}
 
 	/**
-	 * Factory to create a PillarBlock with default settings and
-	 * the same map color on all block faces.
+	 * Use {@code PillarLogHelper.of(color) } instead.
 	 *
 	 * @param color Map color for all faces of log
 	 * @return New PillarBlock
@@ -51,8 +60,7 @@ public class StrippableLogBlock extends PillarBlock {
 	}
 
 	/**
-	 * Factory to create a PillarBlock with default settings and
-	 * different map colors on the top/bottom versus the sides.
+	 * Use {@code PillarLogHelper.of(woodColor, barkColor) } instead.
 	 *
 	 * @param wood Map color for non-bark faces of log (ends)
 	 * @param bark Map color for bark faces of log (sides)
