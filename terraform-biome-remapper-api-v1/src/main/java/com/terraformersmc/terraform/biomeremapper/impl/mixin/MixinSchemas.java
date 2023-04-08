@@ -5,7 +5,8 @@ import com.mojang.datafixers.schemas.Schema;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.RemappingRecord;
 import net.minecraft.datafixer.Schemas;
-import net.minecraft.datafixer.fix.BiomeRenameFix;
+import net.minecraft.datafixer.TypeReferences;
+import net.minecraft.datafixer.fix.GameEventRenamesFix;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,7 +15,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 import static com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.BIOME_REMAPPING_REGISTRY;
 
@@ -23,6 +26,9 @@ public class MixinSchemas {
 	@Shadow
 	@Final
 	private static BiFunction<Integer, Schema, Schema> EMPTY_IDENTIFIER_NORMALIZE;
+
+	@Shadow
+	private static UnaryOperator<String> replacing(Map<String, String> replacements) { return null; }
 
 	@Inject(method = "build", at = @At("TAIL"))
 	private static void terraformBiomeRemapper$injectDataFixers(DataFixerBuilder builder, CallbackInfo ci) {
@@ -40,10 +46,11 @@ public class MixinSchemas {
 					dataVersion -> builder.addSchema(dataVersion, EMPTY_IDENTIFIER_NORMALIZE)
 			);
 			// Associate the requested schema with a freshly built fix for each remapping.
-			builder.addFixer(new BiomeRenameFix(
-					schema, false,
+			builder.addFixer(new GameEventRenamesFix(
+					schema,
 					"Terraform biome remapper fix for " + remappingRecord.modId() + " at data version " + remappingRecord.dataVersion(),
-					remappingRecord.remapping()
+					TypeReferences.BIOME,
+					replacing(remappingRecord.remapping())
 			));
 		}
 	}

@@ -10,6 +10,9 @@
     ],
     "client": [
       "com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientInitializer"
+    ],
+    "preLaunch": [
+      "com.terraformersmc.terraform.wood.WoodPreLaunch"
     ]
   },
   "license": "LGPL-3.0-only",

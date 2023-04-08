@@ -49,7 +49,7 @@ public class PillarLogHelper {
 	public static PillarBlock ofNether(MapColor color) {
 		return new PillarBlock(
 				Block.Settings.of(
-						Material.NETHER_WOOD,
+						Material.WOOD,
 						color
 				).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
 		);
@@ -66,7 +66,7 @@ public class PillarLogHelper {
 	public static PillarBlock ofNether(MapColor wood, MapColor bark) {
 		return new PillarBlock(
 				Block.Settings.of(
-						Material.NETHER_WOOD,
+						Material.WOOD,
 						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
 				).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
 		);
