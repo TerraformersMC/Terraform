@@ -16,8 +16,20 @@ package com.terraformersmc.terraform.noise;
  *   will be the same when ported to other languages.
  */
 
+/**
+ * <p>OpenSimplexNoise is deprecated (without present intent to remove)
+ * because we have added faster, smoother implementations by K.jpg:</p>
+ *
+ * <p>OpenSimplexNoise2 (a.k.a. OpenSimplex2F) gives a result similar to Simplex noise.</p>
+ *
+ * <p>OpenSimplexNoise2S (a.k.a. OpenSimplex2S) gives a result similar to this noise,
+ * but it is faster and distributed across more of the range (-1,1).</p>
+ *
+ * <p>For more info, see <a href="https://github.com/KdotJPG/OpenSimplex2">K.jpg's OpenSimplex2 repo</a>.</p>
+ */
+@Deprecated
+@SuppressWarnings({"UnnecessaryLocalVariable", "unused"})
 public class OpenSimplexNoise {
-
 	private static final double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
 	private static final double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
 	private static final double STRETCH_CONSTANT_3D = -1.0 / 6;              //(1/Math.sqrt(3+1)-1)/3;
@@ -28,8 +40,8 @@ public class OpenSimplexNoise {
 
 	private static final long DEFAULT_SEED = 0;
 
-	private short[] perm;
-	private short[] permGradIndex3D;
+	private final short[] perm;
+	private final short[] permGradIndex3D;
 
 	public OpenSimplexNoise() {
 		this(DEFAULT_SEED);
@@ -776,7 +788,7 @@ public class OpenSimplexNoise {
 
 	//Gradients for 2D. They approximate the directions to the
 	//vertices of an octagon from the center.
-	private static byte[] gradients2D = new byte[]{
+	private static final byte[] gradients2D = new byte[]{
 			5, 2, 2, 5,
 			-5, 2, -2, 5,
 			5, -2, 2, -5,
@@ -787,7 +799,7 @@ public class OpenSimplexNoise {
 	//vertices of a rhombicuboctahedron from the center, skewed so
 	//that the triangular and square facets can be inscribed inside
 	//circles of the same radius.
-	private static byte[] gradients3D = new byte[]{
+	private static final byte[] gradients3D = new byte[]{
 			-11, 4, 4, -4, 11, 4, -4, 4, 11,
 			11, 4, 4, 4, 11, 4, 4, 4, 11,
 			-11, -4, 4, -4, -11, 4, -4, -4, 11,
