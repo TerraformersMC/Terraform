@@ -53,7 +53,7 @@ public class StrippableLogBlock extends PillarBlock {
 	public static PillarBlock of(MapColor color) {
 		return new PillarBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						color
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);
@@ -69,7 +69,7 @@ public class StrippableLogBlock extends PillarBlock {
 	public static PillarBlock of(MapColor wood, MapColor bark) {
 		return new PillarBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);

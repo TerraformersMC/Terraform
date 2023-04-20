@@ -106,7 +106,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	public static BareSmallLogBlock of(MapColor color) {
 		return new BareSmallLogBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						color
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);
@@ -123,7 +123,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
 		return new BareSmallLogBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						(state) -> state.get(UP) ? wood : bark
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);

@@ -61,7 +61,7 @@ public class QuarterLogBlock extends PillarBlock {
 	public static QuarterLogBlock of(MapColor color) {
 		return new QuarterLogBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						color
 				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
 		);
@@ -78,7 +78,7 @@ public class QuarterLogBlock extends PillarBlock {
 	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
 		return new QuarterLogBlock(
 				Block.Settings.of(
-						Material.WOOD,
+						Material.GENERIC,
 						(state) ->
 							switch (state.get(PillarBlock.AXIS)) {
 								case Y -> wood;
