@@ -55,7 +55,7 @@ public class StrippableLogBlock extends PillarBlock {
 				Block.Settings.of(
 						Material.GENERIC,
 						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -71,7 +71,7 @@ public class StrippableLogBlock extends PillarBlock {
 				Block.Settings.of(
 						Material.GENERIC,
 						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 }

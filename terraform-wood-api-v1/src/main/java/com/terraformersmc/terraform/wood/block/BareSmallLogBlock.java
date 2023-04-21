@@ -108,7 +108,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 				Block.Settings.of(
 						Material.GENERIC,
 						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -125,7 +125,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 				Block.Settings.of(
 						Material.GENERIC,
 						(state) -> state.get(UP) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 

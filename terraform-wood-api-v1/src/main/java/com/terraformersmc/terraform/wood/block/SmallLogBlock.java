@@ -92,7 +92,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 				Block.Settings.of(
 						Material.GENERIC,
 						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -111,7 +111,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 						Material.GENERIC,
 						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() :
 								state.get(UP) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 

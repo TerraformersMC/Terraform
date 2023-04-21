@@ -63,7 +63,7 @@ public class QuarterLogBlock extends PillarBlock {
 				Block.Settings.of(
 						Material.GENERIC,
 						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -93,7 +93,7 @@ public class QuarterLogBlock extends PillarBlock {
 										case NORTHEAST, NORTHWEST -> wood;
 									};
 							}
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 

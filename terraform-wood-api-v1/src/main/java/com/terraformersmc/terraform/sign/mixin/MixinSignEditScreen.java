@@ -7,11 +7,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WoodType;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
 import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -23,7 +22,7 @@ public class MixinSignEditScreen {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/TexturedRenderLayers;getSignTextureId(Lnet/minecraft/block/WoodType;)Lnet/minecraft/client/util/SpriteIdentifier;")
 	)
 	@SuppressWarnings("unused")
-	private SpriteIdentifier getTerraformSignTextureId(WoodType type, Operation<SpriteIdentifier> original, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers, BlockState state) {
+	private SpriteIdentifier getTerraformSignTextureId(WoodType type, Operation<SpriteIdentifier> original, DrawableHelper drawContext, BlockState state) {
 		if (state.getBlock() instanceof TerraformSign signBlock) {
 			return new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture());
 		}

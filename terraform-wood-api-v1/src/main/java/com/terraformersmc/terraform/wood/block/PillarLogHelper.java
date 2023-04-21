@@ -1,6 +1,7 @@
 package com.terraformersmc.terraform.wood.block;
 
 import net.minecraft.block.*;
+import net.minecraft.block.enums.Instrument;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Direction;
 
@@ -18,7 +19,7 @@ public class PillarLogHelper {
 				Block.Settings.of(
 						Material.GENERIC,
 						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).method_51368(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -35,7 +36,7 @@ public class PillarLogHelper {
 				Block.Settings.of(
 						Material.GENERIC,
 						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD)
+				).method_51368(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
 		);
 	}
 
@@ -51,7 +52,7 @@ public class PillarLogHelper {
 				Block.Settings.of(
 						Material.GENERIC,
 						color
-				).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
+				).method_51368(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
 		);
 	}
 
@@ -68,7 +69,7 @@ public class PillarLogHelper {
 				Block.Settings.of(
 						Material.GENERIC,
 						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
+				).method_51368(Instrument.BASS).strength(2.0F).sounds(BlockSoundGroup.NETHER_STEM)
 		);
 	}
 }
