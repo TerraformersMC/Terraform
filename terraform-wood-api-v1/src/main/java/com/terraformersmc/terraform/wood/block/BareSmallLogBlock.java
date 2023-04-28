@@ -104,11 +104,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * @return New BareSmallLogBlock
 	 */
 	public static BareSmallLogBlock of(MapColor color) {
-		return new BareSmallLogBlock(
-				Block.Settings.of(
-						Material.GENERIC,
-						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new BareSmallLogBlock(Block.Settings.of()
+				.mapColor(color)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
@@ -121,11 +121,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * @return New BareSmallLogBlock
 	 */
 	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
-		return new BareSmallLogBlock(
-				Block.Settings.of(
-						Material.GENERIC,
-						(state) -> state.get(UP) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new BareSmallLogBlock(Block.Settings.of()
+				.mapColor((state) -> state.get(UP) ? wood : bark)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
@@ -296,29 +296,24 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 
 	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		switch (rotation) {
-			case CLOCKWISE_180:
-				return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
-			case COUNTERCLOCKWISE_90:
-				return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
-			case CLOCKWISE_90:
-				return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
-			default:
-				return state;
-		}
-
+		return switch (rotation) {
+			case CLOCKWISE_180 ->
+					state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
+			case COUNTERCLOCKWISE_90 ->
+					state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
+			case CLOCKWISE_90 ->
+					state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
+			default -> state;
+		};
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
-		switch (mirror) {
-			case LEFT_RIGHT:
-				return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
-			case FRONT_BACK:
-				return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
-			default:
-				return super.mirror(state, mirror);
-		}
+		return switch (mirror) {
+			case LEFT_RIGHT -> state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
+			case FRONT_BACK -> state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
+			default -> super.mirror(state, mirror);
+		};
 	}
 
 	@Override

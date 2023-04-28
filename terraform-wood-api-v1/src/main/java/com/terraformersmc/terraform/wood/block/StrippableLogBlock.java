@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Direction;
@@ -51,11 +50,11 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor color) {
-		return new PillarBlock(
-				Block.Settings.of(
-						Material.GENERIC,
-						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new PillarBlock(Block.Settings.of()
+				.mapColor(color)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
@@ -67,11 +66,11 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor wood, MapColor bark) {
-		return new PillarBlock(
-				Block.Settings.of(
-						Material.GENERIC,
-						(state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new PillarBlock(Block.Settings.of()
+				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 }

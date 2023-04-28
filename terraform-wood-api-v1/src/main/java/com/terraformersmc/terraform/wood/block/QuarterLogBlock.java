@@ -17,6 +17,7 @@ import net.minecraft.util.math.Vec3d;
  * A log block that has 4 different corners that combine together to form a huge and continuous 2x2 log.
  * Used for the mega variants of Redwood, Fir, etc
  */
+@SuppressWarnings("unused")
 public class QuarterLogBlock extends PillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 
@@ -59,11 +60,11 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock of(MapColor color) {
-		return new QuarterLogBlock(
-				Block.Settings.of(
-						Material.GENERIC,
-						color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new QuarterLogBlock(Block.Settings.of()
+				.mapColor(color)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
@@ -76,24 +77,72 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(
-				Block.Settings.of(
-						Material.GENERIC,
+		return new QuarterLogBlock(Block.Settings.of()
+				.mapColor(
 						(state) ->
-							switch (state.get(PillarBlock.AXIS)) {
-								case Y -> wood;
-								case X ->
-									switch (state.get(QuarterLogBlock.BARK_SIDE)) {
-										case NORTHWEST, SOUTHWEST -> bark;
-										case NORTHEAST, SOUTHEAST -> wood;
-									};
-								case Z ->
-									switch (state.get(QuarterLogBlock.BARK_SIDE)) {
-										case SOUTHEAST, SOUTHWEST -> bark;
-										case NORTHEAST, NORTHWEST -> wood;
-									};
-							}
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+								switch (state.get(PillarBlock.AXIS)) {
+									case Y -> wood;
+									case X ->
+											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+												case NORTHWEST, SOUTHWEST -> bark;
+												case NORTHEAST, SOUTHEAST -> wood;
+											};
+									case Z ->
+											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+												case SOUTHEAST, SOUTHWEST -> bark;
+												case NORTHEAST, NORTHWEST -> wood;
+											};
+								}
+				)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
+		);
+	}
+
+	/**
+	 * Factory to create a Nether QuarterLogBlock with default settings and
+	 * the same map color on all block faces.
+	 *
+	 * @param color Map color for all faces of log
+	 * @return New QuarterLogBlock
+	 */
+	public static QuarterLogBlock ofNether(MapColor color) {
+		return new QuarterLogBlock(Block.Settings.of()
+				.mapColor(color)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.NETHER_WOOD)
+		);
+	}
+
+	/**
+	 * Factory to create a Nether QuarterLogBlock with default settings and
+	 * different map colors on the exposed wood versus the bark sides.
+	 *
+	 * @param wood Map color for non-bark faces of log
+	 * @param bark Map color for bark faces of log
+	 * @return New QuarterLogBlock
+	 */
+	public static QuarterLogBlock ofNether(MapColor wood, MapColor bark) {
+		return new QuarterLogBlock(Block.Settings.of()
+				.mapColor(
+						(state) ->
+								switch (state.get(PillarBlock.AXIS)) {
+									case Y -> wood;
+									case X ->
+											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+												case NORTHWEST, SOUTHWEST -> bark;
+												case NORTHEAST, SOUTHEAST -> wood;
+											};
+									case Z ->
+											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+												case SOUTHEAST, SOUTHWEST -> bark;
+												case NORTHEAST, NORTHWEST -> wood;
+											};
+								}
+				)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.NETHER_WOOD)
 		);
 	}
 
@@ -150,18 +199,18 @@ public class QuarterLogBlock extends PillarBlock {
 			boolean hitSouth;
 
 			switch (axis) {
-				case Y:
+				case Y -> {
 					hitEast = hitX >= 0.5;
 					hitSouth = hitZ >= 0.5;
-					break;
-				case X:
+				}
+				case X -> {
 					hitEast = hitY <= 0.5;
 					hitSouth = hitZ >= 0.5;
-					break;
-				default:
+				}
+				default -> {
 					hitEast = hitX >= 0.5;
 					hitSouth = hitY >= 0.5;
-					break;
+				}
 			}
 
 			// Logic of placement: The quadrant the player clicks on should be the one farthest from the bark sides.

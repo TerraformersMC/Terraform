@@ -88,11 +88,11 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * @return New SmallLogBlock
 	 */
 	public static SmallLogBlock of(Block leaves, MapColor color) {
-		return new SmallLogBlock(leaves,
-				Block.Settings.of(
-						Material.GENERIC,
-						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new SmallLogBlock(leaves, Block.Settings.of()
+				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
@@ -106,12 +106,11 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * @return New SmallLogBlock
 	 */
 	public static SmallLogBlock of(Block leaves, MapColor wood, MapColor bark) {
-		return new SmallLogBlock(leaves,
-				Block.Settings.of(
-						Material.GENERIC,
-						(state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() :
-								state.get(UP) ? wood : bark
-				).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+		return new SmallLogBlock(leaves, Block.Settings.of()
+				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : state.get(UP) ? wood : bark)
+				.strength(2.0F)
+				.sounds(BlockSoundGroup.WOOD)
+				.burnable()
 		);
 	}
 
