@@ -15,7 +15,7 @@ public class PillarLogHelper {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor color) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.instrument(Instrument.BASS)
 				.strength(2.0F)
@@ -33,7 +33,7 @@ public class PillarLogHelper {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor wood, MapColor bark) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
 				.instrument(Instrument.BASS)
 				.strength(2.0F)
@@ -50,7 +50,7 @@ public class PillarLogHelper {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock ofNether(MapColor color) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.instrument(Instrument.BASS)
 				.strength(2.0F)
@@ -67,7 +67,7 @@ public class PillarLogHelper {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock ofNether(MapColor wood, MapColor bark) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
 				.instrument(Instrument.BASS)
 				.strength(2.0F)

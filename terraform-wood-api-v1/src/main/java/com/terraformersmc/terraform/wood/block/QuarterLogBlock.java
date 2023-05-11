@@ -21,7 +21,7 @@ import net.minecraft.util.math.Vec3d;
 public class QuarterLogBlock extends PillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
 
-	public QuarterLogBlock(Block.Settings settings) {
+	public QuarterLogBlock(AbstractBlock.Settings settings) {
 		super(settings);
 
 		this.setDefaultState(this.stateManager.getDefaultState()
@@ -44,7 +44,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @param settings Block Settings for log
 	 */
 	@Deprecated(forRemoval = true, since = "6.1.0")
-	public QuarterLogBlock(Supplier<Block> stripped, MapColor color, Block.Settings settings) {
+	public QuarterLogBlock(Supplier<Block> stripped, MapColor color, AbstractBlock.Settings settings) {
 		this(settings);
 
 		if (stripped != null) {
@@ -60,7 +60,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock of(MapColor color) {
-		return new QuarterLogBlock(Block.Settings.of()
+		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
@@ -77,7 +77,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(Block.Settings.of()
+		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(
 						(state) ->
 								switch (state.get(PillarBlock.AXIS)) {
@@ -108,7 +108,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock ofNether(MapColor color) {
-		return new QuarterLogBlock(Block.Settings.of()
+		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.NETHER_WOOD)
@@ -124,7 +124,7 @@ public class QuarterLogBlock extends PillarBlock {
 	 * @return New QuarterLogBlock
 	 */
 	public static QuarterLogBlock ofNether(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(Block.Settings.of()
+		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(
 						(state) ->
 								switch (state.get(PillarBlock.AXIS)) {

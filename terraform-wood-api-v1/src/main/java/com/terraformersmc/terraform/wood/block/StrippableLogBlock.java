@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.wood.block;
 import java.util.function.Supplier;
 
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.PillarBlock;
@@ -50,7 +51,7 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor color) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
@@ -66,7 +67,7 @@ public class StrippableLogBlock extends PillarBlock {
 	 * @return New PillarBlock
 	 */
 	public static PillarBlock of(MapColor wood, MapColor bark) {
-		return new PillarBlock(Block.Settings.of()
+		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)

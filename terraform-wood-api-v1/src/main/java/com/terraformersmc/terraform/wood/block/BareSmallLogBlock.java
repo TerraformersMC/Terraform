@@ -57,7 +57,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	protected final VoxelShape[] boundingShapes;
 	protected final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
-	public BareSmallLogBlock(Block.Settings settings) {
+	public BareSmallLogBlock(AbstractBlock.Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
 				.with(AXIS, Direction.Axis.Y)
@@ -88,7 +88,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * @param settings Block Settings for log
 	 */
 	@Deprecated(forRemoval = true, since = "6.1.0")
-	public BareSmallLogBlock(Supplier<Block> stripped, Block.Settings settings) {
+	public BareSmallLogBlock(Supplier<Block> stripped, AbstractBlock.Settings settings) {
 		this(settings);
 
 		if (stripped != null) {
@@ -104,7 +104,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * @return New BareSmallLogBlock
 	 */
 	public static BareSmallLogBlock of(MapColor color) {
-		return new BareSmallLogBlock(Block.Settings.of()
+		return new BareSmallLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
@@ -121,7 +121,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * @return New BareSmallLogBlock
 	 */
 	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
-		return new BareSmallLogBlock(Block.Settings.of()
+		return new BareSmallLogBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> state.get(UP) ? wood : bark)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)

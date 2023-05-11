@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '1.1.+'
+	id 'fabric-loom' version '1.2.+'
 	// id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
 }
 
@@ -80,7 +80,7 @@ allprojects {
 	}
 
 	jar {
-		classifier = "dev"
+		archiveClassifier.set("dev")
 	}
 
 	tasks.withType(ProcessResources).configureEach {
@@ -92,7 +92,7 @@ allprojects {
 	}
 
 	task sourcesJar(type: Jar, dependsOn: classes) {
-		classifier = "sources"
+		archiveClassifier.set("sources")
 		from sourceSets.main.allSource
 	}
 
