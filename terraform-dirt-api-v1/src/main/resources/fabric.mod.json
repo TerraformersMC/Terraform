@@ -23,11 +23,6 @@
     "gniftygnome"
   ],
   "description": "Makes adding custom dirt/grass/podzol/etc blocks much simpler",
-  "entrypoints": {
-    "preLaunch": [
-      "com.terraformersmc.terraform.dirt.DirtPreLaunch"
-    ]
-  },
   "custom": {
     "modmenu:api": true,
     "modmenu": {
