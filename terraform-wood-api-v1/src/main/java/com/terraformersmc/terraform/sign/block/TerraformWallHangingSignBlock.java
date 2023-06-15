@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.sign.block;
 
+import com.terraformersmc.terraform.sign.BlockSettingsLock;
 import com.terraformersmc.terraform.sign.TerraformHangingSign;
 
 import net.minecraft.block.WallHangingSignBlock;
@@ -11,7 +12,7 @@ public class TerraformWallHangingSignBlock extends WallHangingSignBlock implemen
 	private final Identifier guiTexture;
 
 	public TerraformWallHangingSignBlock(Identifier texture, Identifier guiTexture, Settings settings) {
-		super(settings, WoodType.OAK);
+		super(BlockSettingsLock.lock(settings), WoodType.OAK);
 		this.texture = texture;
 		this.guiTexture = guiTexture;
 	}

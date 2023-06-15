@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.sign.block;
 
+import com.terraformersmc.terraform.sign.BlockSettingsLock;
 import com.terraformersmc.terraform.sign.TerraformSign;
 
 import net.minecraft.block.SignBlock;
@@ -10,7 +11,7 @@ public class TerraformSignBlock extends SignBlock implements TerraformSign {
 	private final Identifier texture;
 
 	public TerraformSignBlock(Identifier texture, Settings settings) {
-		super(settings, WoodType.OAK);
+		super(BlockSettingsLock.lock(settings), WoodType.OAK);
 		this.texture = texture;
 	}
 
