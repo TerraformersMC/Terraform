@@ -18,7 +18,7 @@ public class MixinAbstractBlockSettings implements BlockSettingsLock {
 	@Inject(method = "sounds", at = @At("HEAD"), cancellable = true)
 	private void terraform$preventSoundsOverride(CallbackInfoReturnable<AbstractBlock.Settings> ci) {
 		if (this.terraform$locked) {
-			ci.cancel();
+			ci.setReturnValue((AbstractBlock.Settings) (Object) this);
 			this.terraform$locked = false;
 		}
 	}
