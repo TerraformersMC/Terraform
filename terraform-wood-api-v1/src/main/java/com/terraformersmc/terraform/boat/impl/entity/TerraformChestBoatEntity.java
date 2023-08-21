@@ -51,7 +51,11 @@ public class TerraformChestBoatEntity extends ChestBoatEntity implements Terrafo
 
 	@Override
 	protected Text getDefaultName() {
-		return EntityType.CHEST_BOAT.getName();
+		if (this.getTerraformBoat() == null) {
+			return EntityType.CHEST_BOAT.getName();
+		}
+
+		return super.getDefaultName();
 	}
 
 	@Override

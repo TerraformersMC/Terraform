@@ -50,7 +50,11 @@ public class TerraformBoatEntity extends BoatEntity implements TerraformBoatHold
 
 	@Override
 	protected Text getDefaultName() {
-		return EntityType.BOAT.getName();
+		if (this.getTerraformBoat() == null) {
+			return EntityType.BOAT.getName();
+		}
+
+		return super.getDefaultName();
 	}
 
 	@Override
