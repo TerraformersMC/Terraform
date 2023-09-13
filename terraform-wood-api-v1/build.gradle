@@ -11,6 +11,5 @@ dependencies {
 	testmodImplementation project(path: ":terraform-wood-api-v1", configuration: "namedElements")
 	modTestmodImplementation fabricApi.module("fabric-item-group-api-v1", project.fabric_version)
 
-	include(modImplementation("com.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}"))
-	annotationProcessor("com.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}")
+	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
 }

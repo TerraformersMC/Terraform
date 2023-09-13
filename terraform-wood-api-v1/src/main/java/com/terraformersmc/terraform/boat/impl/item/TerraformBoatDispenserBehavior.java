@@ -15,6 +15,7 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -39,10 +40,11 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 	@Override
 	public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
 		Direction facing = pointer.getBlockState().get(DispenserBlock.FACING);
+		Vec3d centerPos = pointer.method_53906();
 
-		double x = pointer.getX() + facing.getOffsetX() * OFFSET_MULTIPLIER;
-		double y = pointer.getY() + facing.getOffsetY() * OFFSET_MULTIPLIER;
-		double z = pointer.getZ() + facing.getOffsetZ() * OFFSET_MULTIPLIER;
+		double x = centerPos.getX() + facing.getOffsetX() * OFFSET_MULTIPLIER;
+		double y = centerPos.getY() + facing.getOffsetY() * OFFSET_MULTIPLIER;
+		double z = centerPos.getZ() + facing.getOffsetZ() * OFFSET_MULTIPLIER;
 
 		World world = pointer.getWorld();
 		BlockPos pos = pointer.getPos().offset(facing);
