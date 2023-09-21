@@ -8,22 +8,23 @@ import com.terraformersmc.terraform.boat.impl.entity.TerraformChestBoatEntity;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 /**
  * A {@linkplain DispenserBehavior dispenser behavior} that spawns a {@linkplain TerraformBoatEntity boat entity} with a given {@linkplain TerraformBoatType Terraform boat type}.
  */
 public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 	private static final DispenserBehavior FALLBACK_BEHAVIOR = new ItemDispenserBehavior();
-	private static final float OFFSET_MULTIPLIER = 1.125F;
+	private static final double OFFSET_MULTIPLIER = 1.125F;
 
 	private final RegistryKey<TerraformBoatType> boatKey;
 	private final boolean chest;
@@ -39,18 +40,19 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 
 	@Override
 	public ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
-		Direction facing = pointer.getBlockState().get(DispenserBlock.FACING);
-		Vec3d centerPos = pointer.method_53906();
+		Direction facing = pointer.state().get(DispenserBlock.FACING);
+		ServerWorld world = pointer.world();
+		Vec3d centerPos = pointer.centerPos();
 
-		double x = centerPos.getX() + facing.getOffsetX() * OFFSET_MULTIPLIER;
+		double horizontalOffsetMultiplier = (OFFSET_MULTIPLIER + EntityType.BOAT.getWidth()) / 2.0d;
+		double x = centerPos.getX() + facing.getOffsetX() * horizontalOffsetMultiplier;
 		double y = centerPos.getY() + facing.getOffsetY() * OFFSET_MULTIPLIER;
-		double z = centerPos.getZ() + facing.getOffsetZ() * OFFSET_MULTIPLIER;
+		double z = centerPos.getZ() + facing.getOffsetZ() * horizontalOffsetMultiplier;
 
-		World world = pointer.getWorld();
-		BlockPos pos = pointer.getPos().offset(facing);
+		BlockPos pos = pointer.pos().offset(facing);
 
 		if (world.getFluidState(pos).isIn(FluidTags.WATER)) {
-			y += 1;
+			y += 1.0d;
 		} else if (!world.getBlockState(pos).isAir() || !world.getFluidState(pos.down()).isIn(FluidTags.WATER)) {
 			return FALLBACK_BEHAVIOR.dispense(pointer, stack);
 		}
@@ -74,5 +76,10 @@ public class TerraformBoatDispenserBehavior extends ItemDispenserBehavior {
 
 		stack.decrement(1);
 		return stack;
+	}
+
+	@Override
+	protected void playSound(BlockPointer pointer) {
+		pointer.world().syncWorldEvent(1000, pointer.pos(), 0);
 	}
 }
