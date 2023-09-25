@@ -17,15 +17,18 @@ import net.minecraft.world.WorldView;
 
 @Mixin(targets = "net.minecraft.entity.passive.RabbitEntity$EatCarrotCropGoal")
 public class MixinRabbitEntity {
-
 	@Shadow
 	private boolean wantsCarrots;
 
 	@Shadow
 	private boolean hasTarget;
 
-	@Inject(method = "isTargetPos(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;)Z", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-	private void onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info, BlockState state) {
+	@Inject(method = "isTargetPos",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"),
+			cancellable = true,
+			locals = LocalCapture.CAPTURE_FAILHARD
+	)
+	private void terraformDirt$onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState state) {
 		Block block = state.getBlock();
 		if (block instanceof FarmlandBlock && state.isIn(TerraformDirtBlockTags.FARMLAND) && this.wantsCarrots && !this.hasTarget) {
 			state = world.getBlockState(pos.up());
@@ -33,7 +36,7 @@ public class MixinRabbitEntity {
 
 			if (block instanceof CarrotsBlock && ((CarrotsBlock) block).isMature(state)) {
 				this.hasTarget = true;
-				info.setReturnValue(true);
+				cir.setReturnValue(true);
 			}
 		}
 	}

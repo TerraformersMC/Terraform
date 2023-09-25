@@ -14,7 +14,7 @@ public class MixinCropBlock {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
 	)
 	@SuppressWarnings("unused")
-	private static boolean terraform$isOfFarmlandTag(BlockState instance, Block block, Operation<Boolean> original) {
+	private static boolean terraformDirt$isOfFarmlandTag(BlockState instance, Block block, Operation<Boolean> original) {
 		return original.call(instance, block) || (block == Blocks.FARMLAND && instance.isIn(TerraformDirtBlockTags.FARMLAND));
 	}
 }

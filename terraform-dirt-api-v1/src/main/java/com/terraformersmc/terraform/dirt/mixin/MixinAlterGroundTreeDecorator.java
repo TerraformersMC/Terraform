@@ -18,9 +18,12 @@ import net.minecraft.world.gen.treedecorator.TreeDecorator;
 @Mixin(AlterGroundTreeDecorator.class)
 public class MixinAlterGroundTreeDecorator {
 	// prepareGroundColumn
-	@Inject(method = "setColumn(Lnet/minecraft/world/gen/treedecorator/TreeDecorator$Generator;Lnet/minecraft/util/math/BlockPos;)V", at = @At("HEAD"), cancellable = true)
-	private void terraform$allowCustomPodzolPlacement(TreeDecorator.Generator generator, BlockPos pos, CallbackInfo callback) {
-		for(int i = 2; i >= -3; --i) {
+	@Inject(method = "setColumn(Lnet/minecraft/world/gen/treedecorator/TreeDecorator$Generator;Lnet/minecraft/util/math/BlockPos;)V",
+			at = @At("HEAD"),
+			cancellable = true
+	)
+	private void terraformDirt$allowCustomPodzolPlacement(TreeDecorator.Generator generator, BlockPos pos, CallbackInfo ci) {
+		for (int i = 2; i >= -3; --i) {
 			BlockPos posUp = pos.up(i);
 
 			// Test if there's a custom soil block at this location
@@ -30,7 +33,7 @@ public class MixinAlterGroundTreeDecorator {
 				Block podzol = TerraformDirtRegistry.getFromWorld(generator.getWorld(), posUp).map(DirtBlocks::getPodzol).orElse(Blocks.PODZOL);
 
 				generator.replace(posUp, podzol.getDefaultState());
-				callback.cancel();
+				ci.cancel();
 				return;
 			}
 

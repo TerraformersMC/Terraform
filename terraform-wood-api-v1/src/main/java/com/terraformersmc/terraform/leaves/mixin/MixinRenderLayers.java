@@ -1,6 +1,7 @@
 package com.terraformersmc.terraform.leaves.mixin;
 
 import com.terraformersmc.terraform.wood.block.SmallLogBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderLayers;
@@ -22,9 +23,10 @@ public class MixinRenderLayers {
 	private static boolean fancyGraphicsOrBetter;
 
 	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
-	private static void onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<RenderLayer> info) {
-		if (state.getBlock() instanceof ExtendedLeavesBlock || state.getBlock() instanceof SmallLogBlock && state.get(SmallLogBlock.HAS_LEAVES)) {
-			info.setReturnValue(fancyGraphicsOrBetter ? RenderLayer.getCutoutMipped() : RenderLayer.getSolid());
+	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<RenderLayer> cir) {
+		Block block = state.getBlock();
+		if (block instanceof ExtendedLeavesBlock || block instanceof SmallLogBlock && state.get(SmallLogBlock.HAS_LEAVES)) {
+			cir.setReturnValue(fancyGraphicsOrBetter ? RenderLayer.getCutoutMipped() : RenderLayer.getSolid());
 		}
 	}
 }

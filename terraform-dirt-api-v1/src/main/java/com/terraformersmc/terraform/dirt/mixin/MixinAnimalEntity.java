@@ -1,24 +1,27 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldAccess;
 
 @Mixin(AnimalEntity.class)
 public class MixinAnimalEntity {
-	@Inject(method = "isValidNaturalSpawn(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)Z", at = @At("HEAD"), cancellable = true)
-	private static void terraform$spawnOnCustomGrass(EntityType<? extends AnimalEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-		if(world.getBlockState(pos.down()).isIn(TerraformDirtBlockTags.GRASS_BLOCKS) && world.getBaseLightLevel(pos, 0) > 8) {
-			cir.setReturnValue(true);
+	@WrapOperation(
+			method = "isValidNaturalSpawn",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
+	)
+	@SuppressWarnings("unused")
+	private static boolean terraformDirt$spawnOnCustomGrass(BlockState instance, TagKey<Block> grassTag, Operation<Boolean> operation) {
+		if (instance.isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
+			return true;
 		}
+
+		return operation.call(instance, grassTag);
 	}
 }

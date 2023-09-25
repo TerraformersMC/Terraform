@@ -17,9 +17,9 @@ import net.minecraft.world.BlockView;
 @Mixin({AttachedStemBlock.class, CropBlock.class, StemBlock.class})
 public class MixinPlantingOnFarmland {
 	@Inject(method = "canPlantOnTop", at = @At("HEAD"), cancellable = true)
-	private void onCanPlantOnTop(BlockState floor, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
+	private void terraformDirt$onCanPlantOnTop(BlockState floor, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
 		if (floor.getBlock() instanceof FarmlandBlock && floor.isIn(TerraformDirtBlockTags.FARMLAND)) {
-			callback.setReturnValue(true);
+			cir.setReturnValue(true);
 		}
 	}
 }

@@ -28,10 +28,11 @@ public class TerraformDirtRegistry {
 	 * else things will not work properly!</p>
 	 *
 	 * @param blocks the DirtBlocks to register with Terraform. Note that you are still responsible for registering the
-	 *               block instances with {@link net.minecraft.util.registry.Registry#BLOCK} yourself, this method does
+	 *               block instances with {@link net.minecraft.registry.Registries#BLOCK} yourself, this method does
 	 *               not do that for you.
 	 * @return the registered DirtBlocks instance for convenience
 	 */
+	@SuppressWarnings("unused")
 	public static DirtBlocks register(DirtBlocks blocks) {
 		Objects.requireNonNull(blocks);
 
@@ -46,12 +47,22 @@ public class TerraformDirtRegistry {
 		return blocks;
 	}
 
-	public static Optional<DirtBlocks> getFromWorld(TestableWorld world, BlockPos pos) {
+    /**
+     * Return the corresponding DirtBlocks if the Block at pos is any Terraform API dirt variant;
+	 * otherwise returns {@link Optional#empty()}.
+	 *
+	 * <p>If you are looking for only specific dirt variants, see
+	 * {@link TerraformDirtRegistry#getByGrassBlock(Block)} and
+	 * {@link TerraformDirtRegistry#getByFarmland(Block)}.</p>
+     */
+    public static Optional<DirtBlocks> getFromWorld(TestableWorld world, BlockPos pos) {
 		for (DirtBlocks blocks: TYPES) {
 			Predicate<BlockState> isDirtLike =
-					state -> state.getBlock() == blocks.getDirt() ||
-							state.getBlock() == blocks.getGrassBlock() ||
-							state.getBlock() == blocks.getPodzol();
+					state -> state.isOf(blocks.getDirt()) ||
+							state.isOf(blocks.getDirtPath()) ||
+							state.isOf(blocks.getFarmland()) ||
+							state.isOf(blocks.getGrassBlock()) ||
+							state.isOf(blocks.getPodzol());
 
 			if (world.testBlockState(pos, isDirtLike)) {
 				return Optional.of(blocks);

@@ -30,17 +30,17 @@ public abstract class MixinSignBlockEntityRenderer {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/entity/SignBlockEntityRenderer;renderSign(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/block/WoodType;Lnet/minecraft/client/model/Model;)V")
 	)
 	@SuppressWarnings("unused")
-	private void setRenderedBlockEntity(SignBlockEntityRenderer instance, MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, WoodType type, Model model, Operation<Void> original, SignBlockEntity signBlockEntity) {
+	private void terraformWood$setRenderedBlockEntity(SignBlockEntityRenderer instance, MatrixStack matrices, VertexConsumerProvider verticesProvider, int light, int overlay, WoodType type, Model model, Operation<Void> original, SignBlockEntity signBlockEntity) {
 		this.terraform$renderedBlockEntity = signBlockEntity;
 		original.call(instance, matrices, verticesProvider, light, overlay, type, model);
 		this.terraform$renderedBlockEntity = null;
 	}
 
 	@Inject(method = "getTextureId", at = @At("HEAD"), cancellable = true)
-	private void getSignTextureId(CallbackInfoReturnable<SpriteIdentifier> ci) {
+	private void terraformWood$rendererSignTextureId(CallbackInfoReturnable<SpriteIdentifier> cir) {
 		if (this.terraform$renderedBlockEntity != null) {
 			if (this.terraform$renderedBlockEntity.getCachedState().getBlock() instanceof TerraformSign signBlock) {
-				ci.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture()));
+				cir.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture()));
 			}
 		}
 	}

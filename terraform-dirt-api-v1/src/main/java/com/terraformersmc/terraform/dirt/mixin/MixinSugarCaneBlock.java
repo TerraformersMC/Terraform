@@ -1,35 +1,27 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SugarCaneBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.WorldView;
+import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SugarCaneBlock.class)
 public class MixinSugarCaneBlock {
-	@Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
-	private void canPlaceAt(BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-		BlockPos downPos = pos.down();
-
-		if (world.getBlockState(downPos).isIn(TerraformDirtBlockTags.SOIL)) {
-
-			for(Direction direction: Direction.Type.HORIZONTAL) {
-				BlockState candidateState = world.getBlockState(downPos.offset(direction));
-				FluidState fluidState = world.getFluidState(downPos.offset(direction));
-
-				if (fluidState.isIn(FluidTags.WATER) || candidateState.getBlock() == Blocks.FROSTED_ICE) {
-					info.setReturnValue(true);
-				}
-			}
+	@WrapOperation(
+			method = "canPlaceAt",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 0)
+	)
+	@SuppressWarnings("unused")
+	private boolean terraformDirt$canPlaceOnSoil(BlockState instance, TagKey<Block> dirtTag, Operation<Boolean> operation) {
+		if (instance.isIn(TerraformDirtBlockTags.SOIL)) {
+			return true;
 		}
+
+		return operation.call(instance, dirtTag);
 	}
 }

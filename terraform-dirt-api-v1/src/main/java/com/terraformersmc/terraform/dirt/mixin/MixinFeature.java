@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Feature.class)
 public class MixinFeature {
 	@Inject(method = "isSoil(Lnet/minecraft/block/BlockState;)Z", at = @At("HEAD"), cancellable = true)
-	private static void terraform$includeCustomSoil(BlockState state, CallbackInfoReturnable<Boolean> callback) {
+	private static void terraformDirt$includeCustomSoil(BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		if (state.isIn(TerraformDirtBlockTags.SOIL)) {
-			callback.setReturnValue(true);
+			cir.setReturnValue(true);
 		}
 	}
 }

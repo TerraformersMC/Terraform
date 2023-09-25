@@ -23,14 +23,13 @@ import net.minecraft.world.gen.trunk.TrunkPlacer;
 @Mixin(TrunkPlacer.class)
 public class MixinTrunkPlacer {
 	@Inject(method = "setToDirt", at = @At("HEAD"), cancellable = true)
-	private static void notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
-		if (!world.testBlockState(pos, state -> state.isIn(TerraformDirtBlockTags.SOIL))) {
-			return;
+	private static void terraformDirt$notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
+		if (world.testBlockState(pos, state -> state.isIn(TerraformDirtBlockTags.SOIL))) {
+			Block dirt = TerraformDirtRegistry.getFromWorld(world, pos).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
+
+			replacer.accept(pos, dirt.getDefaultState());
+
+			ci.cancel();
 		}
-
-		Block dirt = TerraformDirtRegistry.getFromWorld(world, pos).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
-
-		replacer.accept(pos, dirt.getDefaultState());
-		ci.cancel();
 	}
 }

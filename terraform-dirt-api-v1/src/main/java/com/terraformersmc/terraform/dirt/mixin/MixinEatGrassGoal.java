@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(EatGrassGoal.class)
 public class MixinEatGrassGoal {
@@ -29,19 +30,24 @@ public class MixinEatGrassGoal {
 	@Final
 	private World world;
 
-	private static final String GRASS_BLOCK = "Lnet/minecraft/block/Blocks;GRASS_BLOCK:Lnet/minecraft/block/Block;";
-
-	@Inject(method = "canStart", at = @At(value = "FIELD", target = GRASS_BLOCK), cancellable = true)
-	private void terraform$startOnCustomGrass(CallbackInfoReturnable<Boolean> callbackInfo) {
+	@Inject(method = "canStart",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;GRASS_BLOCK:Lnet/minecraft/block/Block;"),
+			cancellable = true,
+			locals = LocalCapture.NO_CAPTURE
+	)
+	private void terraformDirt$startOnCustomGrass(CallbackInfoReturnable<Boolean> cir) {
 		BlockPos pos = this.mob.getBlockPos();
 
 		if (this.world.getBlockState(pos.down()).isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
-			callbackInfo.setReturnValue(true);
+			cir.setReturnValue(true);
 		}
 	}
 
-	@Inject(method = "tick", at = @At(value = "FIELD", target = GRASS_BLOCK))
-	private void terraform$finishEatingOnCustomGrass(CallbackInfo info) {
+	@Inject(method = "tick",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;GRASS_BLOCK:Lnet/minecraft/block/Block;"),
+			locals = LocalCapture.NO_CAPTURE
+	)
+	private void terraformDirt$finishEatingOnCustomGrass(CallbackInfo ci) {
 		BlockPos downPos = this.mob.getBlockPos().down();
 		BlockState down = this.world.getBlockState(downPos);
 

@@ -16,10 +16,10 @@ import com.terraformersmc.terraform.sign.TerraformSign;
 @Environment(EnvType.CLIENT)
 public abstract class MixinHangingSignBlockEntityRenderer extends MixinSignBlockEntityRenderer {
 	@Inject(method = "getTextureId", at = @At("HEAD"), cancellable = true)
-	private void getHangingSignTextureId(CallbackInfoReturnable<SpriteIdentifier> ci) {
+	private void terraformWood$getHangingSignTextureId(CallbackInfoReturnable<SpriteIdentifier> cir) {
 		if (this.terraform$renderedBlockEntity != null) {
 			if (this.terraform$renderedBlockEntity.getCachedState().getBlock() instanceof TerraformSign signBlock) {
-				ci.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture()));
+				cir.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture()));
 			}
 		}
 	}

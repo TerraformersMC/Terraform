@@ -14,8 +14,8 @@ import net.minecraft.client.util.SpriteIdentifier;
 @Mixin(TexturedRenderLayers.class)
 public class MixinTexturedRenderLayers {
 	@Inject(method = "addDefaultTextures", at = @At("RETURN"))
-	private static void injectTerrestriaSigns(Consumer<SpriteIdentifier> consumer, CallbackInfo info) {
-		for(SpriteIdentifier identifier: SpriteIdentifierRegistry.INSTANCE.getIdentifiers()) {
+	private static void terraformWood$injectSignTextures(Consumer<SpriteIdentifier> consumer, CallbackInfo ci) {
+		for (SpriteIdentifier identifier: SpriteIdentifierRegistry.INSTANCE.getIdentifiers()) {
 			consumer.accept(identifier);
 		}
 	}

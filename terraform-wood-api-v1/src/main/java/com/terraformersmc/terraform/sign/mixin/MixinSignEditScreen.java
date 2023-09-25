@@ -22,7 +22,7 @@ public class MixinSignEditScreen {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/TexturedRenderLayers;getSignTextureId(Lnet/minecraft/block/WoodType;)Lnet/minecraft/client/util/SpriteIdentifier;")
 	)
 	@SuppressWarnings("unused")
-	private SpriteIdentifier getTerraformSignTextureId(WoodType type, Operation<SpriteIdentifier> original, DrawContext drawContext, BlockState state) {
+	private SpriteIdentifier terraformWood$editSignTextureId(WoodType type, Operation<SpriteIdentifier> original, DrawContext drawContext, BlockState state) {
 		if (state.getBlock() instanceof TerraformSign signBlock) {
 			return new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, signBlock.getTexture());
 		}

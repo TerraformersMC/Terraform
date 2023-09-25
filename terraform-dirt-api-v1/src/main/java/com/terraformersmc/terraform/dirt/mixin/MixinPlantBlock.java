@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlantBlock.class)
 public class MixinPlantBlock {
 	@Inject(method = "canPlantOnTop", at = @At("HEAD"), cancellable = true)
-	protected void hookPlantOnTop(BlockState state, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
-		if(state.isIn(TerraformDirtBlockTags.SOIL) || state.isIn(TerraformDirtBlockTags.FARMLAND)) {
-			callback.setReturnValue(true);
+	private void terraformDirt$hookPlantOnTop(BlockState state, BlockView view, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+		if (state.isIn(TerraformDirtBlockTags.SOIL) || state.isIn(TerraformDirtBlockTags.FARMLAND)) {
+			cir.setReturnValue(true);
 		}
 	}
 }

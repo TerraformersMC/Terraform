@@ -15,7 +15,7 @@ import net.minecraft.block.entity.BlockEntityType;
 @Mixin(BlockEntityType.class)
 public class MixinBlockEntityType {
 	@Inject(method = "supports", at = @At("HEAD"), cancellable = true)
-	private void supports(BlockState state, CallbackInfoReturnable<Boolean> info) {
+	private void terraformWood$signSupports(BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		Block block = state.getBlock();
 
 		if (block instanceof TerraformSign) {
@@ -27,7 +27,7 @@ public class MixinBlockEntityType {
 				return;
 			}
 
-			info.setReturnValue(true);
+			cir.setReturnValue(true);
 		}
 	}
 }

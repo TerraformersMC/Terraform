@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TrunkPlacer.class)
 public class MixinTrunkPlacer {
 	@Inject(method = "setToDirt", at = @At("HEAD"), cancellable = true)
-	private static void notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
+	private static void terraformTree$notAlwaysDirt(TestableWorld world, BiConsumer<BlockPos, BlockState> replacer, Random random, BlockPos pos, TreeFeatureConfig config, CallbackInfo ci) {
 		if (world.testBlockState(pos, state -> state.isIn(BlockTags.SAND))) {
 			ci.cancel();
 		}
