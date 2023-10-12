@@ -1,43 +1,24 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
+import net.minecraft.block.*;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CarrotsBlock;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
 
 @Mixin(targets = "net.minecraft.entity.passive.RabbitEntity$EatCarrotCropGoal")
 public class MixinRabbitEntity {
-	@Shadow
-	private boolean wantsCarrots;
-
-	@Shadow
-	private boolean hasTarget;
-
-	@Inject(method = "isTargetPos",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;FARMLAND:Lnet/minecraft/block/Block;"),
-			cancellable = true,
-			locals = LocalCapture.CAPTURE_FAILHARD
+	@WrapOperation(
+			method = "isTargetPos",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
 	)
-	private void terraformDirt$onIsTargetBlock(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState state) {
-		Block block = state.getBlock();
-		if (block instanceof FarmlandBlock && state.isIn(TerraformDirtBlockTags.FARMLAND) && this.wantsCarrots && !this.hasTarget) {
-			state = world.getBlockState(pos.up());
-			block = state.getBlock();
-
-			if (block instanceof CarrotsBlock && ((CarrotsBlock) block).isMature(state)) {
-				this.hasTarget = true;
-				cir.setReturnValue(true);
-			}
+	@SuppressWarnings("unused")
+	private boolean terraformDirt$isOnFarmland(BlockState instance, Block block, Operation<Boolean> operation) {
+		if (Blocks.FARMLAND.equals(block) && instance.isIn(TerraformDirtBlockTags.FARMLAND)) {
+			return true;
 		}
+
+		return operation.call(instance, block);
 	}
 }

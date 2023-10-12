@@ -3,22 +3,25 @@ package com.terraformersmc.terraform.dirt.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.terraformersmc.terraform.dirt.TerraformDirtBlockTags;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StemBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(CropBlock.class)
-public class MixinCropBlock {
+@Mixin(StemBlock.class)
+public class MixinStemBlock {
 	@WrapOperation(
-			method = "getAvailableMoisture",
+			method = "randomTick",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
 	)
 	@SuppressWarnings("unused")
-	private static boolean terraformDirt$isOnFarmland(BlockState instance, Block block, Operation<Boolean> original) {
+	private boolean terraformDirt$isOnFarmland(BlockState instance, Block block, Operation<Boolean> operation) {
 		if (Blocks.FARMLAND.equals(block) && instance.isIn(TerraformDirtBlockTags.FARMLAND)) {
 			return true;
 		}
 
-		return original.call(instance, block);
+		return operation.call(instance, block);
 	}
 }
