@@ -2,7 +2,7 @@ package com.terraformersmc.terraform.tree.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.sapling.SaplingGenerator;
+import net.minecraft.block.SaplingGenerator;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;

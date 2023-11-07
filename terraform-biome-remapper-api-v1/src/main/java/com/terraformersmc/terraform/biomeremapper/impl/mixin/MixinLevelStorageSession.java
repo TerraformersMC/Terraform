@@ -5,6 +5,7 @@ import com.terraformersmc.terraform.biomeremapper.impl.fix.BiomeIdFixData;
 import net.fabricmc.fabric.impl.registry.sync.RegistryMapSerializer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtTagSizeTracker;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import org.spongepowered.asm.mixin.Final;
@@ -33,7 +34,7 @@ public class MixinLevelStorageSession {
 
 		if (file.exists()) {
 			FileInputStream fileInputStream = new FileInputStream(file);
-			NbtCompound nbt = NbtIo.readCompressed(fileInputStream);
+			NbtCompound nbt = NbtIo.readCompressed(fileInputStream, NbtTagSizeTracker.ofUnlimitedBytes());
 			fileInputStream.close();
 
 			if (nbt != null) {
@@ -45,7 +46,7 @@ public class MixinLevelStorageSession {
 		return false;
 	}
 
-	@Inject(method = "readLevelProperties", at = @At("HEAD"))
+	@Inject(method = "readLevelProperties(Z)Lcom/mojang/serialization/Dynamic;", at = @At("HEAD"))
 	public void terraformBiomeRemapper$readWorldProperties(CallbackInfoReturnable<SaveProperties> callbackInfo) {
 		try {
 			if (terraformBiomeRemapper$readIdMapFile(new File(new File(directory.path().toFile(), "data"), "fabricDynamicRegistry.dat"))) {

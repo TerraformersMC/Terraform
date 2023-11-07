@@ -12,7 +12,7 @@ public class TerraformWallHangingSignBlock extends WallHangingSignBlock implemen
 	private final Identifier guiTexture;
 
 	public TerraformWallHangingSignBlock(Identifier texture, Identifier guiTexture, Settings settings) {
-		super(BlockSettingsLock.lock(settings), WoodType.OAK);
+		super(WoodType.OAK, BlockSettingsLock.lock(settings));
 		this.texture = texture;
 		this.guiTexture = guiTexture;
 	}

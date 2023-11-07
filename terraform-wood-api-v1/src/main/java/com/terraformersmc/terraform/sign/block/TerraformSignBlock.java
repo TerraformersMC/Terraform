@@ -11,7 +11,7 @@ public class TerraformSignBlock extends SignBlock implements TerraformSign {
 	private final Identifier texture;
 
 	public TerraformSignBlock(Identifier texture, Settings settings) {
-		super(BlockSettingsLock.lock(settings), WoodType.OAK);
+		super(WoodType.OAK, BlockSettingsLock.lock(settings));
 		this.texture = texture;
 	}
 
