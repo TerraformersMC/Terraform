@@ -40,15 +40,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (this.shouldDecay(state)) {
-			ExtendedLeavesBlock.dropStacks(state, world, pos);
-			world.removeBlock(pos, false);
-		}
-	}
-
-	@Override
-	protected boolean shouldDecay(BlockState state) {
+	public boolean shouldDecay(BlockState state) {
 		return !state.get(PERSISTENT) && state.get(DISTANCE) == MAX_DISTANCE;
 	}
 
