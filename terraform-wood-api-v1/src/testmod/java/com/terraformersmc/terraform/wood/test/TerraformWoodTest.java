@@ -7,8 +7,10 @@ import com.terraformersmc.terraform.sign.block.TerraformHangingSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallHangingSignBlock;
 import com.terraformersmc.terraform.sign.block.TerraformWallSignBlock;
+import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -34,8 +36,8 @@ public class TerraformWoodTest implements ModInitializer {
 	protected static final Identifier CUSTOM_RAFT_ID = new Identifier(MOD_ID, "custom_raft");
 	private static final Identifier CUSTOM_CHEST_RAFT_ID = new Identifier(MOD_ID, "custom_chest_raft");
 
-	private static final RegistryKey<TerraformBoatType> CUSTOM_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_BOAT_ID);
-	private static final RegistryKey<TerraformBoatType> CUSTOM_RAFT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_RAFT_ID);
+	public static final RegistryKey<TerraformBoatType> CUSTOM_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_BOAT_ID);
+	public static final RegistryKey<TerraformBoatType> CUSTOM_RAFT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_RAFT_ID);
 
 	protected static final Identifier SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/custom");
 	protected static final Identifier HANGING_SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/hanging/custom");
@@ -96,6 +98,11 @@ public class TerraformWoodTest implements ModInitializer {
 			entries.addAfter(Items.MANGROVE_PLANKS, planks);
 			entries.addAfter(Items.MANGROVE_CHEST_BOAT, boatItem, chestBoatItem, raftItem, chestRaftItem);
 			entries.addAfter(Items.MANGROVE_HANGING_SIGN, signItem, hangingSignItem);
+		});
+
+		// Utility commands
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			SpawnBoatsCommand.register(dispatcher);
 		});
 	}
 }
