@@ -9,7 +9,7 @@ plugins {
 dependencies {
 	afterEvaluate {
 		subprojects.each {
-			implementation project(path: "${it.name}", configuration: "dev")
+			implementation project(path: "${it.name}", configuration: "namedElements")
 			include project("${it.name}:")
 		}
 	}
@@ -62,10 +62,6 @@ allprojects {
 		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 	}
 
-	configurations {
-		dev
-	}
-
 	repositories {
 		maven {
 			name = 'TerraformersMC'
@@ -73,8 +69,11 @@ allprojects {
 		}
 	}
 
-	jar {
-		archiveClassifier.set("dev")
+	java {
+		withSourcesJar()
+
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 
 	tasks.withType(ProcessResources).configureEach {
@@ -83,11 +82,6 @@ allprojects {
 		filesMatching("fabric.mod.json") {
 			expand "version": project.version
 		}
-	}
-
-	task sourcesJar(type: Jar, dependsOn: classes) {
-		archiveClassifier.set("sources")
-		from sourceSets.main.allSource
 	}
 
 	tasks.withType(JavaCompile) {
@@ -99,14 +93,6 @@ allprojects {
 subprojects {
 	version = rootProject.version
 
-	task remapMavenJar(type: Copy, dependsOn: remapJar) {
-		afterEvaluate {
-			from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
-			into("${project.buildDir}/libs/")
-			rename { String fn -> "$archivesBaseName-${version}-maven.jar" }
-		}
-	}
-
 	publish {
 		onlyIf {
 			checkVersion(archivesBaseName, version)
@@ -116,14 +102,7 @@ subprojects {
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
-				afterEvaluate {
-					artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
-						builtBy remapMavenJar
-					}
-					artifact(sourcesJar) {
-						builtBy remapSourcesJar
-					}
-				}
+				from components.java
 			}
 		}
 
