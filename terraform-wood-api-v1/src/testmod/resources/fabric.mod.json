@@ -10,5 +10,8 @@
     "client": [
       "com.terraformersmc.terraform.wood.test.TerraformWoodTestClient"
     ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15"
   }
 }

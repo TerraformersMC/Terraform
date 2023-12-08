@@ -43,6 +43,9 @@
       }
     }
   },
+  "depends": {
+    "fabricloader": ">=0.15"
+  },
   "breaks": {
     "moretags": "*"
   },
