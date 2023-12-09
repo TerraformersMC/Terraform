@@ -3,8 +3,8 @@ package com.terraformersmc.terraform.shapes.impl.layer.transform;
 import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.Shape;
 import com.terraformersmc.terraform.shapes.api.layer.Layer;
+import net.minecraft.util.math.random.Random;
 
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class NoiseTranslateLayer implements Layer {
@@ -17,9 +17,24 @@ public class NoiseTranslateLayer implements Layer {
         this.random = random;
     }
 
-    public static NoiseTranslateLayer of(double magnitude, Random random) {
-        return new NoiseTranslateLayer(magnitude, random);
-    }
+	/**
+	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.math.random.Random} instead.
+	 */
+	@Deprecated
+    public NoiseTranslateLayer(double magnitude, java.util.Random random) {
+		this(magnitude, Random.create(random.nextLong()));
+	}
+
+	public static NoiseTranslateLayer of(double magnitude, Random random) {
+		return new NoiseTranslateLayer(magnitude, random);
+	}
+
+	/**
+	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.math.random.Random} instead.
+	 */
+	public static NoiseTranslateLayer of(double magnitude, java.util.Random random) {
+		return new NoiseTranslateLayer(magnitude, random);
+	}
 
 
     @Override
