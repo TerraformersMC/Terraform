@@ -2,24 +2,12 @@ package com.terraformersmc.terraform.dirt.block;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.*;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
-import net.minecraft.item.ShovelItem;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.light.ChunkLightProvider;
 
@@ -109,39 +97,5 @@ public class TerraformGrassBlock extends GrassBlock {
 
 			}
 		}
-	}
-
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		ItemStack heldStack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-
-		if (heldStack.isEmpty()) {
-			return ActionResult.FAIL;
-		}
-
-		Item held = heldStack.getItem();
-		if (!(held instanceof MiningToolItem)) {
-			return ActionResult.FAIL;
-		}
-
-		MiningToolItem tool = (MiningToolItem) held;
-
-		if (hit.getSide() == Direction.DOWN || !world.getBlockState(pos.up()).isAir()) {
-			return ActionResult.FAIL;
-		}
-
-		if (path != null && (tool.getMiningSpeedMultiplier(heldStack, state) > 1.0F || tool instanceof ShovelItem)) {
-			world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-			if (!world.isClient) {
-				world.setBlockState(pos, path.get().getDefaultState());
-
-				heldStack.damage(1, player, consumedPlayer -> consumedPlayer.sendToolBreakStatus(hand));
-			}
-
-			return ActionResult.SUCCESS;
-		}
-
-		return ActionResult.FAIL;
 	}
 }

@@ -5,7 +5,7 @@ import com.terraformersmc.terraform.biomeremapper.impl.fix.BiomeIdFixData;
 import net.fabricmc.fabric.impl.registry.sync.RegistryMapSerializer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtTagSizeTracker;
+import net.minecraft.nbt.NbtSizeTracker;
 import net.minecraft.world.SaveProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import org.spongepowered.asm.mixin.Final;
@@ -34,7 +34,7 @@ public class MixinLevelStorageSession {
 
 		if (file.exists()) {
 			FileInputStream fileInputStream = new FileInputStream(file);
-			NbtCompound nbt = NbtIo.readCompressed(fileInputStream, NbtTagSizeTracker.ofUnlimitedBytes());
+			NbtCompound nbt = NbtIo.readCompressed(fileInputStream, NbtSizeTracker.ofUnlimitedBytes());
 			fileInputStream.close();
 
 			if (nbt != null) {

@@ -15,7 +15,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -138,8 +137,8 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
-		ItemStack held = player.getStackInHand(hand);
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult result) {
+		ItemStack held = player.getActiveItem();
 
 		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
 			if (!player.isCreative()) {
