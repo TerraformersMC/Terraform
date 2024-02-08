@@ -7,22 +7,20 @@ import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 
 public final class TerraformBoatTrackedData {
 	private TerraformBoatTrackedData() {
 		return;
 	}
 
-	public static final TrackedDataHandler<Optional<TerraformBoatType>> HANDLER = TrackedDataHandler.ofOptional(TerraformBoatTrackedData::write, TerraformBoatTrackedData::read);
+	public static final PacketCodec<RegistryByteBuf, Optional<TerraformBoatType>> PACKET_CODEC = PacketCodecs
+		.registryValue(TerraformBoatTypeRegistry.INSTANCE.getKey())
+		.collect(PacketCodecs::optional);
 
-	private static void write(PacketByteBuf buf, TerraformBoatType boat) {
-		buf.writeRegistryValue(TerraformBoatTypeRegistry.INSTANCE, boat);
-	}
-
-	private static TerraformBoatType read(PacketByteBuf buf) {
-		return buf.readRegistryValue(TerraformBoatTypeRegistry.INSTANCE);
-	}
+	public static final TrackedDataHandler<Optional<TerraformBoatType>> HANDLER = TrackedDataHandler.create(PACKET_CODEC);
 
 	protected static void register() {
 		TrackedDataHandlerRegistry.register(HANDLER);
