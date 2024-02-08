@@ -87,9 +87,9 @@ public class TerraformBoatEntity extends BoatEntity implements TerraformBoatHold
 	}
 
 	@Override
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.dataTracker.startTracking(TERRAFORM_BOAT, Optional.empty());
+	protected void initDataTracker(DataTracker.Builder builder) {
+		super.initDataTracker(builder);
+		builder.add(TERRAFORM_BOAT, Optional.empty());
 	}
 
 	// Serialization
