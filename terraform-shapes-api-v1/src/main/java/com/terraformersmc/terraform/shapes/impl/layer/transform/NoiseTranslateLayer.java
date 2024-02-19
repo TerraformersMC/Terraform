@@ -8,7 +8,6 @@ import net.minecraft.util.math.random.Random;
 import java.util.function.Predicate;
 
 public class NoiseTranslateLayer implements Layer {
-
     private final double magnitude;
     private final Random random;
 
@@ -32,6 +31,7 @@ public class NoiseTranslateLayer implements Layer {
 	/**
 	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.math.random.Random} instead.
 	 */
+	@Deprecated
 	public static NoiseTranslateLayer of(double magnitude, java.util.Random random) {
 		return new NoiseTranslateLayer(magnitude, random);
 	}

@@ -4,16 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.fabricmc.loader.api.FabricLoader;
 
+@SuppressWarnings("unused")
 public class BiomeConfigHandler {
 
-	private String namespace;
+	private final String namespace;
 	private File file;
 	private BiomeConfig config;
 
@@ -26,11 +26,12 @@ public class BiomeConfigHandler {
 			return;
 		}
 
-		File configDirectory = new File(FabricLoader.getInstance().getConfigDirectory(), namespace);
-		file = new File(configDirectory, "biomes.json");
+		File configDirectory = new File(FabricLoader.getInstance().getConfigDir().toFile(), namespace);
 
-		if (!configDirectory.exists()) {
-			configDirectory.mkdir();
+		if (configDirectory.isDirectory() || configDirectory.mkdir()) {
+			file = new File(configDirectory, "biomes.json");
+		} else {
+			System.err.println("Couldn't create config directory for " + namespace);
 		}
 	}
 
@@ -73,7 +74,7 @@ public class BiomeConfigHandler {
 
 		try (FileWriter fileWriter = new FileWriter(file)) {
 			fileWriter.write(jsonString);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Couldn't save biome configuration file for " + namespace);
 			e.printStackTrace();
 		}
