@@ -24,6 +24,7 @@ jobs:
       - name: Setup JDK ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
+          distribution: 'zulu'
           java-version: ${{ matrix.java }}
       - name: Make Gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
