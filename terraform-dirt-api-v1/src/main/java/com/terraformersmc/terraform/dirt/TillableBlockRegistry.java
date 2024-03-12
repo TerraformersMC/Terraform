@@ -16,8 +16,8 @@ import net.minecraft.item.ToolMaterial;
  * {@link TerraformDirtRegistry}.
  */
 public abstract class TillableBlockRegistry extends HoeItem {
-	private TillableBlockRegistry(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
-		super(material, attackDamage, attackSpeed, settings);
+	private TillableBlockRegistry(ToolMaterial material, Settings settings) {
+		super(material, settings);
 	}
 
 	/**
