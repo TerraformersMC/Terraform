@@ -6,8 +6,7 @@
     "MixinHangingSignBlockEntityRenderer",
     "MixinHangingSignEditScreen",
     "MixinSignBlockEntityRenderer",
-    "MixinSignEditScreen",
-    "MixinTexturedRenderLayers"
+    "MixinSignEditScreen"
   ],
   "mixins": [
     "MixinAbstractBlockSettings",
