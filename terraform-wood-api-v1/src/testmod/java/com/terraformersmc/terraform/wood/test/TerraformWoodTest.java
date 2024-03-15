@@ -12,7 +12,7 @@ import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.HangingSignItem;
@@ -72,16 +72,16 @@ public class TerraformWoodTest implements ModInitializer {
 			.build();
 
 		// Signs
-		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL));
+		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL));
 		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
 
-		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).dropsLike(sign));
+		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).dropsLike(sign));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
 
-		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL));
+		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL));
 		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
 
-		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).dropsLike(hangingSign));
+		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).dropsLike(hangingSign));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
 		Item signItem = new SignItem(new Item.Settings().maxCount(16), sign, wallSign);
