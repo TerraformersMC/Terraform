@@ -317,7 +317,7 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	public boolean canPathfindThrough(BlockState state, BlockView view, BlockPos pos, NavigationType blockPlacementEnvironment_1) {
+	public boolean canPathfindThrough(BlockState state, NavigationType type) {
 		return false;
 	}
 

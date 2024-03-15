@@ -8,6 +8,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.village.TradedItem;
 
 /**
  * A helper class for merchant trades regarding saplings.
@@ -35,7 +36,7 @@ public final class TerraformSaplingTradeHelper {
 
 		@Override
 		public TradeOffer create(Entity entity, Random random) {
-			return new TradeOffer(new ItemStack(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
+			return new TradeOffer(new TradedItem(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
 		}
 	}
 }
