@@ -73,10 +73,16 @@ public class TerraformWoodTest implements ModInitializer {
 
 		// Signs
 		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL));
-		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND));
+		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
+
+		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).dropsLike(sign));
+		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
 
 		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL));
-		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR));
+		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
+
+		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, FabricBlockSettings.copyOf(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).dropsLike(hangingSign));
+		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
 		Item signItem = new SignItem(new Item.Settings().maxCount(16), sign, wallSign);
 		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16));
@@ -84,11 +90,6 @@ public class TerraformWoodTest implements ModInitializer {
 		// Register
 		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_BOAT_KEY, boat);
 		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_RAFT_KEY, raft);
-
-		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
-		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
-		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
-		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
 		Registry.register(Registries.ITEM, CUSTOM_PLANKS_ID, planks);
 		Registry.register(Registries.ITEM, CUSTOM_SIGN_ID, signItem);
