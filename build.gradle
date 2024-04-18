@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '1.5.+'
+	id 'fabric-loom' version '1.6.+'
 }
 
 allprojects {
@@ -13,8 +13,8 @@ allprojects {
 	apply plugin: 'maven-publish'
 	apply plugin: 'fabric-loom'
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 
 	group = project.maven_group
 
@@ -63,8 +63,8 @@ allprojects {
 	java {
 		withSourcesJar()
 
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
 	}
 
 	tasks.withType(ProcessResources).configureEach {
@@ -77,7 +77,7 @@ allprojects {
 
 	tasks.withType(JavaCompile) {
 		it.options.encoding = "UTF-8"
-		it.options.release = 17
+		it.options.release = 21
 	}
 }
 
