@@ -51,6 +51,8 @@ allprojects {
 		modImplementation "net.fabricmc:fabric-loader:$project.loader_version"
 
 		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
+		testmodImplementation sourceSets.main.output
 	}
 
 	repositories {
@@ -101,6 +103,17 @@ subprojects {
 	}
 
 	javadoc.enabled = false
+}
+
+dependencies {
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	afterEvaluate {
+		subprojects.each {
+			implementation project(path: ":${it.path}", configuration: "namedElements")
+			testmodImplementation project(":${it.path}").sourceSets.testmod.output
+		}
+	}
 }
 
 void setupRepositories(RepositoryHandler repositories) {
