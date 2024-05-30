@@ -29,23 +29,23 @@ import net.minecraft.util.Identifier;
 public class TerraformWoodTest implements ModInitializer {
 	private static final String MOD_ID = "terraform";
 
-	private static final Identifier CUSTOM_PLANKS_ID = new Identifier(MOD_ID, "custom_planks");
+	private static final Identifier CUSTOM_PLANKS_ID = Identifier.of(MOD_ID, "custom_planks");
 
-	protected static final Identifier CUSTOM_BOAT_ID = new Identifier(MOD_ID, "custom_boat");
-	private static final Identifier CUSTOM_CHEST_BOAT_ID = new Identifier(MOD_ID, "custom_chest_boat");
-	protected static final Identifier CUSTOM_RAFT_ID = new Identifier(MOD_ID, "custom_raft");
-	private static final Identifier CUSTOM_CHEST_RAFT_ID = new Identifier(MOD_ID, "custom_chest_raft");
+	protected static final Identifier CUSTOM_BOAT_ID = Identifier.of(MOD_ID, "custom_boat");
+	private static final Identifier CUSTOM_CHEST_BOAT_ID = Identifier.of(MOD_ID, "custom_chest_boat");
+	protected static final Identifier CUSTOM_RAFT_ID = Identifier.of(MOD_ID, "custom_raft");
+	private static final Identifier CUSTOM_CHEST_RAFT_ID = Identifier.of(MOD_ID, "custom_chest_raft");
 
 	public static final RegistryKey<TerraformBoatType> CUSTOM_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_BOAT_ID);
 	public static final RegistryKey<TerraformBoatType> CUSTOM_RAFT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_RAFT_ID);
 
-	protected static final Identifier SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/custom");
-	protected static final Identifier HANGING_SIGN_TEXTURE_ID = new Identifier(MOD_ID, "entity/signs/hanging/custom");
-	protected static final Identifier HANGING_SIGN_GUI_TEXTURE_ID = new Identifier(MOD_ID, "textures/gui/hanging_signs/custom");
-	private static final Identifier CUSTOM_SIGN_ID = new Identifier(MOD_ID, "custom_sign");
-	private static final Identifier CUSTOM_WALL_SIGN_ID = new Identifier(MOD_ID, "custom_wall_sign");
-	private static final Identifier CUSTOM_HANGING_SIGN_ID = new Identifier(MOD_ID, "custom_hanging_sign");
-	private static final Identifier CUSTOM_WALL_HANGING_SIGN_ID = new Identifier(MOD_ID, "custom_wall_hanging_sign");
+	protected static final Identifier SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/custom");
+	protected static final Identifier HANGING_SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/hanging/custom");
+	protected static final Identifier HANGING_SIGN_GUI_TEXTURE_ID = Identifier.of(MOD_ID, "textures/gui/hanging_signs/custom");
+	private static final Identifier CUSTOM_SIGN_ID = Identifier.of(MOD_ID, "custom_sign");
+	private static final Identifier CUSTOM_WALL_SIGN_ID = Identifier.of(MOD_ID, "custom_wall_sign");
+	private static final Identifier CUSTOM_HANGING_SIGN_ID = Identifier.of(MOD_ID, "custom_hanging_sign");
+	private static final Identifier CUSTOM_WALL_HANGING_SIGN_ID = Identifier.of(MOD_ID, "custom_wall_hanging_sign");
 
 	@Override
 	public void onInitialize() {

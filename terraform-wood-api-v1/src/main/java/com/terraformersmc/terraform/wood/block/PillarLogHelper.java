@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.wood.block;
 
 import net.minecraft.block.*;
-import net.minecraft.block.enums.Instrument;
+import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Direction;
 
@@ -17,7 +17,7 @@ public class PillarLogHelper {
 	public static PillarBlock of(MapColor color) {
 		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
-				.instrument(Instrument.BASS)
+				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
 				.burnable()
@@ -35,7 +35,7 @@ public class PillarLogHelper {
 	public static PillarBlock of(MapColor wood, MapColor bark) {
 		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
-				.instrument(Instrument.BASS)
+				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
 				.burnable()
@@ -52,7 +52,7 @@ public class PillarLogHelper {
 	public static PillarBlock ofNether(MapColor color) {
 		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
-				.instrument(Instrument.BASS)
+				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.NETHER_STEM)
 		);
@@ -69,7 +69,7 @@ public class PillarLogHelper {
 	public static PillarBlock ofNether(MapColor wood, MapColor bark) {
 		return new PillarBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
-				.instrument(Instrument.BASS)
+				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.NETHER_STEM)
 		);
