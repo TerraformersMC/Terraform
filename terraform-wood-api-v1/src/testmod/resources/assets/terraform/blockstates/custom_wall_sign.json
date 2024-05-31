@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "block/oak_sign" }
+    "": { "model": "terraform:block/custom_sign" }
   }
 }

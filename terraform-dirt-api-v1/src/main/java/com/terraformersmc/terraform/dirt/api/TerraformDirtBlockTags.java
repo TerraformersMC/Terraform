@@ -18,6 +18,6 @@ public final class TerraformDirtBlockTags {
 	}
 
 	private static TagKey<Block> register(String id) {
-		return TagKey.of(RegistryKeys.BLOCK, new Identifier("terraform", id));
+		return TagKey.of(RegistryKeys.BLOCK, Identifier.of("terraform", id));
 	}
 }

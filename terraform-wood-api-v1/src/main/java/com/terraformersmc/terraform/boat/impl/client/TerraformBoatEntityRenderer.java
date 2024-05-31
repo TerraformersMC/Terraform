@@ -37,7 +37,7 @@ public class TerraformBoatEntityRenderer extends BoatEntityRenderer {
 			String prefix = raft ? (chest ? "chest_raft/" : "raft/") : (chest ? "chest_boat/" : "boat/");
 
 			Identifier id = entry.getKey().getValue();
-			Identifier textureId = new Identifier(id.getNamespace(), "textures/entity/" + prefix + id.getPath() + ".png");
+			Identifier textureId = id.withPath(path -> "textures/entity/" + prefix + path + ".png");
 
 			EntityModelLayer layer = TerraformBoatClientHelper.getLayer(id, raft, chest);
 			CompositeEntityModel<BoatEntity> model = createModel(context.getPart(layer), raft, chest);

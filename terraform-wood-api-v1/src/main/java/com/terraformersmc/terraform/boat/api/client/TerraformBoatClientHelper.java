@@ -28,7 +28,7 @@ public final class TerraformBoatClientHelper {
 	 */
 	private static Identifier getLayerId(Identifier boatId, boolean raft, boolean chest) {
 		String prefix = raft ? (chest ? "chest_raft/" : "raft/") : (chest ? "chest_boat/" : "boat/");
-		return new Identifier(boatId.getNamespace(), prefix + boatId.getPath());
+		return boatId.withPrefixedPath(prefix);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public final class TerraformBoatClientHelper {
 	 * @param chest whether the boat contains a chest
 	 * 
 	 * <pre>{@code
-	 *     EntityModelLayer layer = TerraformBoatClientHelper.getLayer(new Identifier("examplemod", "mahogany"), false, false);
+	 *     EntityModelLayer layer = TerraformBoatClientHelper.getLayer(Identifier.of("examplemod", "mahogany"), false, false);
 	 * }</pre>
 	 */
 	public static EntityModelLayer getLayer(Identifier boatId, boolean raft, boolean chest) {
@@ -60,7 +60,7 @@ public final class TerraformBoatClientHelper {
 	 * @param chest whether the boat contains a chest
 	 * 
 	 * <pre>{@code
-	 *     TerraformBoatClientHelper.registerModelLayer(new Identifier("examplemod", "mahogany"), false, false);
+	 *     TerraformBoatClientHelper.registerModelLayer(Identifier.of("examplemod", "mahogany"), false, false);
 	 * }</pre>
 	 */
 	private static void registerModelLayer(Identifier boatId, boolean raft, boolean chest) {
@@ -73,7 +73,7 @@ public final class TerraformBoatClientHelper {
 	 * @param raft whether the boat is a raft
 	 * 
 	 * <pre>{@code
-	 *     TerraformBoatClientHelper.registerModelLayers(new Identifier("examplemod", "mahogany"), false);
+	 *     TerraformBoatClientHelper.registerModelLayers(Identifier.of("examplemod", "mahogany"), false);
 	 * }</pre>
 	 */
 	public static void registerModelLayers(Identifier boatId, boolean raft) {

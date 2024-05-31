@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public final class SpawnBoatsCommand {
-	private static final Identifier ADVANCEMENT_ID = new Identifier("husbandry/ride_a_boat_with_a_goat");
+	private static final Identifier ADVANCEMENT_ID = Identifier.ofVanilla("husbandry/ride_a_boat_with_a_goat");
 
 	private SpawnBoatsCommand() {
 		return;
