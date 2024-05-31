@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.terraformersmc.terraform.leaves.mixin",
+  "package": "com.terraformersmc.terraform.leaves.impl.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinProperties"
