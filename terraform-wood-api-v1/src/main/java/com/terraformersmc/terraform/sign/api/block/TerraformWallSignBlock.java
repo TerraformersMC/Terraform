@@ -10,9 +10,13 @@ import net.minecraft.util.Identifier;
 public class TerraformWallSignBlock extends WallSignBlock implements TerraformSign {
 	private final Identifier texture;
 
-	public TerraformWallSignBlock(Identifier texture, Settings settings) {
-		super(WoodType.OAK, BlockSettingsLock.lock(settings)); // TODO: take a look at this again
+	public TerraformWallSignBlock(Identifier texture, WoodType woodType, Settings settings) {
+		super(woodType, BlockSettingsLock.lock(settings));
 		this.texture = texture;
+	}
+
+	public TerraformWallSignBlock(Identifier texture, Settings settings) {
+		this(texture, WoodType.OAK, settings);
 	}
 
 	@Override
