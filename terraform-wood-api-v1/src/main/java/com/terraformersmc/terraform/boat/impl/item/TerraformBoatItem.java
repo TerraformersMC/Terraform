@@ -18,8 +18,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
@@ -48,7 +48,7 @@ public class TerraformBoatItem extends Item {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack stack = user.getStackInHand(hand);
 
-		HitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.ANY);
+		BlockHitResult hitResult = Item.raycast(world, user, RaycastContext.FluidHandling.ANY);
 		if (hitResult.getType() == HitResult.Type.MISS) {
 			return TypedActionResult.pass(stack);
 		}
@@ -91,10 +91,10 @@ public class TerraformBoatItem extends Item {
 			if (!world.isSpaceEmpty(boatEntity, boatEntity.getBoundingBox().expand(-0.1d))) {
 				return TypedActionResult.fail(stack);
 			}
-			
+
 			if (!world.isClient()) {
 				world.spawnEntity(boatEntity);
-				world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hitResult.getPos()));
+				world.emitGameEvent(user, GameEvent.ENTITY_PLACE, hitResult.getPos());
 
 				if (!user.getAbilities().creativeMode) {
 					stack.decrement(1);
