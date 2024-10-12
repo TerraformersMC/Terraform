@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class TillableBlockRegistryImpl extends HoeItem {
-	private TillableBlockRegistryImpl(ToolMaterial material, Settings settings) {
-		super(material, settings);
+	private TillableBlockRegistryImpl(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
+		super(material, attackDamage, attackSpeed, settings);
 		return;
 	}
 

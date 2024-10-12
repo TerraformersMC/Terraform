@@ -6,10 +6,8 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.terraformersmc.terraform.boat.impl.TerraformBoatInitializer"
     ],
     "client": [
-      "com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientInitializer"
     ]
   },
   "license": "LGPL-3.0-only",
@@ -60,7 +58,6 @@
     }
   },
   "mixins": [
-    "mixins.terraform-boats.json",
     "mixins.terraform-leaves.json",
     "mixins.terraform-signs.json",
     "mixins.terraform-wood.json"

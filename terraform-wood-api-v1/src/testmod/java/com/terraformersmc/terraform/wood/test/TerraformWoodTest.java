@@ -1,28 +1,23 @@
 package com.terraformersmc.terraform.wood.test;
 
-import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
 import com.terraformersmc.terraform.sign.api.block.TerraformHangingSignBlock;
 import com.terraformersmc.terraform.sign.api.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.api.block.TerraformWallHangingSignBlock;
 import com.terraformersmc.terraform.sign.api.block.TerraformWallSignBlock;
-import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 
+import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.HangingSignItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.Items;
-import net.minecraft.item.SignItem;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
@@ -31,13 +26,7 @@ public class TerraformWoodTest implements ModInitializer {
 
 	private static final Identifier CUSTOM_PLANKS_ID = Identifier.of(MOD_ID, "custom_planks");
 
-	protected static final Identifier CUSTOM_BOAT_ID = Identifier.of(MOD_ID, "custom_boat");
-	private static final Identifier CUSTOM_CHEST_BOAT_ID = Identifier.of(MOD_ID, "custom_chest_boat");
-	protected static final Identifier CUSTOM_RAFT_ID = Identifier.of(MOD_ID, "custom_raft");
-	private static final Identifier CUSTOM_CHEST_RAFT_ID = Identifier.of(MOD_ID, "custom_chest_raft");
-
-	public static final RegistryKey<TerraformBoatType> CUSTOM_BOAT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_BOAT_ID);
-	public static final RegistryKey<TerraformBoatType> CUSTOM_RAFT_KEY = TerraformBoatTypeRegistry.createKey(CUSTOM_RAFT_ID);
+	public static final Identifier CUSTOM_BOATS_ID = Identifier.of(MOD_ID, "custom");
 
 	protected static final Identifier SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/custom");
 	protected static final Identifier HANGING_SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/hanging/custom");
@@ -47,63 +36,52 @@ public class TerraformWoodTest implements ModInitializer {
 	private static final Identifier CUSTOM_HANGING_SIGN_ID = Identifier.of(MOD_ID, "custom_hanging_sign");
 	private static final Identifier CUSTOM_WALL_HANGING_SIGN_ID = Identifier.of(MOD_ID, "custom_wall_hanging_sign");
 
+	public static BoatItem customBoatItem;
+	public static BoatItem customChestBoatItem;
+	public static BoatItem customRaftItem;
+	public static BoatItem customChestRaftItem;
+
 	@Override
 	public void onInitialize() {
-		Item planks = new Item(new Item.Settings());
+		Item planks = new Item(new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_PLANKS_ID)));
 
 		// Boats
-		Item boatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOAT_ID, CUSTOM_BOAT_KEY, false);
-		Item chestBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_BOAT_ID, CUSTOM_BOAT_KEY, true);
+		customBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, false);
+		customChestBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, true);
 
-		Item raftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_RAFT_ID, CUSTOM_RAFT_KEY, false);
-		Item chestRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_CHEST_RAFT_ID, CUSTOM_RAFT_KEY, true);
-
-		TerraformBoatType boat = new TerraformBoatType.Builder()
-			.item(boatItem)
-			.chestItem(chestBoatItem)
-			.planks(planks)
-			.build();
-
-		TerraformBoatType raft = new TerraformBoatType.Builder()
-			.raft()
-			.item(raftItem)
-			.chestItem(chestRaftItem)
-			.planks(planks)
-			.build();
+		customRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, false, true);
+		customChestRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, true, true);
 
 		// Signs
-		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL));
+		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
 
-		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).dropsLike(sign));
+		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).lootTable(sign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
 
-		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL));
+		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_HANGING_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
 
-		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).dropsLike(hangingSign));
+		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).lootTable(hangingSign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
-		Item signItem = new SignItem(new Item.Settings().maxCount(16), sign, wallSign);
-		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16));
+		Item signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)));
+		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)));
 
 		// Register
-		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_BOAT_KEY, boat);
-		Registry.register(TerraformBoatTypeRegistry.INSTANCE, CUSTOM_RAFT_KEY, raft);
-
 		Registry.register(Registries.ITEM, CUSTOM_PLANKS_ID, planks);
 		Registry.register(Registries.ITEM, CUSTOM_SIGN_ID, signItem);
 		Registry.register(Registries.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
 			entries.addAfter(Items.MANGROVE_PLANKS, planks);
-			entries.addAfter(Items.MANGROVE_CHEST_BOAT, boatItem, chestBoatItem, raftItem, chestRaftItem);
+			entries.addAfter(Items.MANGROVE_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem);
 			entries.addAfter(Items.MANGROVE_HANGING_SIGN, signItem, hangingSignItem);
 		});
 
 		// Utility commands
-		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			SpawnBoatsCommand.register(dispatcher);
-		});
+		CommandRegistrationCallback.EVENT.register(
+				(dispatcher, registryAccess, environment) -> SpawnBoatsCommand.register(dispatcher)
+		);
 	}
 }

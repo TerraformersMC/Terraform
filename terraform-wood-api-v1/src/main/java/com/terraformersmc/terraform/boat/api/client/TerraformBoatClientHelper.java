@@ -1,83 +1,35 @@
 package com.terraformersmc.terraform.boat.api.client;
 
+import com.terraformersmc.terraform.boat.impl.client.TerraformBoatClientHelperImpl;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.TexturedModelDataProvider;
-import net.minecraft.client.render.entity.model.BoatEntityModel;
-import net.minecraft.client.render.entity.model.ChestBoatEntityModel;
-import net.minecraft.client.render.entity.model.ChestRaftEntityModel;
+import net.minecraft.client.render.entity.BoatEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.RaftEntityModel;
 import net.minecraft.util.Identifier;
 
-@Environment(EnvType.CLIENT)
 /**
- * This class provides useful helpers for registering a {@linkplain com.terraformersmc.terraform.boat.api.TerraformBoatType Terraform boat} on the client.
+ * This class provides useful helpers for registering a {@linkplain net.minecraft.entity.vehicle.BoatEntity boat} on the client.
  */
+@Environment(EnvType.CLIENT)
+@SuppressWarnings("unused")
 public final class TerraformBoatClientHelper {
 	private TerraformBoatClientHelper() {
 		return;
 	}
 
 	/**
-	 * Gets the identifier of a {@linkplain EntityModelLayer model layer} for a boat of a given type.
-	 * @param boatId the {@linkplain net.minecraft.util.Identifier identifier} of the {@linkplain com.terraformersmc.terraform.boat.api.TerraformBoatType boat}
-	 * @param raft whether the boat is a raft
-	 * @param chest whether the boat contains a chest
-	 */
-	private static Identifier getLayerId(Identifier boatId, boolean raft, boolean chest) {
-		String prefix = raft ? (chest ? "chest_raft/" : "raft/") : (chest ? "chest_boat/" : "boat/");
-		return boatId.withPrefixedPath(prefix);
-	}
-
-	/**
-	 * Creates a {@linkplain EntityModelLayer model layer} for a boat of a given type.
-	 * @param boatId the {@linkplain net.minecraft.util.Identifier identifier} of the {@linkplain com.terraformersmc.terraform.boat.api.TerraformBoatType boat}
-	 * @param raft whether the boat is a raft
-	 * @param chest whether the boat contains a chest
-	 * 
+	 * Registers {@linkplain EntityModelLayer model layers} and
+	 * {@linkplain BoatEntityRenderer entity renderers} for all boats of given boat type.
+	 * The provided identifier must match the identifier used to
+	 * {@linkplain com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper#registerBoatItem register the boat type}.
+	 *
 	 * <pre>{@code
-	 *     EntityModelLayer layer = TerraformBoatClientHelper.getLayer(Identifier.of("examplemod", "mahogany"), false, false);
+	 *     TerraformBoatClientHelper.registerModelLayers(Identifier.of("examplemod", "mahogany"));
 	 * }</pre>
+	 *
+	 * @param id the {@linkplain net.minecraft.util.Identifier identifier} of the boat type.
 	 */
-	public static EntityModelLayer getLayer(Identifier boatId, boolean raft, boolean chest) {
-		return new EntityModelLayer(getLayerId(boatId, raft, chest), "main");
-	}
-
-	private static TexturedModelDataProvider getTexturedModelDataProvider(boolean raft, boolean chest) {
-		if (raft) {
-			return chest ? ChestRaftEntityModel::getTexturedModelData : RaftEntityModel::getTexturedModelData;
-		} else {
-			return chest ? ChestBoatEntityModel::getTexturedModelData : BoatEntityModel::getTexturedModelData;
-		}
-	}
-
-	/**
-	 * Registers a {@linkplain EntityModelLayer model layer} for a boat of a given type.
-	 * @param boatId the {@linkplain net.minecraft.util.Identifier identifier} of the {@linkplain com.terraformersmc.terraform.boat.api.TerraformBoatType boat}
-	 * @param raft whether the boat is a raft
-	 * @param chest whether the boat contains a chest
-	 * 
-	 * <pre>{@code
-	 *     TerraformBoatClientHelper.registerModelLayer(Identifier.of("examplemod", "mahogany"), false, false);
-	 * }</pre>
-	 */
-	private static void registerModelLayer(Identifier boatId, boolean raft, boolean chest) {
-		EntityModelLayerRegistry.registerModelLayer(getLayer(boatId, raft, chest), getTexturedModelDataProvider(raft, chest));
-	}
-
-	/**
-	 * Registers {@linkplain EntityModelLayer model layers} for a given boat type.
-	 * @param boatId the {@linkplain net.minecraft.util.Identifier identifier} of the {@linkplain com.terraformersmc.terraform.boat.api.TerraformBoatType boat type}
-	 * @param raft whether the boat is a raft
-	 * 
-	 * <pre>{@code
-	 *     TerraformBoatClientHelper.registerModelLayers(Identifier.of("examplemod", "mahogany"), false);
-	 * }</pre>
-	 */
-	public static void registerModelLayers(Identifier boatId, boolean raft) {
-		registerModelLayer(boatId, raft, false);
-		registerModelLayer(boatId, raft, true);
+	public static void registerModelLayers(Identifier id) {
+		TerraformBoatClientHelperImpl.registerModelLayers(id);
 	}
 }

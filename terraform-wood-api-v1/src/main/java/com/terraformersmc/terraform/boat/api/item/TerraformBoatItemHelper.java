@@ -1,91 +1,101 @@
 package com.terraformersmc.terraform.boat.api.item;
 
-import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.impl.item.TerraformBoatDispenserBehavior;
-import com.terraformersmc.terraform.boat.impl.item.TerraformBoatItem;
-
-import net.minecraft.block.DispenserBlock;
+import com.terraformersmc.terraform.boat.impl.item.TerraformBoatItemHelperImpl;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.vehicle.AbstractBoatEntity;
+import net.minecraft.item.BoatItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
-/**
- * This class provides utilities for the {@linkplain TerraformBoatItem item forms} of {@linkplain TerraformBoatType Terraform boats},
- * such as {@linkplain #registerBoatItem(Identifier, RegistryKey, boolean, Item.Settings) registering them and their dispenser behavior}.
- */
+@SuppressWarnings("unused")
 public final class TerraformBoatItemHelper {
 	private TerraformBoatItemHelper() {
 		return;
 	}
 
 	/**
-	 * Registers a {@linkplain TerraformBoatItem boat item}
-	 * and its corresponding {@link #registerBoatDispenserBehavior dispenser behavior}.
-	 * 
-	 * <p>To register a boat item and its dispenser behavior:
-	 * 
+	 * Creates and registers a {@linkplain BoatItem boat item} and associated
+	 * {@linkplain net.minecraft.entity.vehicle.BoatEntity boat entity} of the requested type
+	 * and with the default {@linkplain Item.Settings}.  This method assumes the type is a boat
+	 * instead of a raft.
+	 *
+	 * This method should be called once for each boat type.
+	 * Created items and entities will have identifiers similar to
+	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 *
 	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany_boat"), MAHOGANY_BOAT_KEY, false);
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), true);
 	 * }</pre>
-	 * 
-	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
-	 * 
-	 * <p>This method does not define item groups for the item.
-	 * 
-	 * @see #registerBoatItem(Identifier, RegistryKey, boolean, Item.Settings) Helper that allows specifying a custom item settings
-	 * 
-	 * @param id the {@linkplain Identifier identifier} to register the item with 
-	 * @param boatKey a {@linkplain RegistryKey registry key} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item and dispenser behavior
-	 * @param chest whether the boat contains a chest
+	 *
+	 * @param id The identifier of the boat family
+	 * @param chest Whether the boat is a chest boat
+	 * @return The created, registered boat item
 	 */
-	public static Item registerBoatItem(Identifier id, RegistryKey<TerraformBoatType> boatKey, boolean chest) {
-		return registerBoatItem(id, boatKey, chest, new Item.Settings().maxCount(1));
+	public static BoatItem registerBoatItem(Identifier id, boolean chest) {
+		return registerBoatItem(id, chest, false);
 	}
 
 	/**
-	 * Registers a {@linkplain TerraformBoatItem boat item} and its corresponding {@link #registerBoatDispenserBehavior dispenser behavior}.
-	 * 
-	 * <p>To register a boat item and its dispenser behavior:
-	 * 
+	 * Creates and registers a {@linkplain BoatItem boat item} and associated
+	 * {@linkplain net.minecraft.entity.vehicle.BoatEntity boat entity} of the requested type
+	 * and with the default {@linkplain Item.Settings}.
+	 *
+	 * This method should be called once for each boat type.  Both boat and raft may be registered
+	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
+	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 *
 	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany_boat"), MAHOGANY_BOAT_KEY, false, new Item.Settings().maxCount(1));
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), false, false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), true, false);
 	 * }</pre>
-	 * 
-	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
-	 * 
-	 * <p>This method does not define item groups for the item.
-	 * 
-	 * @param id the {@linkplain Identifier identifier} to register the item with
-	 * @param boatKey a {@linkplain RegistryKey registry key} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this item and dispenser behavior
-	 * @param chest whether the boat contains a chest
+	 *
+	 * @param id The identifier of the boat family
+	 * @param chest Whether the boat is a chest boat
+	 * @param raft Whether the boat is a raft
+	 * @return The created, registered boat item
 	 */
-	public static Item registerBoatItem(Identifier id, RegistryKey<TerraformBoatType> boatKey, boolean chest, Item.Settings settings) {
-		Item item = new TerraformBoatItem(boatKey, chest, settings);
-		Registry.register(Registries.ITEM, id, item);
-
-		registerBoatDispenserBehavior(item, boatKey, chest);
-		return item;
+	public static BoatItem registerBoatItem(Identifier id, boolean chest, boolean raft) {
+		return registerBoatItem(id, new Item.Settings().maxCount(1), chest, raft);
 	}
 
 	/**
-	 * Registers a {@linkplain net.minecraft.block.dispenser.DispenserBehavior dispenser behavior} that spawns a {@linkplain com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity boat entity} with a given {@linkplain TerraformBoatType Terraform boat type}.
-	 * 
-	 * <p>To register a boat dispenser behavior:
-	 * 
+	 * Creates and registers a {@linkplain BoatItem boat item} and associated
+	 * {@linkplain net.minecraft.entity.vehicle.BoatEntity boat entity} of the requested type
+	 * and with the provided {@linkplain Item.Settings}.
+	 *
+	 * This method should be called once for each boat type.  Both boat and raft may be registered
+	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
+	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 *
 	 * <pre>{@code
-	 *     TerraformBoatItemHelper.registerBoatDispenserBehavior(MAHOGANY_BOAT_ITEM, MAHOGANY_BOAT_KEY, false);
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), settings, false, false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), settings, true, false);
 	 * }</pre>
-	 * 
-	 * <p>This method should be called twice for a given boat type for both boats and chest boats.
-	 * 
-	 * @param item the item that should be assigned to this dispenser behavior
-	 * @param boatKey a {@linkplain RegistryKey registry key} for the {@linkplain TerraformBoatType Terraform boat type} that should be spawned by this dispenser behavior
-	 * @param chest whether the boat contains a chest
+	 *
+	 * @param id The identifier of the boat family
+	 * @param settings Non-default item settings (f.e. changing stack size)
+	 * @param chest Whether the boat is a chest boat
+	 * @param raft Whether the boat is a raft
+	 * @return The created, registered boat item
 	 */
-	public static void registerBoatDispenserBehavior(ItemConvertible item, RegistryKey<TerraformBoatType> boatKey, boolean chest) {
-		DispenserBlock.registerBehavior(item, new TerraformBoatDispenserBehavior(boatKey, chest));
+	public static BoatItem registerBoatItem(Identifier id, Item.Settings settings, boolean chest, boolean raft) {
+		return TerraformBoatItemHelperImpl.registerBoatItem(id, settings, chest, raft);
+	}
+
+	/**
+	 * Registers a vanilla {@link net.minecraft.block.dispenser.BoatDispenserBehavior boat dispenser behavior}
+	 * for the provided {@linkplain ItemConvertible item} and
+	 * {@linkplain net.minecraft.entity.vehicle.BoatEntity boat entity}.
+	 *
+	 * This registration is performed automatically by the {@linkplain TerraformBoatItemHelper#registerBoatItem}
+	 * methods of this class.
+	 *
+	 * @param item The item for which to register the dispenser behavior
+	 * @param boatEntity The boat entity which should be dispensed
+	 */
+	public static void registerBoatDispenserBehavior(ItemConvertible item, EntityType<? extends AbstractBoatEntity> boatEntity) {
+		TerraformBoatItemHelperImpl.registerBoatDispenserBehavior(item, boatEntity);
 	}
 }
