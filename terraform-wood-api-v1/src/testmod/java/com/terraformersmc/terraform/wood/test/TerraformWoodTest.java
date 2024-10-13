@@ -6,13 +6,12 @@ import com.terraformersmc.terraform.sign.api.block.TerraformSignBlock;
 import com.terraformersmc.terraform.sign.api.block.TerraformWallHangingSignBlock;
 import com.terraformersmc.terraform.sign.api.block.TerraformWallSignBlock;
 
+import com.terraformersmc.terraform.wood.api.block.PillarLogHelper;
 import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -24,6 +23,7 @@ import net.minecraft.util.Identifier;
 public class TerraformWoodTest implements ModInitializer {
 	private static final String MOD_ID = "terraform";
 
+	private static final Identifier CUSTOM_LOG_ID = Identifier.of(MOD_ID, "custom_log");
 	private static final Identifier CUSTOM_PLANKS_ID = Identifier.of(MOD_ID, "custom_planks");
 
 	public static final Identifier CUSTOM_BOATS_ID = Identifier.of(MOD_ID, "custom");
@@ -43,7 +43,11 @@ public class TerraformWoodTest implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Item planks = new Item(new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_PLANKS_ID)));
+		Block customLog = new PillarBlock(PillarLogHelper.settings(MapColor.RED, MapColor.BLUE).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_LOG_ID)));
+		Block customPlanks = new Block(AbstractBlock.Settings.create().mapColor(MapColor.RED).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_PLANKS_ID)));
+
+		BlockItem customLogItem = new BlockItem(customLog, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_LOG_ID)));
+		BlockItem customPlanksItem = new BlockItem(customPlanks, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_PLANKS_ID)));
 
 		// Boats
 		customBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, false);
@@ -65,18 +69,33 @@ public class TerraformWoodTest implements ModInitializer {
 		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).lootTable(hangingSign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
-		Item signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)));
-		Item hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)));
+		SignItem signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)));
+		HangingSignItem hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)));
 
 		// Register
-		Registry.register(Registries.ITEM, CUSTOM_PLANKS_ID, planks);
+		customLogItem.appendBlocks(Item.BLOCK_ITEMS, customLogItem);
+		customPlanksItem.appendBlocks(Item.BLOCK_ITEMS, customPlanksItem);
+		signItem.appendBlocks(Item.BLOCK_ITEMS, signItem);
+		hangingSignItem.appendBlocks(Item.BLOCK_ITEMS, hangingSignItem);
+
+		Registry.register(Registries.BLOCK, CUSTOM_LOG_ID, customLog);
+		Registry.register(Registries.BLOCK, CUSTOM_PLANKS_ID, customPlanks);
+
+		Registry.register(Registries.ITEM, CUSTOM_LOG_ID, customLogItem);
+		Registry.register(Registries.ITEM, CUSTOM_PLANKS_ID, customPlanksItem);
 		Registry.register(Registries.ITEM, CUSTOM_SIGN_ID, signItem);
 		Registry.register(Registries.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register(entries -> {
-			entries.addAfter(Items.MANGROVE_PLANKS, planks);
-			entries.addAfter(Items.MANGROVE_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem);
-			entries.addAfter(Items.MANGROVE_HANGING_SIGN, signItem, hangingSignItem);
+			entries.addAfter(Items.CHERRY_BUTTON, customLogItem, customPlanksItem);
+		});
+
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
+			entries.addAfter(Items.CHERRY_HANGING_SIGN, signItem, hangingSignItem);
+		});
+
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> {
+			entries.addAfter(Items.CHERRY_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem);
 		});
 
 		// Utility commands

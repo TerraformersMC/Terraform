@@ -12,70 +12,66 @@ public final class PillarLogHelper {
 	}
 
 	/**
-	 * Factory to create a PillarBlock log with default settings and
+	 * Factory to create default block settings for a PillarBlock log with
 	 * the same map color on all block faces.
 	 *
 	 * @param color Map color for all faces of log
-	 * @return New PillarBlock
+	 * @return New AbstractBlock.Settings
 	 */
-	public static PillarBlock of(MapColor color) {
-		return new PillarBlock(AbstractBlock.Settings.create()
+	public static AbstractBlock.Settings settings(MapColor color) {
+		return AbstractBlock.Settings.create()
 				.mapColor(color)
 				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
-		);
+				.burnable();
 	}
 
 	/**
-	 * Factory to create a PillarBlock log with default settings and
+	 * Factory to create default block settings for a PillarBlock log with
 	 * different map colors on the top/bottom versus the sides.
 	 *
 	 * @param wood Map color for non-bark faces of log (ends)
 	 * @param bark Map color for bark faces of log (sides)
-	 * @return New PillarBlock
+	 * @return New AbstractBlock.Settings
 	 */
-	public static PillarBlock of(MapColor wood, MapColor bark) {
-		return new PillarBlock(AbstractBlock.Settings.create()
+	public static AbstractBlock.Settings settings(MapColor wood, MapColor bark) {
+		return AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
 				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
 				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
-		);
+				.burnable();
 	}
 
 	/**
-	 * Factory to create a PillarBlock Nether stem with default settings and
+	 * Factory to create default block settings for a PillarBlock Nether stem with
 	 * the same map color on all block faces.
 	 *
 	 * @param color Map color for all faces of stem
-	 * @return New PillarBlock
+	 * @return New AbstractBlock.Settings
 	 */
-	public static PillarBlock ofNether(MapColor color) {
-		return new PillarBlock(AbstractBlock.Settings.create()
+	public static AbstractBlock.Settings settingsNether(MapColor color) {
+		return AbstractBlock.Settings.create()
 				.mapColor(color)
 				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_STEM)
-		);
+				.sounds(BlockSoundGroup.NETHER_STEM);
 	}
 
 	/**
-	 * Factory to create a PillarBlock Nether stem with default settings and
+	 * Factory to create default block settings for a PillarBlock Nether stem with
 	 * different map colors on the top/bottom versus the sides.
 	 *
 	 * @param wood Map color for non-bark faces of stem (ends)
 	 * @param bark Map color for bark faces of stem (sides)
-	 * @return New PillarBlock
+	 * @return New AbstractBlock.Settings
 	 */
-	public static PillarBlock ofNether(MapColor wood, MapColor bark) {
-		return new PillarBlock(AbstractBlock.Settings.create()
+	public static AbstractBlock.Settings settingsNether(MapColor wood, MapColor bark) {
+		return AbstractBlock.Settings.create()
 				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
 				.instrument(NoteBlockInstrument.BASS)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_STEM)
-		);
+				.sounds(BlockSoundGroup.NETHER_STEM);
 	}
 }
