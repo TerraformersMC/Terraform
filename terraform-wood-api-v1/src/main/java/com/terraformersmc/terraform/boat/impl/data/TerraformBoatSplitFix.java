@@ -30,13 +30,18 @@ public class TerraformBoatSplitFix extends DataFix {
 
 	private static String getNewBoatIdFromOldType(String type) {
 		Optional<TerraformBoatData> boatData = TerraformBoatData.getOptional(Identifier.of(type));
+		String newId = null;
 
 		if (boatData.isPresent()) {
 			if (boatData.get().boatEntity() != null) {
-				return boatData.get().boatId().toString();
+				newId = boatData.get().boatId().toString();
 			} else if (boatData.get().raftEntity() != null) {
-				return boatData.get().raftId().toString();
+				newId = boatData.get().raftId().toString();
 			}
+		}
+
+		if (newId != null && TerraformBoatDfu.getRegisteredBoats().contains(newId)) {
+			return newId;
 		}
 
 		return "minecraft:oak_boat";
@@ -44,13 +49,18 @@ public class TerraformBoatSplitFix extends DataFix {
 
 	private static String getNewChestBoatIdFromOldType(String type) {
 		Optional<TerraformBoatData> boatData = TerraformBoatData.getOptional(Identifier.of(type));
+		String newId = null;
 
 		if (boatData.isPresent()) {
 			if (boatData.get().chestBoatEntity() != null) {
-				return boatData.get().chestBoatId().toString();
+				newId = boatData.get().chestBoatId().toString();
 			} else if (boatData.get().chestRaftEntity() != null) {
-				return boatData.get().chestRaftId().toString();
+				newId = boatData.get().chestRaftId().toString();
 			}
+		}
+
+		if (newId != null && TerraformBoatDfu.getRegisteredBoats().contains(newId)) {
+			return newId;
 		}
 
 		return "minecraft:oak_chest_boat";
