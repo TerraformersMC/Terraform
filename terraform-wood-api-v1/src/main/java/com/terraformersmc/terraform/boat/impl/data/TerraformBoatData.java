@@ -5,8 +5,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.util.Identifier;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,6 +23,7 @@ public record TerraformBoatData(Identifier id, EntityType<BoatEntity> boatEntity
 		Objects.requireNonNull(id);
 	}
 
+
 	public static void put(TerraformBoatData boatData) {
 		BOAT_DATA.put(boatData.id, boatData);
 	}
@@ -33,6 +36,15 @@ public record TerraformBoatData(Identifier id, EntityType<BoatEntity> boatEntity
 
 		return BOAT_DATA.get(id);
 	}
+
+	public static Optional<TerraformBoatData> getOptional(Identifier id) {
+		if (id == null || !BOAT_DATA.containsKey(id)) {
+			return Optional.empty();
+		}
+
+		return Optional.of(BOAT_DATA.get(id));
+	}
+
 
 	public static TerraformBoatData empty(Identifier id) {
 		return new TerraformBoatData(id, null, null, null, null);
@@ -85,6 +97,12 @@ public record TerraformBoatData(Identifier id, EntityType<BoatEntity> boatEntity
 			put(new TerraformBoatData(id, null, null, null, chestRaftEntity));
 		}
 	}
+
+
+	public static Collection<TerraformBoatData> getCollection() {
+		return BOAT_DATA.values();
+	}
+
 
 	public Identifier boatId() {
 		return id.withSuffixedPath("_boat");
