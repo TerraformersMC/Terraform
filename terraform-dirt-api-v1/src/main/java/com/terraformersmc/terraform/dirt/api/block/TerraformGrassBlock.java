@@ -23,6 +23,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	private final Map<Block, Block> spreadsTo;
 	private final Supplier<Block> path;
 	public static final Map<Block, Block> GRASS_SPREADS_TO = new HashMap<>();
+	private static final int MAX_LIGHT_LEVEL = 15;
 
 	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings) {
 		this(dirt, path, settings, ImmutableMap.of(Blocks.DIRT, Blocks.GRASS_BLOCK));
@@ -55,11 +56,13 @@ public class TerraformGrassBlock extends GrassBlock {
 		BlockPos above = pos.up();
 		BlockState aboveState = world.getBlockState(above);
 
-		if (aboveState.getBlock() == Blocks.SNOW && aboveState.get(SnowBlock.LAYERS) == 1) {
+		if (aboveState.isOf(Blocks.SNOW) && aboveState.get(SnowBlock.LAYERS) == 1) {
 			return true;
+		} else if (aboveState.getFluidState().getLevel() == 8) {
+			return false;
 		} else {
-			int lightingAt = ChunkLightProvider.getRealisticOpacity(world, state, pos, aboveState, above, Direction.UP, aboveState.getOpacity(world, above));
-			return lightingAt < world.getMaxLightLevel();
+			int lightingAt = ChunkLightProvider.getRealisticOpacity(state, aboveState, Direction.UP, aboveState.getOpacity());
+			return lightingAt < MAX_LIGHT_LEVEL;
 		}
 	}
 

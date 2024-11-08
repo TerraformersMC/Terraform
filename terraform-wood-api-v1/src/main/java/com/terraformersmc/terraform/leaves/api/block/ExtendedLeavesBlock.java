@@ -12,8 +12,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 
 /**
  * A leaves block with extended range, permitting leaves to be as far as 13 blocks away from the tree rather than the
@@ -50,19 +51,19 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public int getOpacity(BlockState state, BlockView view, BlockPos pos) {
+	public int getOpacity(BlockState state) {
 		return 0;
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
 		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+			tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
 
 		int distance = ExtendedLeavesBlock.getDistanceFromLog(neighborState) + 1;
 		if (distance != 1 || state.get(DISTANCE) != distance) {
-			world.scheduleBlockTick(pos, this, 1);
+			tickView.scheduleBlockTick(pos, this, 1);
 		}
 
 		return state;

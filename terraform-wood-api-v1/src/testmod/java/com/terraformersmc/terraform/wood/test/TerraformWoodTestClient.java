@@ -7,7 +7,6 @@ import net.fabricmc.api.ClientModInitializer;
 public class TerraformWoodTestClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_BOAT_ID, false);
-		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_RAFT_ID, true);
+		TerraformBoatClientHelper.registerModelLayers(TerraformWoodTest.CUSTOM_BOATS_ID);
 	}
 }

@@ -206,7 +206,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	@Override
-	public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+	public VoxelShape getCullingShape(BlockState state) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 

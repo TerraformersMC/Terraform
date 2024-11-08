@@ -3,11 +3,7 @@
   "package": "com.terraformersmc.terraform.boat.impl.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBoatEntity",
-    "MixinEntityPredicate"
-  ],
-  "client": [
-    "MixinBoatEntityRenderer"
+    "MixinSchemas"
   ],
   "injectors": {
     "defaultRequire": 1

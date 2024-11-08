@@ -3,9 +3,7 @@ package com.terraformersmc.terraform.wood.test.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.terraformersmc.terraform.boat.api.TerraformBoatType;
-import com.terraformersmc.terraform.boat.api.TerraformBoatTypeRegistry;
-import com.terraformersmc.terraform.boat.impl.entity.TerraformBoatEntity;
+import com.terraformersmc.terraform.boat.impl.data.TerraformBoatData;
 import com.terraformersmc.terraform.wood.test.TerraformWoodTest;
 
 import net.minecraft.advancement.AdvancementEntry;
@@ -15,6 +13,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.entity.passive.GoatEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle.ChestBoatEntity;
+import net.minecraft.entity.vehicle.ChestRaftEntity;
+import net.minecraft.entity.vehicle.RaftEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -39,8 +41,7 @@ public final class SpawnBoatsCommand {
 		ServerWorld world = source.getWorld();
 		Vec3d pos = source.getPosition();
 
-		TerraformBoatType boatType = TerraformBoatTypeRegistry.INSTANCE.getOrThrow(TerraformWoodTest.CUSTOM_BOAT_KEY);
-		TerraformBoatType raftType = TerraformBoatTypeRegistry.INSTANCE.getOrThrow(TerraformWoodTest.CUSTOM_RAFT_KEY);
+		TerraformBoatData boatData = TerraformBoatData.get(TerraformWoodTest.CUSTOM_BOATS_ID);
 
 		// Revoke advancement
 		ServerPlayerEntity player = source.getPlayer();
@@ -60,20 +61,20 @@ public final class SpawnBoatsCommand {
 		}
 
 		// Spawn boats
-		TerraformBoatEntity boat = new TerraformBoatEntity(world, pos.getX(), pos.getY(), pos.getZ());
-		boat.setTerraformBoat(boatType);
+		BoatEntity boat = new BoatEntity(boatData.boatEntity(), world, () -> TerraformWoodTest.customBoatItem);
+		boat.setPos(pos.getX(), pos.getY(), pos.getZ());
 		world.spawnEntity(boat);
 
-		TerraformBoatEntity chestBoat = new TerraformBoatEntity(world, pos.getX() - 2, pos.getY(), pos.getZ());
-		chestBoat.setTerraformBoat(boatType);
+		ChestBoatEntity chestBoat = new ChestBoatEntity(boatData.chestBoatEntity(), world, () -> TerraformWoodTest.customChestBoatItem);
+		chestBoat.setPos(pos.getX() - 2, pos.getY(), pos.getZ());
 		world.spawnEntity(chestBoat);
 
-		TerraformBoatEntity raft = new TerraformBoatEntity(world, pos.getX() - 4, pos.getY(), pos.getZ());
-		raft.setTerraformBoat(raftType);
+		RaftEntity raft = new RaftEntity(boatData.raftEntity(), world, () -> TerraformWoodTest.customRaftItem);
+		raft.setPos(pos.getX() - 4, pos.getY(), pos.getZ());
 		world.spawnEntity(raft);
 
-		TerraformBoatEntity chestRaft = new TerraformBoatEntity(world, pos.getX() - 6, pos.getY(), pos.getZ());
-		chestRaft.setTerraformBoat(raftType);
+		ChestRaftEntity chestRaft = new ChestRaftEntity(boatData.chestRaftEntity(), world, () -> TerraformWoodTest.customChestRaftItem);
+		chestRaft.setPos(pos.getX() - 6, pos.getY(), pos.getZ());
 		world.spawnEntity(chestRaft);
 
 		// Spawn passengers
