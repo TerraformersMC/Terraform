@@ -75,9 +75,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * Factory to create a BareSmallLogBlock with default settings and
 	 * the same map color on all block faces.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor)}
 	 * @param color Map color for all faces of log
 	 * @return New BareSmallLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static BareSmallLogBlock of(MapColor color) {
 		return new BareSmallLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
@@ -91,10 +93,12 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 * Factory to create a BareSmallLogBlock with default settings and
 	 * different map colors on the top/bottom versus the sides.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor, MapColor)}
 	 * @param wood Map color for non-bark faces of log (ends)
 	 * @param bark Map color for bark faces of log (sides)
 	 * @return New BareSmallLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
 		return new BareSmallLogBlock(AbstractBlock.Settings.create()
 				.mapColor((state) -> state.get(UP) ? wood : bark)

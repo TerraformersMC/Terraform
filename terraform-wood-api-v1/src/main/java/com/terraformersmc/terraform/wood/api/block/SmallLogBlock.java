@@ -56,10 +56,12 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * Factory to create a SmallLogBlock with default settings and
 	 * the same map color on all block faces.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createSmallLogSettings(Block, MapColor)}
 	 * @param leaves Block used for leaves on log
 	 * @param color Map color for all faces of log
 	 * @return New SmallLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static SmallLogBlock of(Block leaves, MapColor color) {
 		return new SmallLogBlock(leaves, AbstractBlock.Settings.create()
 				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color)
@@ -73,11 +75,13 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 * Factory to create a SmallLogBlock with default settings and
 	 * different map colors on the top/bottom versus the sides.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createSmallLogSettings(Block, MapColor, MapColor)}
 	 * @param leaves Block used for leaves on log
 	 * @param wood Map color for non-bark faces of log (ends)
 	 * @param bark Map color for bark faces of log (sides)
 	 * @return New SmallLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static SmallLogBlock of(Block leaves, MapColor wood, MapColor bark) {
 		return new SmallLogBlock(leaves, AbstractBlock.Settings.create()
 				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : state.get(UP) ? wood : bark)

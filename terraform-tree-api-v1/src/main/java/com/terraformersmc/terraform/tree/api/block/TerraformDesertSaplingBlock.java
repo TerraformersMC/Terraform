@@ -11,10 +11,10 @@ public class TerraformDesertSaplingBlock extends SaplingBlock {
 	private final boolean onlySand;
 
 	public TerraformDesertSaplingBlock(SaplingGenerator generator, Settings settings) {
-		this(generator, settings, false);
+		this(generator, false, settings);
 	}
 
-	public TerraformDesertSaplingBlock(SaplingGenerator generator, Settings settings, boolean onlySand) {
+	public TerraformDesertSaplingBlock(SaplingGenerator generator, boolean onlySand, Settings settings) {
 		super(generator, settings);
 		this.onlySand = onlySand;
 	}

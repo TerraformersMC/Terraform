@@ -11,7 +11,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 /**
- * A log block that has 4 different corners that combine together to form a huge and continuous 2x2 log.
+ * A log block that has 4 different corners that combine to form a huge and continuous 2x2 log.
  * Used for the mega variants of Redwood, Fir, etc
  */
 @SuppressWarnings("unused")
@@ -30,9 +30,11 @@ public class QuarterLogBlock extends PillarBlock {
 	 * Factory to create a QuarterLogBlock with default settings and
 	 * the same map color on all block faces.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor)}
 	 * @param color Map color for all faces of log
 	 * @return New QuarterLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock of(MapColor color) {
 		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
@@ -46,10 +48,12 @@ public class QuarterLogBlock extends PillarBlock {
 	 * Factory to create a QuarterLogBlock with default settings and
 	 * different map colors on the exposed wood versus the bark sides.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createQuarterLogSettings(MapColor, MapColor)}
 	 * @param wood Map color for non-bark faces of log
 	 * @param bark Map color for bark faces of log
 	 * @return New QuarterLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
 		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(
@@ -78,9 +82,11 @@ public class QuarterLogBlock extends PillarBlock {
 	 * Factory to create a Nether QuarterLogBlock with default settings and
 	 * the same map color on all block faces.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createNetherSettings(MapColor)}
 	 * @param color Map color for all faces of log
 	 * @return New QuarterLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock ofNether(MapColor color) {
 		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(color)
@@ -93,10 +99,12 @@ public class QuarterLogBlock extends PillarBlock {
 	 * Factory to create a Nether QuarterLogBlock with default settings and
 	 * different map colors on the exposed wood versus the bark sides.
 	 *
+	 * @deprecated Use {@linkplain PillarLogHelper#createQuarterLogNetherSettings(MapColor, MapColor)}
 	 * @param wood Map color for non-bark faces of log
 	 * @param bark Map color for bark faces of log
 	 * @return New QuarterLogBlock
 	 */
+	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock ofNether(MapColor wood, MapColor bark) {
 		return new QuarterLogBlock(AbstractBlock.Settings.create()
 				.mapColor(
