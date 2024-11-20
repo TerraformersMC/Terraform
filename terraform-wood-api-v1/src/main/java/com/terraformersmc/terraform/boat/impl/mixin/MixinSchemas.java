@@ -23,7 +23,7 @@ import java.util.function.BiFunction;
 public class MixinSchemas {
 	/*
 	 * The following provides a mechanism for mods to register their boat IDs early enough for the DFU.
-	 * This is required in order for Terraform boats to be upgraded from <1.21.2 to after >=1.21.2.
+	 * This is required in order for Terraform boats to be upgraded from <1.21.2 to >=1.21.2.
 	 * Boats not registered in this manner will be converted to oak wood type at upgrade.
 	 */
 	@Inject(method = "create", at = @At("HEAD"))

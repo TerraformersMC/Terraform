@@ -7,6 +7,8 @@ public final class DataVersions {
 		return;
 	}
 
+	public static final int V_1_21_4 = 4179;
+	public static final int V_1_21_3 = 4082;
 	public static final int V_1_21_2 = 4073;
 	public static final int V_1_21_1 = 3954;
 	public static final int V_1_21   = 3948;
