@@ -46,8 +46,8 @@ public class TerraformWoodTest implements ModInitializer {
 		Block customLog = new PillarBlock(PillarLogHelper.createSettings(MapColor.RED, MapColor.BLUE).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_LOG_ID)));
 		Block customPlanks = new Block(AbstractBlock.Settings.create().mapColor(MapColor.RED).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_PLANKS_ID)));
 
-		BlockItem customLogItem = new BlockItem(customLog, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_LOG_ID)));
-		BlockItem customPlanksItem = new BlockItem(customPlanks, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_PLANKS_ID)));
+		BlockItem customLogItem = new BlockItem(customLog, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_LOG_ID)).useBlockPrefixedTranslationKey());
+		BlockItem customPlanksItem = new BlockItem(customPlanks, new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_PLANKS_ID)).useBlockPrefixedTranslationKey());
 
 		// Boats
 		customBoatItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, false);
@@ -69,8 +69,8 @@ public class TerraformWoodTest implements ModInitializer {
 		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).lootTable(hangingSign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID)));
 		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
 
-		SignItem signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)));
-		HangingSignItem hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)));
+		SignItem signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)).useBlockPrefixedTranslationKey());
+		HangingSignItem hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)).useBlockPrefixedTranslationKey());
 
 		// Register
 		customLogItem.appendBlocks(Item.BLOCK_ITEMS, customLogItem);
