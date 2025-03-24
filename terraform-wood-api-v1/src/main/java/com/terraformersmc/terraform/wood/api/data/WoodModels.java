@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
  * see <a href="https://github.com/TerraformersMC/Terrestria">the Terrestria project source code</a>.
  * </p>
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameParameterValue"})
 public final class WoodModels {
 	/**
 	 * Extend this model for {@linkplain QuarterLogBlock} block models.  F.e.:
