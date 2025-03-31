@@ -10,17 +10,19 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradedItem;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public final class TerraformSaplingTradeHelperImpl {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformSaplingTradeHelperImpl() {
 		return;
 	}
 
 	public static void registerWanderingTraderSaplingTrades(ItemConvertible... saplings) {
-		TradeOfferHelper.registerWanderingTraderOffers(1, factories -> {
-			for (ItemConvertible sapling : saplings) {
-				factories.add(new SellSaplingFactory(sapling));
-			}
-		});
+		TradeOfferHelper.registerWanderingTraderOffers(builder ->
+				builder.addOffersToPool(TradeOfferHelper.WanderingTraderOffersBuilder.SELL_COMMON_ITEMS_POOL,
+						Arrays.stream(saplings).map(SellSaplingFactory::new).collect(Collectors.toSet())));
 	}
 
 	private static class SellSaplingFactory implements TradeOffers.Factory {

@@ -16,8 +16,11 @@ import net.minecraft.world.tick.ScheduledTickView;
 /**
  * A very thin block that is intended to be used like a carpet block, but for leaves.
  */
+@SuppressWarnings("unused")
 public class LeafPileBlock extends Block {
-	protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+	protected static final VoxelShape SHAPE = Block.createCuboidShape(
+			0.0D, 0.0D, 0.0D,
+			16.0D, 1.0D, 16.0D);
 
 	public LeafPileBlock(Settings settings) {
 		super(settings);
@@ -30,7 +33,9 @@ public class LeafPileBlock extends Block {
 
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-		return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+		return !state.canPlaceAt(world, pos) ?
+				Blocks.AIR.getDefaultState() :
+				super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
 	}
 
 	@Override
