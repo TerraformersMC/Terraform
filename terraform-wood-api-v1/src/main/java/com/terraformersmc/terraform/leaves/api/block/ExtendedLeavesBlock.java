@@ -3,6 +3,7 @@ package com.terraformersmc.terraform.leaves.api.block;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.terraformersmc.terraform.wood.api.block.SmallLogBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,13 +29,24 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
+ * <p>
  * A leaves block with extended range, permitting leaves to be as far as 13 blocks away from the tree rather than the
  * limit of 6 blocks imposed by vanilla leaves.  Enabling the opti-leaves feature can reduce geometry and give better
  * rendering performance in dense forests of large trees.  By default, extended leaves are transparent (do not block
  * light at all).  If the optional leaf_particle field is present, the custom particle is used; otherwise a tinted
  * falling leaf particle is used.
+ * </p><p>
+ * Be aware when using the extended leaf range, there are now two distance properties which combine to provide the
+ * extended distance range.  Mod authors should be careful not to directly rely on or set the value of the
+ * {@link LeavesBlock#DISTANCE} property when using this class.  Instead, use the provided
+ * {@link ExtendedLeavesBlock#getExtendedDistance(BlockState)} and
+ * {@link ExtendedLeavesBlock#setExtendedDistance(BlockState, int)} methods, which will sum up and properly allocate
+ * the total distance to the two properties.  For the total available extended distance constant (14), use
+ * {@link ExtendedLeavesBlock#MAX_TOTAL_DISTANCE} instead of either MAX_DISTANCE or MAX_EXTENDED_DISTANCE.
+ * </p>
  */
 /* This class must override every LeavesBlock function that references (compiler inlined) MAX_DISTANCE.
  * The DISTANCE_1_7 property used by LeavesBlock is complemented by our EXTENDED_DISTANCE property.
@@ -157,14 +169,43 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 			}
 		}
 
-		if (distance > MAX_DISTANCE) {
-			return state.with(DISTANCE, MAX_DISTANCE).with(EXTENDED_DISTANCE, distance - MAX_DISTANCE);
-		} else {
-			return state.with(DISTANCE, distance).with(EXTENDED_DISTANCE, 0);
-		}
+		return setExtendedDistance(state, distance);
 	}
 
 	private static int getDistanceFromLog(BlockState state) {
+		return ExtendedLeavesBlock.getOptionalDistanceFromLog(state).orElse(MAX_TOTAL_DISTANCE);
+	}
+
+	/**
+	 * <p>
+	 * Get an {@link OptionalInt} containing the previously calculated distance from the provided leaves block state
+	 * to the nearest log.  The value will be between 0 and 14 inclusive.
+	 * </p><p>
+	 * A value of 0 indicates the block is a log (including a {@link SmallLogBlock} which may also have leaves).
+	 * A value of 14 indicates the leaves should decay and will schedule random ticks.
+	 * No value indicates the block state does not contain the {@link LeavesBlock#DISTANCE} property.
+	 * </p>
+	 *
+	 * @param state Target block state for which to fetch extended optional distance
+	 * @return OptionalInt of the previously calculated distance, if present
+	 */
+	public static OptionalInt getOptionalDistanceFromLog(BlockState state) {
+		if (state.isIn(BlockTags.LOGS)) {
+			return OptionalInt.of(0);
+		}
+
+		Block block = state.getBlock();
+		if (block instanceof ExtendedLeavesBlock) {
+			return OptionalInt.of(getExtendedDistance(state));
+		} else if (state.contains(DISTANCE)) {
+			int distance = state.get(DISTANCE);
+			return OptionalInt.of(distance < LeavesBlock.MAX_DISTANCE ? distance : MAX_TOTAL_DISTANCE);
+		}
+
+		return OptionalInt.empty();
+	}
+
+	private static int getDistanceFromLogx(BlockState state) {
 		if (state.isIn(BlockTags.LOGS)) {
 			return 0;
 		}
@@ -172,7 +213,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 		Block block = state.getBlock();
 		if (block instanceof ExtendedLeavesBlock) {
 			return getExtendedDistance(state);
-		} else if (block instanceof LeavesBlock) {
+		} else if (state.contains(DISTANCE)) {
 			int distance = state.get(DISTANCE);
 			return distance < LeavesBlock.MAX_DISTANCE ? distance : MAX_TOTAL_DISTANCE;
 		}
@@ -180,8 +221,51 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 		return MAX_TOTAL_DISTANCE;
 	}
 
-	private static int getExtendedDistance(BlockState state) {
-		return state.get(DISTANCE) + state.get(EXTENDED_DISTANCE);
+	/**
+	 * <p>
+	 * Get the extended distance value for the targeted leaves block state.  It is the caller's responsibility to
+	 * determine whether the block state is extended or not.
+	 * </p><p>
+	 * If the target block state is of {@link ExtendedLeavesBlock} or a descendant, the value will be between 1 and 14
+	 * inclusive, and a value of 14 indicates the leaves should decay and will schedule random ticks.
+	 * </p><p>
+	 * Otherwise, if the target block state contains the {@link LeavesBlock#DISTANCE} property, the value will be
+	 * between 1 and 7, and a value of 7 indicates the leaves should decay and will schedule random ticks.
+	 * </p>
+	 *
+	 * @param state Target block state for which to fetch extended distance
+	 * @return Extended distance value of the target block state
+	 */
+	public static int getExtendedDistance(BlockState state) {
+		return state.get(DISTANCE) + state.getOrEmpty(EXTENDED_DISTANCE).orElse(0);
+	}
+
+	/**
+	 * <p>
+	 * Set the extended distance value for the targeted leaves block state.  It is the caller's responsibility to
+	 * determine whether the block state is extended or not.  Passing an out-of-bounds value will throw an exception.
+	 * </p><p>
+	 * If the target block state is of {@link ExtendedLeavesBlock} or a descendant, the value must be between 1 and 14
+	 * inclusive, and a value of 14 indicates the leaves should decay and will schedule random ticks.
+	 * </p><p>
+	 * Otherwise, if the target block state contains the {@link LeavesBlock#DISTANCE} property, the value must be
+	 * between 1 and 7, and a value of 7 indicates the leaves should decay and will schedule random ticks.
+	 * </p>
+	 *
+	 * @param state The target block state for which to update extended distance
+	 * @param distance The extended distance to set for the target block state
+	 * @return The modified block state
+	 */
+	public static BlockState setExtendedDistance(BlockState state, int distance) {
+		if (state.contains(EXTENDED_DISTANCE)) {
+			if (distance > MAX_DISTANCE) {
+				return state.with(DISTANCE, MAX_DISTANCE).with(EXTENDED_DISTANCE, distance - MAX_DISTANCE);
+			} else {
+				return state.with(DISTANCE, distance).with(EXTENDED_DISTANCE, 0);
+			}
+		} else {
+			return state.with(DISTANCE, distance);
+		}
 	}
 
 	@Override

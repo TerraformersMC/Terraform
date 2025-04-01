@@ -14,6 +14,7 @@ public final class TerraformBoatDfu {
 
 	private static final Collection<String> REGISTERED_BOATS = new HashSet<>();
 
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformBoatDfu() {
 		return;
 	}
