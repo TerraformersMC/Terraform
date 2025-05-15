@@ -1,11 +1,7 @@
 package com.terraformersmc.terraform.wood.test;
 
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
-import com.terraformersmc.terraform.sign.api.block.TerraformHangingSignBlock;
-import com.terraformersmc.terraform.sign.api.block.TerraformSignBlock;
-import com.terraformersmc.terraform.sign.api.block.TerraformWallHangingSignBlock;
-import com.terraformersmc.terraform.sign.api.block.TerraformWallSignBlock;
-
+import com.terraformersmc.terraform.sign.api.block.TerraformSignBlockHelper;
 import com.terraformersmc.terraform.wood.api.block.PillarLogHelper;
 import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
@@ -28,9 +24,6 @@ public class TerraformWoodTest implements ModInitializer {
 
 	public static final Identifier CUSTOM_BOATS_ID = Identifier.of(MOD_ID, "custom");
 
-	protected static final Identifier SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/custom");
-	protected static final Identifier HANGING_SIGN_TEXTURE_ID = Identifier.of(MOD_ID, "entity/signs/hanging/custom");
-	protected static final Identifier HANGING_SIGN_GUI_TEXTURE_ID = Identifier.of(MOD_ID, "textures/gui/hanging_signs/custom");
 	private static final Identifier CUSTOM_SIGN_ID = Identifier.of(MOD_ID, "custom_sign");
 	private static final Identifier CUSTOM_WALL_SIGN_ID = Identifier.of(MOD_ID, "custom_wall_sign");
 	private static final Identifier CUSTOM_HANGING_SIGN_ID = Identifier.of(MOD_ID, "custom_hanging_sign");
@@ -57,17 +50,12 @@ public class TerraformWoodTest implements ModInitializer {
 		customChestRaftItem = TerraformBoatItemHelper.registerBoatItem(CUSTOM_BOATS_ID, true, true);
 
 		// Signs
-		Block sign = new TerraformSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_SIGN_ID)));
-		Registry.register(Registries.BLOCK, CUSTOM_SIGN_ID, sign);
+		WoodType customSignWoodType = TerraformSignBlockHelper.registerDefaultWoodType(Identifier.of(MOD_ID, "custom"));
 
-		Block wallSign = new TerraformWallSignBlock(SIGN_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).lootTable(sign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_SIGN_ID)));
-		Registry.register(Registries.BLOCK, CUSTOM_WALL_SIGN_ID, wallSign);
-
-		Block hangingSign = new TerraformHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_HANGING_SIGN_ID)));
-		Registry.register(Registries.BLOCK, CUSTOM_HANGING_SIGN_ID, hangingSign);
-
-		Block wallHangingSign = new TerraformWallHangingSignBlock(HANGING_SIGN_TEXTURE_ID, HANGING_SIGN_GUI_TEXTURE_ID, AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).lootTable(hangingSign.getLootTableKey()).registryKey(RegistryKey.of(RegistryKeys.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID)));
-		Registry.register(Registries.BLOCK, CUSTOM_WALL_HANGING_SIGN_ID, wallHangingSign);
+		SignBlock sign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_SIGN_ID, settings -> new SignBlock(customSignWoodType, settings), AbstractBlock.Settings.copy(Blocks.OAK_SIGN).sounds(BlockSoundGroup.ANVIL));
+		WallSignBlock wallSign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_WALL_SIGN_ID, settings -> new WallSignBlock(customSignWoodType, settings), AbstractBlock.Settings.copy(Blocks.OAK_WALL_SIGN).sounds(BlockSoundGroup.SAND).lootTable(sign.getLootTableKey()));
+		HangingSignBlock hangingSign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_HANGING_SIGN_ID, settings -> new HangingSignBlock(customSignWoodType, settings), AbstractBlock.Settings.copy(Blocks.OAK_HANGING_SIGN).sounds(BlockSoundGroup.WOOL));
+		WallHangingSignBlock wallHangingSign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_WALL_HANGING_SIGN_ID, settings -> new WallHangingSignBlock(customSignWoodType, settings), AbstractBlock.Settings.copy(Blocks.OAK_WALL_HANGING_SIGN).sounds(BlockSoundGroup.SCULK_SENSOR).lootTable(hangingSign.getLootTableKey()));
 
 		SignItem signItem = new SignItem(sign, wallSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_SIGN_ID)).useBlockPrefixedTranslationKey());
 		HangingSignItem hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Settings().maxCount(16).registryKey(RegistryKey.of(RegistryKeys.ITEM, CUSTOM_HANGING_SIGN_ID)).useBlockPrefixedTranslationKey());

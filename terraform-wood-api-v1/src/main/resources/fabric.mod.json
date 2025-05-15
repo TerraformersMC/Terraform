@@ -60,7 +60,6 @@
   "mixins": [
     "mixins.terraform-boat.json",
     "mixins.terraform-leaves.json",
-    "mixins.terraform-sign.json",
     "mixins.terraform-wood.json"
   ]
 }
