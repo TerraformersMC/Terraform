@@ -31,7 +31,7 @@ public class TerraformSignBlockHelper {
 	 * @param key The registery key of the sign block to be registered
 	 * @param block The sign block to be registered
 	 * @return The registered sign block
-	 * @param <T> A descendent of {@linkplain AbstractSignBlock}
+	 * @param <T> A descendant of {@linkplain AbstractSignBlock}
 	 */
 	public static <T extends AbstractSignBlock> T registerSignBlock(RegistryKey<Block> key, T block) {
 		if (block instanceof SignBlock || block instanceof WallSignBlock) {
@@ -39,7 +39,7 @@ public class TerraformSignBlockHelper {
 		} else if (block instanceof HangingSignBlock || block instanceof WallHangingSignBlock) {
 			BlockEntityType.HANGING_SIGN.addSupportedBlock(block);
 		} else {
-			throw new IllegalArgumentException("This method only accepts vanilla sign blocks!");
+			throw new IllegalArgumentException("This method only accepts vanilla sign blocks and descendants!");
 		}
 
 		return Registry.register(Registries.BLOCK, key, block);
@@ -54,7 +54,7 @@ public class TerraformSignBlockHelper {
 	 * @param id The identifier of the sign block to be registered
 	 * @param factory A factory which creates the block to be registered using the provided block settings
 	 * @return The registered sign block
-	 * @param <T> A descendent of {@linkplain AbstractSignBlock}
+	 * @param <T> A descendant of {@linkplain AbstractSignBlock}
 	 */
 	public static <T extends AbstractSignBlock> T registerSignBlock(Identifier id, Function<AbstractBlock.Settings, T> factory, AbstractBlock.Settings settings) {
 		RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
