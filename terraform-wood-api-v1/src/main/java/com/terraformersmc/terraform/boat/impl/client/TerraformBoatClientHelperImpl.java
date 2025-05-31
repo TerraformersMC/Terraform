@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.boat.impl.client;
 
-import com.terraformersmc.terraform.boat.impl.data.TerraformBoatData;
+import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -28,25 +28,25 @@ public final class TerraformBoatClientHelperImpl {
 	}
 
 	public static void registerModelLayers(Identifier id) {
-		TerraformBoatData boatData = TerraformBoatData.get(id);
+		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.get(id);
 
-		if (boatData.boatEntity() != null) {
-			registerEntityRenderer(boatData.boatEntity(), boatData.boatModelLayer(),
+		if (boatData.boatEntityType() != null) {
+			registerEntityRenderer(boatData.boatEntityType(), boatData.boatModelLayer(),
 					BoatEntityModel::getTexturedModelData,
 					context -> new BoatEntityRenderer(context, boatData.boatModelLayer()));
 		}
-		if (boatData.chestBoatEntity() != null) {
-			registerEntityRenderer(boatData.chestBoatEntity(), boatData.chestBoatModelLayer(),
+		if (boatData.chestBoatEntityType() != null) {
+			registerEntityRenderer(boatData.chestBoatEntityType(), boatData.chestBoatModelLayer(),
 					BoatEntityModel::getChestTexturedModelData,
 					context -> new BoatEntityRenderer(context, boatData.chestBoatModelLayer()));
 		}
-		if (boatData.raftEntity() != null) {
-			registerEntityRenderer(boatData.raftEntity(), boatData.raftModelLayer(),
+		if (boatData.raftEntityType() != null) {
+			registerEntityRenderer(boatData.raftEntityType(), boatData.raftModelLayer(),
 					RaftEntityModel::getTexturedModelData,
 					context -> new RaftEntityRenderer(context, boatData.raftModelLayer()));
 		}
-		if (boatData.chestRaftEntity() != null) {
-			registerEntityRenderer(boatData.chestRaftEntity(), boatData.chestRaftModelLayer(),
+		if (boatData.chestRaftEntityType() != null) {
+			registerEntityRenderer(boatData.chestRaftEntityType(), boatData.chestRaftModelLayer(),
 					RaftEntityModel::getChestTexturedModelData,
 					context -> new RaftEntityRenderer(context, boatData.chestRaftModelLayer()));
 		}

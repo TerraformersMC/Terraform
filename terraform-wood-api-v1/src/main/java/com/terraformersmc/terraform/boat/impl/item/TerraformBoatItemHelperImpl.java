@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.boat.impl.item;
 
-import com.terraformersmc.terraform.boat.impl.data.TerraformBoatData;
+import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.BoatDispenserBehavior;
 import net.minecraft.entity.Entity;
@@ -14,7 +14,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.function.BiConsumer;
@@ -50,20 +49,16 @@ public final class TerraformBoatItemHelperImpl {
 				.maxTrackingRange(10);
 	}
 
-	private static <T extends Entity> EntityType<T> registerEntityType(Identifier id, EntityType.Builder<T> type) {
-		RegistryKey<EntityType<?>> key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, id);
-
+	private static <T extends Entity> EntityType<T> registerEntityType(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
 		return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
 	}
 
-	private static <T extends AbstractBoatEntity> BoatItem registerBoat(Identifier id, Identifier boatId, Item.Settings settings, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
+	private static <T extends AbstractBoatEntity> BoatItem registerBoat(Identifier id, RegistryKey<Item> itemKey, RegistryKey<EntityType<?>> entityTypeKey, Item.Settings settings, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
 		DelayedItemSupplier itemSupplier = new DelayedItemSupplier();
-		EntityType<T> entityType = registerEntityType(boatId, createEntityTypeBuilder(factory.apply(itemSupplier)));
-
-		RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, boatId);
+		EntityType<T> entityType = registerEntityType(entityTypeKey, createEntityTypeBuilder(factory.apply(itemSupplier)));
 		BoatItem item = Registry.register(Registries.ITEM, itemKey, new BoatItem(entityType, settings.registryKey(itemKey)));
-
 		itemSupplier.set(item);
+
 		registry.accept(id, entityType);
 		registerBoatDispenserBehavior(item, entityType);
 
@@ -72,23 +67,23 @@ public final class TerraformBoatItemHelperImpl {
 
 
 	public static BoatItem registerBoatItem(Identifier id, Item.Settings settings, boolean chest, boolean raft) {
-		TerraformBoatData boatData = TerraformBoatData.empty(id);
+		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.empty(id);
 
 		if (raft) {
 			if (chest) {
-				return registerBoat(id, boatData.chestRaftId(), settings,
-						TerraformBoatItemHelperImpl::getChestRaftFactory, TerraformBoatData::addChestRaft);
+				return registerBoat(id, boatData.chestRaftKey(), boatData.chestRaftEntityTypeKey(), settings,
+						TerraformBoatItemHelperImpl::getChestRaftFactory, TerraformBoatDataImpl::addChestRaft);
 			} else {
-				return registerBoat(id, boatData.raftId(), settings,
-						TerraformBoatItemHelperImpl::getRaftFactory, TerraformBoatData::addRaft);
+				return registerBoat(id, boatData.raftKey(), boatData.raftEntityTypeKey(), settings,
+						TerraformBoatItemHelperImpl::getRaftFactory, TerraformBoatDataImpl::addRaft);
 			}
 		} else {
 			if (chest) {
-				return registerBoat(id, boatData.chestBoatId(), settings,
-						TerraformBoatItemHelperImpl::getChestBoatFactory, TerraformBoatData::addChestBoat);
+				return registerBoat(id, boatData.chestBoatKey(), boatData.chestBoatEntityTypeKey(), settings,
+						TerraformBoatItemHelperImpl::getChestBoatFactory, TerraformBoatDataImpl::addChestBoat);
 			} else {
-				return registerBoat(id, boatData.boatId(), settings,
-						TerraformBoatItemHelperImpl::getBoatFactory, TerraformBoatData::addBoat);
+				return registerBoat(id, boatData.boatKey(), boatData.boatEntityTypeKey(), settings,
+						TerraformBoatItemHelperImpl::getBoatFactory, TerraformBoatDataImpl::addBoat);
 			}
 		}
 	}

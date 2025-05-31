@@ -29,13 +29,13 @@ public class TerraformBoatSplitFix extends DataFix {
 	}
 
 	private static String getNewBoatIdFromOldType(String type) {
-		Optional<TerraformBoatData> boatData = TerraformBoatData.getOptional(Identifier.of(type));
+		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.of(type));
 		String newId = null;
 
 		if (boatData.isPresent()) {
-			if (boatData.get().boatEntity() != null) {
+			if (boatData.get().boatEntityType() != null) {
 				newId = boatData.get().boatId().toString();
-			} else if (boatData.get().raftEntity() != null) {
+			} else if (boatData.get().raftEntityType() != null) {
 				newId = boatData.get().raftId().toString();
 			}
 		}
@@ -48,13 +48,13 @@ public class TerraformBoatSplitFix extends DataFix {
 	}
 
 	private static String getNewChestBoatIdFromOldType(String type) {
-		Optional<TerraformBoatData> boatData = TerraformBoatData.getOptional(Identifier.of(type));
+		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.of(type));
 		String newId = null;
 
 		if (boatData.isPresent()) {
-			if (boatData.get().chestBoatEntity() != null) {
+			if (boatData.get().chestBoatEntityType() != null) {
 				newId = boatData.get().chestBoatId().toString();
-			} else if (boatData.get().chestRaftEntity() != null) {
+			} else if (boatData.get().chestRaftEntityType() != null) {
 				newId = boatData.get().chestRaftId().toString();
 			}
 		}

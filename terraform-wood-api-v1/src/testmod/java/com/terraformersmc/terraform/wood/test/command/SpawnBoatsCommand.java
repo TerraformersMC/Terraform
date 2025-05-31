@@ -3,7 +3,7 @@ package com.terraformersmc.terraform.wood.test.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.terraformersmc.terraform.boat.impl.data.TerraformBoatData;
+import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
 import com.terraformersmc.terraform.wood.test.TerraformWoodTest;
 
 import net.minecraft.advancement.AdvancementEntry;
@@ -41,7 +41,7 @@ public final class SpawnBoatsCommand {
 		ServerWorld world = source.getWorld();
 		Vec3d pos = source.getPosition();
 
-		TerraformBoatData boatData = TerraformBoatData.get(TerraformWoodTest.CUSTOM_BOATS_ID);
+		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.get(TerraformWoodTest.CUSTOM_BOATS_ID);
 
 		// Revoke advancement
 		ServerPlayerEntity player = source.getPlayer();
@@ -61,19 +61,19 @@ public final class SpawnBoatsCommand {
 		}
 
 		// Spawn boats
-		BoatEntity boat = new BoatEntity(boatData.boatEntity(), world, () -> TerraformWoodTest.customBoatItem);
+		BoatEntity boat = new BoatEntity(boatData.boatEntityType(), world, () -> TerraformWoodTest.customBoatItem);
 		boat.setPos(pos.getX(), pos.getY(), pos.getZ());
 		world.spawnEntity(boat);
 
-		ChestBoatEntity chestBoat = new ChestBoatEntity(boatData.chestBoatEntity(), world, () -> TerraformWoodTest.customChestBoatItem);
+		ChestBoatEntity chestBoat = new ChestBoatEntity(boatData.chestBoatEntityType(), world, () -> TerraformWoodTest.customChestBoatItem);
 		chestBoat.setPos(pos.getX() - 2, pos.getY(), pos.getZ());
 		world.spawnEntity(chestBoat);
 
-		RaftEntity raft = new RaftEntity(boatData.raftEntity(), world, () -> TerraformWoodTest.customRaftItem);
+		RaftEntity raft = new RaftEntity(boatData.raftEntityType(), world, () -> TerraformWoodTest.customRaftItem);
 		raft.setPos(pos.getX() - 4, pos.getY(), pos.getZ());
 		world.spawnEntity(raft);
 
-		ChestRaftEntity chestRaft = new ChestRaftEntity(boatData.chestRaftEntity(), world, () -> TerraformWoodTest.customChestRaftItem);
+		ChestRaftEntity chestRaft = new ChestRaftEntity(boatData.chestRaftEntityType(), world, () -> TerraformWoodTest.customChestRaftItem);
 		chestRaft.setPos(pos.getX() - 6, pos.getY(), pos.getZ());
 		world.spawnEntity(chestRaft);
 

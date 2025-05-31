@@ -29,6 +29,7 @@ public final class WoodModels {
 	 * }</pre>
 	 */
 	public static final Identifier BLOCK_QUARTER_LOG = block("quarter_log");
+
 	/**
 	 * Extend this model for {@linkplain SmallLogBlock} block models when each direction is false.  F.e.:
 	 *
@@ -43,6 +44,7 @@ public final class WoodModels {
 	 * }</pre>
 	 */
 	public static final Identifier BLOCK_SMALL_LOG = block("small_log");
+
 	/**
 	 * Extend this model for {@linkplain SmallLogBlock} block models when each direction is true.  F.e.:
 	 *
@@ -58,6 +60,7 @@ public final class WoodModels {
 	 * }</pre>
 	 */
 	public static final Identifier BLOCK_SMALL_LOG_BRANCH = block("small_log_branch");
+
 	/**
 	 * Extend this model for {@linkplain SmallLogBlock} block models when leaves=true and each direction is false.  F.e.:
 	 *
@@ -72,6 +75,7 @@ public final class WoodModels {
 	 * }</pre>
 	 */
 	public static final Identifier BLOCK_SMALL_LOG_LEAVES = block("small_log_leaves");
+
 	/**
 	 * Extend this model for {@linkplain SmallLogBlock} block models when leaves=true and each direction is true.  F.e.:
 	 *
