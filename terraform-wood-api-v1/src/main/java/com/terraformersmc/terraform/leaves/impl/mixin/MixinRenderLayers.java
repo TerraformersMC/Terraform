@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.BlockRenderLayer;
 import net.minecraft.client.render.RenderLayers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,10 +21,10 @@ public class MixinRenderLayers {
 	private static boolean fancyGraphicsOrBetter;
 
 	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
-	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<RenderLayer> cir) {
+	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<BlockRenderLayer> cir) {
 		Block block = state.getBlock();
 		if (block instanceof ExtendedLeavesBlock || block instanceof SmallLogBlock && state.get(SmallLogBlock.HAS_LEAVES)) {
-			cir.setReturnValue(fancyGraphicsOrBetter ? RenderLayer.getCutoutMipped() : RenderLayer.getSolid());
+			cir.setReturnValue(fancyGraphicsOrBetter ? BlockRenderLayer.CUTOUT_MIPPED : BlockRenderLayer.SOLID);
 		}
 	}
 }
