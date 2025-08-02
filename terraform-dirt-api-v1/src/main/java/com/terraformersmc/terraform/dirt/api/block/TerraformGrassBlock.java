@@ -73,31 +73,32 @@ public class TerraformGrassBlock extends GrassBlock {
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (!world.isClient) {
-			if (!canSurvive(state, world, pos)) {
-				world.setBlockState(pos, dirt.getDefaultState());
-			} else if (world.getLightLevel(LightType.SKY, pos.up()) >= 4) {
-				if (world.getLightLevel(LightType.SKY, pos.up()) >= 9) {
-					BlockState defaultState = this.getDefaultState();
+		if (world.isClient()) {
+			return;
+		}
 
-					for (int int_1 = 0; int_1 < 4; ++int_1) {
-						BlockPos spreadingPos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+		if (!canSurvive(state, world, pos)) {
+			world.setBlockState(pos, dirt.getDefaultState());
+		} else if (world.getLightLevel(LightType.SKY, pos.up()) >= 4) {
+			if (world.getLightLevel(LightType.SKY, pos.up()) >= 9) {
+				BlockState defaultState = this.getDefaultState();
 
-						Block spreadTarget = world.getBlockState(spreadingPos).getBlock();
-						if (spreadTarget == dirt && canSpread(defaultState, world, spreadingPos)) {
-							world.setBlockState(spreadingPos, defaultState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW));
+				for (int int_1 = 0; int_1 < 4; ++int_1) {
+					BlockPos spreadingPos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+
+					Block spreadTarget = world.getBlockState(spreadingPos).getBlock();
+					if (spreadTarget == dirt && canSpread(defaultState, world, spreadingPos)) {
+						world.setBlockState(spreadingPos, defaultState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW));
+					}
+					Block spreadedBlock = spreadsTo.get(spreadTarget);
+					if (spreadedBlock != null && canSpread(defaultState, world, spreadingPos)) {
+						BlockState spreadedState = spreadedBlock.getDefaultState();
+						if (spreadedBlock instanceof SnowyBlock) {
+							spreadedState = spreadedState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW);
 						}
-						Block spreadedBlock = spreadsTo.get(spreadTarget);
-						if (spreadedBlock != null && canSpread(defaultState, world, spreadingPos)) {
-							BlockState spreadedState = spreadedBlock.getDefaultState();
-							if (spreadedBlock instanceof SnowyBlock) {
-								spreadedState = spreadedState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW);
-							}
-							world.setBlockState(spreadingPos, spreadedState);
-						}
+						world.setBlockState(spreadingPos, spreadedState);
 					}
 				}
-
 			}
 		}
 	}
