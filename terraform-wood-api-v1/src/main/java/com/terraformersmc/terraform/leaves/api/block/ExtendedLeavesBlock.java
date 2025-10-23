@@ -11,10 +11,10 @@ import net.minecraft.block.LeavesBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.ParticleUtil;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -120,7 +120,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	@Override
 	protected void spawnLeafParticle(World world, BlockPos pos, Random random) {
 		ParticleUtil.spawnParticle(world, pos, random, leafParticleEffect
-				.orElse(EntityEffectParticleEffect.create(ParticleTypes.TINTED_LEAVES, world.getBlockColor(pos))));
+				.orElse(TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, world.getBlockColor(pos))));
 	}
 
 	@Override

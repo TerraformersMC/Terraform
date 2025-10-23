@@ -5,10 +5,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradedItem;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ public final class TerraformSaplingTradeHelperImpl {
 		}
 
 		@Override
-		public TradeOffer create(Entity entity, Random random) {
+		public @Nullable TradeOffer create(ServerWorld world, Entity entity, Random random) {
 			return new TradeOffer(new TradedItem(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
 		}
 	}

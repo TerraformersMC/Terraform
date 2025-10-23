@@ -3,9 +3,9 @@ package com.terraformersmc.terraform.leaves.api.block;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.ParticleUtil;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -46,7 +46,7 @@ public class ColoredParticleLeavesBlock extends LeavesBlock {
 
 	@Override
 	protected void spawnLeafParticle(World world, BlockPos pos, Random random) {
-		EntityEffectParticleEffect effect = EntityEffectParticleEffect.create(ParticleTypes.TINTED_LEAVES, leafParticleColor);
+		TintedParticleEffect effect = TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, leafParticleColor);
 		ParticleUtil.spawnParticle(world, pos, random, effect);
 	}
 
