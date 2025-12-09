@@ -10,7 +10,7 @@ import net.minecraft.entity.ai.goal.EatGrassGoal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,7 +53,7 @@ public class MixinEatGrassGoal {
 		BlockState down = this.world.getBlockState(downPos);
 
 		if (down.isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
-			if (((ServerWorld) this.world).getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+			if (((ServerWorld) this.world).getGameRules().getValue(GameRules.DO_MOB_GRIEFING)) {
 				this.world.syncWorldEvent(2001, downPos, Block.getRawIdFromState(Blocks.GRASS_BLOCK.getDefaultState()));
 
 				Block replacement = TerraformDirtRegistryImpl.getByGrassBlock(down.getBlock()).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
