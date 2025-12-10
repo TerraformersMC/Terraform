@@ -7,15 +7,15 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.BlockRenderLayer;
-import net.minecraft.client.render.RenderLayers;
+import net.minecraft.client.render.BlockRenderLayers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(RenderLayers.class)
+@Mixin(BlockRenderLayers.class)
 @Environment(EnvType.CLIENT)
-public class MixinRenderLayers {
+public class MixinBlockRenderLayers {
 	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
 	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<BlockRenderLayer> cir) {
 		Block block = state.getBlock();

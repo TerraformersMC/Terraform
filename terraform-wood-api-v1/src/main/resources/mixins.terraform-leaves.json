@@ -6,7 +6,7 @@
     "MixinSchemas"
   ],
   "client": [
-    "MixinRenderLayers"
+    "MixinBlockRenderLayers"
   ],
   "injectors": {
     "defaultRequire": 1
