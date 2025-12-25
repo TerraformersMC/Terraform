@@ -17,7 +17,7 @@ import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.schemas.NamespacedSchema;
 
 @Mixin(DataFixers.class)
-public class MixinSchemas {
+public class MixinDataFixers {
 	/*
 	 * The following provides a mechanism for mods to register their leaves IDs early enough for the DFU.
 	 * This is required in order for Terraform extended leaves to be upgraded from <1.21.5 to >=1.21.5.

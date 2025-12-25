@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(SpreadingSnowyDirtBlock.class)
-public abstract class MixinSpreadableBlock {
+public abstract class MixinSpreadingSnowyDirtBlock {
 	@Inject(method = "randomTick",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"),
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"),
 			locals = LocalCapture.CAPTURE_FAILHARD
 	)
-	private void terraformDirt$onScheduledTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo info, BlockState defaultState, int i, BlockPos spreadingPos) {
+	private void terraformDirt$customGrassSpreads(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo info, BlockState defaultState, int i, BlockPos spreadingPos) {
 		Block grassBlock = TerraformGrassBlock.GRASS_SPREADS_TO.get(world.getBlockState(spreadingPos).getBlock());
 		if (grassBlock != null) {
 			BlockState grassDefaultState = grassBlock.defaultBlockState();

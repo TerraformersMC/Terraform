@@ -3,10 +3,10 @@
   "package": "com.terraformersmc.terraform.leaves.impl.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinSchemas"
+    "MixinDataFixers"
   ],
   "client": [
-    "MixinBlockRenderLayers"
+    "MixinItemBlockRenderTypes"
   ],
   "injectors": {
     "defaultRequire": 1

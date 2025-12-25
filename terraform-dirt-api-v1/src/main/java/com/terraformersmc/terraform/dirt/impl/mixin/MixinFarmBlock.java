@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FarmBlock.class)
-public class MixinFarmlandBlock extends Block {
-	public MixinFarmlandBlock(Properties settings) {
+public class MixinFarmBlock extends Block {
+	public MixinFarmBlock(Properties settings) {
 		super(settings);
 	}
 

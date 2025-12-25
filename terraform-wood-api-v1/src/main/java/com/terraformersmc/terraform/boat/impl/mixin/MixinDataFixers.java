@@ -20,7 +20,7 @@ import net.minecraft.util.datafix.fixes.AddNewChoices;
 import net.minecraft.util.datafix.fixes.References;
 
 @Mixin(DataFixers.class)
-public class MixinSchemas {
+public class MixinDataFixers {
 	/*
 	 * The following provides a mechanism for mods to register their boat IDs early enough for the DFU.
 	 * This is required in order for Terraform boats to be upgraded from <1.21.2 to >=1.21.2.

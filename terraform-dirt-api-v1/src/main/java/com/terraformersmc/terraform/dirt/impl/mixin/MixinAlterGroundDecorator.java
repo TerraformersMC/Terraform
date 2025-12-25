@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AlterGroundDecorator.class)
-public class MixinAlterGroundTreeDecorator {
+public class MixinAlterGroundDecorator {
 	// prepareGroundColumn
 	@Inject(method = "placeBlockAt(Lnet/minecraft/world/level/levelgen/feature/treedecorators/TreeDecorator$Context;Lnet/minecraft/core/BlockPos;)V",
 			at = @At("HEAD"),

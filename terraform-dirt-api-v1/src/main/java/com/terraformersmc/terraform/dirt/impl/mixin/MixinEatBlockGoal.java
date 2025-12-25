@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(EatBlockGoal.class)
-public class MixinEatGrassGoal {
+public class MixinEatBlockGoal {
 	@Shadow
 	@Final
 	private Mob mob;

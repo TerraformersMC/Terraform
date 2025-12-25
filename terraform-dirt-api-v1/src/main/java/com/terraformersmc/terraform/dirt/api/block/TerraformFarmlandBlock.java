@@ -1,12 +1,12 @@
 package com.terraformersmc.terraform.dirt.api.block;
 
-import com.terraformersmc.terraform.dirt.impl.mixin.MixinFarmlandBlock;
+import com.terraformersmc.terraform.dirt.impl.mixin.MixinFarmBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 
 /**
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
- * @see MixinFarmlandBlock
+ * @see MixinFarmBlock
  */
 public class TerraformFarmlandBlock extends FarmBlock {
 	/**

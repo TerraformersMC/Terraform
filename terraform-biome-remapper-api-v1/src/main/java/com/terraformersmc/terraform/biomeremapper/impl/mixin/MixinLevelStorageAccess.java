@@ -22,7 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Mixin(LevelStorageSource.LevelStorageAccess.class)
-public class MixinLevelStorageSession {
+public class MixinLevelStorageAccess {
 	@Shadow
 	@Final
 	LevelStorageSource.LevelDirectory levelDirectory;

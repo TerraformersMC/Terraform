@@ -22,7 +22,7 @@ import net.minecraft.util.datafix.fixes.References;
 import static com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.BIOME_REMAPPING_REGISTRY;
 
 @Mixin(DataFixers.class)
-public class MixinSchemas {
+public class MixinDataFixers {
 	@Shadow
 	@Final
 	private static BiFunction<Integer, Schema, Schema> SAME_NAMESPACED;

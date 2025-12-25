@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Animal.class)
-public class MixinAnimalEntity {
+public class MixinAnimal {
 	@WrapOperation(
 			method = "checkAnimalSpawnRules",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z")

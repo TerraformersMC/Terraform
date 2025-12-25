@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemBlockRenderTypes.class)
 @Environment(EnvType.CLIENT)
-public class MixinBlockRenderLayers {
+public class MixinItemBlockRenderTypes {
 	@Inject(method = "getChunkRenderType", at = @At("HEAD"), cancellable = true)
-	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<ChunkSectionLayer> cir) {
+	private static void terraformWood$onGetChunkRenderType(BlockState state, CallbackInfoReturnable<ChunkSectionLayer> cir) {
 		Block block = state.getBlock();
 		if (block instanceof ExtendedLeavesBlock || block instanceof SmallLogBlock && state.getValue(SmallLogBlock.HAS_LEAVES)) {
 			cir.setReturnValue(ChunkSectionLayer.CUTOUT);
