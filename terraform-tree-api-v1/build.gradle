@@ -1,5 +1,5 @@
-archivesBaseName = "terraform-tree-api-v1"
+base.archivesName = "terraform-tree-api-v1"
 
 dependencies {
-	modImplementation fabricApi.module("fabric-object-builder-api-v1", project.fabric_version)
+	implementation fabricApi.module("fabric-object-builder-api-v1", project.fabric_version)
 }

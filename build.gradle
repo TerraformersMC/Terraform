@@ -3,18 +3,17 @@ plugins {
 	id 'maven-publish'
 	id 'idea'
 	id 'eclipse'
-	id 'fabric-loom' version '1.13.+'
+	id 'net.fabricmc.fabric-loom' version '1.14.+'
 }
+
+import groovy.xml.XmlSlurper
 
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'idea'
 	apply plugin: 'eclipse'
 	apply plugin: 'maven-publish'
-	apply plugin: 'fabric-loom'
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	apply plugin: 'net.fabricmc.fabric-loom'
 
 	group = project.maven_group
 
@@ -41,18 +40,15 @@ allprojects {
 				name = "Test Mod Server"
 			}
 		}
-
-		createRemapConfigurations(sourceSets.testmod)
 	}
 
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
-		mappings loom.officialMojangMappings()
-		modImplementation "net.fabricmc:fabric-loader:$project.loader_version"
+		implementation "net.fabricmc:fabric-loader:$project.loader_version"
 
 		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
-		testmodImplementation sourceSets.main.output
+		testImplementation sourceSets.main.output
 	}
 
 	repositories {
@@ -65,8 +61,8 @@ allprojects {
 	java {
 		withSourcesJar()
 
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
+		sourceCompatibility = JavaVersion.VERSION_25
+		targetCompatibility = JavaVersion.VERSION_25
 	}
 
 	tasks.withType(ProcessResources).configureEach {
@@ -77,9 +73,11 @@ allprojects {
 		}
 	}
 
-	tasks.withType(JavaCompile) {
-		it.options.encoding = "UTF-8"
-		it.options.release = 21
+	tasks.withType(JavaCompile).tap {
+		configureEach {
+			it.options.encoding = "UTF-8"
+			it.options.release = 25
+		}
 	}
 }
 
@@ -88,7 +86,7 @@ subprojects {
 
 	publish {
 		onlyIf {
-			checkVersion(archivesBaseName, version)
+			checkVersion(base.archivesName, version)
 		}
 	}
 
@@ -106,14 +104,8 @@ subprojects {
 }
 
 dependencies {
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	afterEvaluate {
-		subprojects.each {
-			implementation project(path: ":${it.path}", configuration: "namedElements")
-			testmodImplementation project(":${it.path}").sourceSets.testmod.output
-		}
-	}
 }
 
 void setupRepositories(RepositoryHandler repositories) {

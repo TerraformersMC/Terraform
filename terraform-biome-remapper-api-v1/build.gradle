@@ -1,5 +1,5 @@
-archivesBaseName = "terraform-biome-remapper-api-v1"
+base.archivesName = "terraform-biome-remapper-api-v1"
 
 dependencies {
-	modImplementation fabricApi.module("fabric-registry-sync-v0", project.fabric_version)
+	implementation fabricApi.module("fabric-registry-sync-v0", project.fabric_version)
 }

@@ -1,1 +1,1 @@
-archivesBaseName = "terraform-surfaces-api-v1"
+base.archivesName = "terraform-surfaces-api-v1"
