@@ -23,7 +23,7 @@ public class MixinTrunkPlacer {
 	@Inject(method = "setDirtAt", at = @At("HEAD"), cancellable = true)
 	private static void terraformDirt$notAlwaysDirt(LevelSimulatedReader world, BiConsumer<BlockPos, BlockState> replacer, RandomSource random, BlockPos pos, TreeConfiguration config, CallbackInfo ci) {
 		if (world.isStateAtPosition(pos, state -> state.is(TerraformDirtBlockTags.SOIL))) {
-			Block dirt = TerraformDirtRegistryImpl.getFromWorld(world, pos).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
+			Block dirt = TerraformDirtRegistryImpl.getFromWorld(world, pos).map(DirtBlocks::getDirtBlock).orElse(Blocks.DIRT);
 
 			replacer.accept(pos, dirt.defaultBlockState());
 

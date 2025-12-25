@@ -56,7 +56,7 @@ public class MixinEatBlockGoal {
 			if (((ServerLevel) this.level).getGameRules().get(GameRules.MOB_GRIEFING)) {
 				this.level.levelEvent(2001, downPos, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
 
-				Block replacement = TerraformDirtRegistryImpl.getByGrassBlock(down.getBlock()).map(DirtBlocks::getDirt).orElse(Blocks.DIRT);
+				Block replacement = TerraformDirtRegistryImpl.getByGrassBlock(down.getBlock()).map(DirtBlocks::getDirtBlock).orElse(Blocks.DIRT);
 
 				this.level.setBlock(downPos, replacement.defaultBlockState(), 2);
 			}

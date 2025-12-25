@@ -5,12 +5,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.TexturedModelDataProvider;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.model.object.boat.RaftModel;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.RaftRenderer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +24,7 @@ public final class TerraformBoatClientHelperImpl {
 
 	private static <T extends Entity> void registerEntityRenderer(EntityType<? extends T> entityType, ModelLayerLocation modelLayer, TexturedModelDataProvider texturedModelDataProvider, EntityRendererProvider<T> entityRendererFactory) {
 		EntityModelLayerRegistry.registerModelLayer(modelLayer, texturedModelDataProvider);
-		EntityRendererRegistry.register(entityType, entityRendererFactory);
+		EntityRenderers.register(entityType, entityRendererFactory);
 	}
 
 	public static void registerModelLayers(Identifier id) {

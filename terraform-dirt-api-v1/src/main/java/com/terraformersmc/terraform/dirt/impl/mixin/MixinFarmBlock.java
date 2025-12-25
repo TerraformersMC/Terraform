@@ -29,8 +29,8 @@ public class MixinFarmBlock extends Block {
 	)
 	private void terraformDirt$setCustomDirtInBlockPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
 		// If this is custom farmland, make sure that we don't set back to vanilla dirt
-		TerraformDirtRegistryImpl.getByFarmland(this)
-				.ifPresent(blocks -> cir.setReturnValue(blocks.getDirt().defaultBlockState()));
+		TerraformDirtRegistryImpl.getByFarmBlock(this)
+				.ifPresent(blocks -> cir.setReturnValue(blocks.getDirtBlock().defaultBlockState()));
 	}
 
 	@Inject(method = "turnToDirt",
@@ -43,7 +43,7 @@ public class MixinFarmBlock extends Block {
 		// Note: as of 1.20.2, vanilla uses FarmlandBlock.setToDirt() for all trample-able blocks;
 		// we are not responsible for evaluating whether the block can be trampled, here.
 		TerraformDirtRegistryImpl.getFromWorld(world, pos).ifPresent(blocks -> {
-			BlockState dirtState = FarmBlock.pushEntitiesUp(state, blocks.getDirt().defaultBlockState(), world, pos);
+			BlockState dirtState = FarmBlock.pushEntitiesUp(state, blocks.getDirtBlock().defaultBlockState(), world, pos);
 			world.setBlockAndUpdate(pos, dirtState);
 			world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, dirtState));
 

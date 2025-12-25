@@ -12,18 +12,18 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TerraformDirtRegistryImpl {
 	private static final List<DirtBlocks> TYPES = new ArrayList<>();
 	private static final Map<Block, DirtBlocks> BY_GRASS_BLOCK = new HashMap<>();
-	private static final Map<Block, DirtBlocks> BY_FARMLAND = new HashMap<>();
+	private static final Map<Block, DirtBlocks> BY_FARM_BLOCK = new HashMap<>();
 
 	public static DirtBlocks register(DirtBlocks blocks) {
 		Objects.requireNonNull(blocks);
 
 		TYPES.add(blocks);
 		BY_GRASS_BLOCK.put(blocks.getGrassBlock(), blocks);
-		BY_FARMLAND.put(blocks.getFarmland(), blocks);
+		BY_FARM_BLOCK.put(blocks.getFarmBlock(), blocks);
 
-		TillableBlockRegistry.add(blocks.getDirt(), blocks.getFarmland().defaultBlockState());
-		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmland().defaultBlockState());
-		TillableBlockRegistry.add(blocks.getDirtPath(), blocks.getFarmland().defaultBlockState());
+		TillableBlockRegistry.add(blocks.getDirtBlock(), blocks.getFarmBlock().defaultBlockState());
+		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmBlock().defaultBlockState());
+		TillableBlockRegistry.add(blocks.getDirtPathBlock(), blocks.getFarmBlock().defaultBlockState());
 
 		return blocks;
 	}
@@ -31,11 +31,11 @@ public class TerraformDirtRegistryImpl {
     public static Optional<DirtBlocks> getFromWorld(LevelSimulatedReader world, BlockPos pos) {
 		for (DirtBlocks blocks: TYPES) {
 			Predicate<BlockState> isDirtLike =
-					state -> state.is(blocks.getDirt()) ||
-							state.is(blocks.getDirtPath()) ||
-							state.is(blocks.getFarmland()) ||
+					state -> state.is(blocks.getDirtBlock()) ||
+							state.is(blocks.getDirtPathBlock()) ||
+							state.is(blocks.getFarmBlock()) ||
 							state.is(blocks.getGrassBlock()) ||
-							state.is(blocks.getPodzol());
+							state.is(blocks.getPodzolBlock());
 
 			if (world.isStateAtPosition(pos, isDirtLike)) {
 				return Optional.of(blocks);
@@ -49,7 +49,7 @@ public class TerraformDirtRegistryImpl {
 		return Optional.ofNullable(BY_GRASS_BLOCK.get(grass));
 	}
 
-	public static Optional<DirtBlocks> getByFarmland(Block farmland) {
-		return Optional.ofNullable(BY_FARMLAND.get(farmland));
+	public static Optional<DirtBlocks> getByFarmBlock(Block farmland) {
+		return Optional.ofNullable(BY_FARM_BLOCK.get(farmland));
 	}
 }

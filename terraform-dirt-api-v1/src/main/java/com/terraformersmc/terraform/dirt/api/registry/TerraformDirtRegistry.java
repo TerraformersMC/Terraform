@@ -67,6 +67,6 @@ public final class TerraformDirtRegistry {
 	 * @return optional of the matching {@link DirtBlocks} if any
 	 */
 	public static Optional<DirtBlocks> getByFarmland(Block farmland) {
-		return TerraformDirtRegistryImpl.getByFarmland(farmland);
+		return TerraformDirtRegistryImpl.getByFarmBlock(farmland);
 	}
 }

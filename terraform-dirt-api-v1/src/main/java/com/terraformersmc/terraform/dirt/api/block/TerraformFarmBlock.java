@@ -8,16 +8,16 @@ import net.minecraft.world.level.block.FarmBlock;
  * A custom farmland block for new farmland. Mixins are required to make hoes create these blocks and to allow seeds to be planted.
  * @see MixinFarmBlock
  */
-public class TerraformFarmlandBlock extends FarmBlock {
+public class TerraformFarmBlock extends FarmBlock {
 	/**
-	 * @deprecated the "trampled" block is no longer controlled by TerraformFarmlandBlock, use the other constructor.
+	 * @deprecated the "trampled" block is no longer controlled by TerraformFarmBlock, use the other constructor.
 	 */
 	@Deprecated
-	public TerraformFarmlandBlock(Properties settings, Block trampled) {
+	public TerraformFarmBlock(Properties settings, Block trampled) {
 		super(settings);
 	}
 
-	public TerraformFarmlandBlock(Properties settings) {
+	public TerraformFarmBlock(Properties settings) {
 		super(settings);
 	}
 }

@@ -29,7 +29,7 @@ public class MixinAlterGroundDecorator {
 			if (generator.level().isStateAtPosition(posUp, state -> state.is(TerraformDirtBlockTags.SOIL))) {
 				// Try to determine if the soil block is registered, and if so, replace it with custom podzol.
 				// Fall back to vanilla podzol if the soil block is unregistered.
-				Block podzol = TerraformDirtRegistryImpl.getFromWorld(generator.level(), posUp).map(DirtBlocks::getPodzol).orElse(Blocks.PODZOL);
+				Block podzol = TerraformDirtRegistryImpl.getFromWorld(generator.level(), posUp).map(DirtBlocks::getPodzolBlock).orElse(Blocks.PODZOL);
 
 				generator.setBlock(posUp, podzol.defaultBlockState());
 				ci.cancel();
