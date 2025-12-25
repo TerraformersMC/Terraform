@@ -4,23 +4,23 @@ import com.terraformersmc.terraform.leaves.api.block.ExtendedLeavesBlock;
 import com.terraformersmc.terraform.wood.api.block.SmallLogBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.render.BlockRenderLayer;
-import net.minecraft.client.render.BlockRenderLayers;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BlockRenderLayers.class)
+@Mixin(ItemBlockRenderTypes.class)
 @Environment(EnvType.CLIENT)
 public class MixinBlockRenderLayers {
-	@Inject(method = "getBlockLayer", at = @At("HEAD"), cancellable = true)
-	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<BlockRenderLayer> cir) {
+	@Inject(method = "getChunkRenderType", at = @At("HEAD"), cancellable = true)
+	private static void terraformWood$onGetBlockRenderLayer(BlockState state, CallbackInfoReturnable<ChunkSectionLayer> cir) {
 		Block block = state.getBlock();
-		if (block instanceof ExtendedLeavesBlock || block instanceof SmallLogBlock && state.get(SmallLogBlock.HAS_LEAVES)) {
-			cir.setReturnValue(BlockRenderLayer.CUTOUT);
+		if (block instanceof ExtendedLeavesBlock || block instanceof SmallLogBlock && state.getValue(SmallLogBlock.HAS_LEAVES)) {
+			cir.setReturnValue(ChunkSectionLayer.CUTOUT);
 		}
 	}
 }

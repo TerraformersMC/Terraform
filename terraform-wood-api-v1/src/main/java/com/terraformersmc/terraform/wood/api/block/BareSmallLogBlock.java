@@ -2,28 +2,33 @@ package com.terraformersmc.terraform.wood.api.block;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 // Rather complex: combine the function of logs, and cobblestone walls.
 
@@ -31,15 +36,15 @@ import net.minecraft.world.WorldView;
  * A very complex smaller log block that can connect on all 6 axes and can be waterlogged.
  * Used for things like the Saguaro Cactus.
  */
-public class BareSmallLogBlock extends Block implements Waterloggable {
-	public static final EnumProperty<Direction.Axis> AXIS = Properties.AXIS;
-	public static final BooleanProperty UP = Properties.UP;
-	public static final BooleanProperty DOWN = Properties.DOWN;
-	public static final BooleanProperty NORTH = Properties.NORTH;
-	public static final BooleanProperty EAST = Properties.EAST;
-	public static final BooleanProperty SOUTH = Properties.SOUTH;
-	public static final BooleanProperty WEST = Properties.WEST;
-	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
+	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
+	public static final BooleanProperty UP = BlockStateProperties.UP;
+	public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
+	public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
+	public static final BooleanProperty EAST = BlockStateProperties.EAST;
+	public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
+	public static final BooleanProperty WEST = BlockStateProperties.WEST;
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	protected static final int UP_MASK = 1 << Direction.UP.ordinal();
 	protected static final int DOWN_MASK = 1 << Direction.DOWN.ordinal();
@@ -54,17 +59,17 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	protected final VoxelShape[] boundingShapes;
 	protected final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
-	public BareSmallLogBlock(AbstractBlock.Settings settings) {
+	public BareSmallLogBlock(BlockBehaviour.Properties settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState()
-				.with(AXIS, Direction.Axis.Y)
-				.with(UP, false)
-				.with(DOWN, false)
-				.with(WEST, false)
-				.with(EAST, false)
-				.with(NORTH, false)
-				.with(SOUTH, false)
-				.with(WATERLOGGED, false)
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(AXIS, Direction.Axis.Y)
+				.setValue(UP, false)
+				.setValue(DOWN, false)
+				.setValue(WEST, false)
+				.setValue(EAST, false)
+				.setValue(NORTH, false)
+				.setValue(SOUTH, false)
+				.setValue(WATERLOGGED, false)
 		);
 
 		this.collisionShapes = this.createShapes(LOG_RADIUS);
@@ -81,11 +86,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static BareSmallLogBlock of(MapColor color) {
-		return new BareSmallLogBlock(AbstractBlock.Settings.create()
+		return new BareSmallLogBlock(BlockBehaviour.Properties.of()
 				.mapColor(color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
@@ -100,11 +105,11 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
-		return new BareSmallLogBlock(AbstractBlock.Settings.create()
-				.mapColor((state) -> state.get(UP) ? wood : bark)
+		return new BareSmallLogBlock(BlockBehaviour.Properties.of()
+				.mapColor((state) -> state.getValue(UP) ? wood : bark)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
@@ -112,27 +117,27 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
 			int mask = 0;
 
-			if (state.get(UP)) {
+			if (state.getValue(UP)) {
 				mask |= UP_MASK;
 			}
 
-			if (state.get(DOWN)) {
+			if (state.getValue(DOWN)) {
 				mask |= DOWN_MASK;
 			}
 
-			if (state.get(NORTH)) {
+			if (state.getValue(NORTH)) {
 				mask |= NORTH_MASK;
 			}
 
-			if (state.get(EAST)) {
+			if (state.getValue(EAST)) {
 				mask |= EAST_MASK;
 			}
 
-			if (state.get(SOUTH)) {
+			if (state.getValue(SOUTH)) {
 				mask |= SOUTH_MASK;
 			}
 
-			if (state.get(WEST)) {
+			if (state.getValue(WEST)) {
 				mask |= WEST_MASK;
 			}
 
@@ -144,18 +149,18 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		double lower = 8.0 - radius;
 		double upper = 8.0 + radius;
 
-		VoxelShape center = Block.createCuboidShape(lower, lower, lower, upper, upper, upper);
+		VoxelShape center = Block.box(lower, lower, lower, upper, upper, upper);
 
-		VoxelShape down = Block.createCuboidShape(lower, 0.0, lower, upper, lower, upper);
-		VoxelShape up = Block.createCuboidShape(lower, upper, lower, upper, 16.0, upper);
+		VoxelShape down = Block.box(lower, 0.0, lower, upper, lower, upper);
+		VoxelShape up = Block.box(lower, upper, lower, upper, 16.0, upper);
 
 		// Minus Z: North
-		VoxelShape north = Block.createCuboidShape(lower, lower, 0.0, upper, upper, lower);
-		VoxelShape south = Block.createCuboidShape(lower, lower, upper, upper, upper, 16.0);
+		VoxelShape north = Block.box(lower, lower, 0.0, upper, upper, lower);
+		VoxelShape south = Block.box(lower, lower, upper, upper, upper, 16.0);
 
 		// Minus X: West
-		VoxelShape west = Block.createCuboidShape(0.0, lower, lower, lower, upper, upper);
-		VoxelShape east = Block.createCuboidShape(upper, lower, lower, 16.0, upper, upper);
+		VoxelShape west = Block.box(0.0, lower, lower, lower, upper, upper);
+		VoxelShape east = Block.box(upper, lower, lower, 16.0, upper, upper);
 
 		VoxelShape[] shapes = new VoxelShape[64];
 
@@ -163,27 +168,27 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 			VoxelShape shape = center;
 
 			if ((i & DOWN_MASK) != 0) {
-				shape = VoxelShapes.union(shape, down);
+				shape = Shapes.or(shape, down);
 			}
 
 			if ((i & UP_MASK) != 0) {
-				shape = VoxelShapes.union(shape, up);
+				shape = Shapes.or(shape, up);
 			}
 
 			if ((i & NORTH_MASK) != 0) {
-				shape = VoxelShapes.union(shape, north);
+				shape = Shapes.or(shape, north);
 			}
 
 			if ((i & SOUTH_MASK) != 0) {
-				shape = VoxelShapes.union(shape, south);
+				shape = Shapes.or(shape, south);
 			}
 
 			if ((i & WEST_MASK) != 0) {
-				shape = VoxelShapes.union(shape, west);
+				shape = Shapes.or(shape, west);
 			}
 
 			if ((i & EAST_MASK) != 0) {
-				shape = VoxelShapes.union(shape, east);
+				shape = Shapes.or(shape, east);
 			}
 
 			shapes[i] = shape;
@@ -193,8 +198,8 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 
 		builder.add(AXIS, UP, DOWN, NORTH, SOUTH, EAST, WEST, WATERLOGGED);
 	}
@@ -206,15 +211,15 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
-		super.onPlaced(world, pos, state, entity, stack);
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
+		super.setPlacedBy(world, pos, state, entity, stack);
 
 		for (Direction direction : Direction.values()) {
-			BlockPos offsetPos = pos.offset(direction);
+			BlockPos offsetPos = pos.relative(direction);
 			BlockState offsetState = world.getBlockState(offsetPos);
 
 			if (offsetState.getBlock() instanceof BareSmallLogBlock) {
-				world.setBlockState(offsetPos, getNeighborUpdateState(
+				world.setBlockAndUpdate(offsetPos, getNeighborUpdateState(
 					offsetState,
 					direction.getOpposite(),
 					state,
@@ -227,18 +232,18 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 
-		WorldView world = context.getWorld();
-		BlockPos pos = context.getBlockPos();
-		FluidState fluid = context.getWorld().getFluidState(context.getBlockPos());
+		LevelReader world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		FluidState fluid = context.getLevel().getFluidState(context.getClickedPos());
 
 		if (context.getPlayer() == null) {
-			return fluid.getFluid().equals(Fluids.WATER) ? this.getDefaultState().with(WATERLOGGED, true) : this.getDefaultState();
+			return fluid.getType().equals(Fluids.WATER) ? this.defaultBlockState().setValue(WATERLOGGED, true) : this.defaultBlockState();
 		}
 
-		BlockPos upPos = pos.up();
-		BlockPos downPos = pos.down();
+		BlockPos upPos = pos.above();
+		BlockPos downPos = pos.below();
 		BlockPos northPos = pos.north();
 		BlockPos eastPos = pos.east();
 		BlockPos southPos = pos.south();
@@ -251,88 +256,88 @@ public class BareSmallLogBlock extends Block implements Waterloggable {
 		BlockState southState = world.getBlockState(southPos);
 		BlockState westState = world.getBlockState(westPos);
 
-		boolean up = this.shouldConnectTo(upState, upState.isSideSolidFullSquare(world, upPos, Direction.UP));
-		boolean down = this.shouldConnectTo(downState, downState.isSideSolidFullSquare(world, downPos, Direction.DOWN));
-		boolean north = this.shouldConnectTo(northState, northState.isSideSolidFullSquare(world, northPos, Direction.SOUTH));
-		boolean east = this.shouldConnectTo(eastState, eastState.isSideSolidFullSquare(world, eastPos, Direction.WEST));
-		boolean south = this.shouldConnectTo(southState, southState.isSideSolidFullSquare(world, southPos, Direction.NORTH));
-		boolean west = this.shouldConnectTo(westState, westState.isSideSolidFullSquare(world, westPos, Direction.EAST));
+		boolean up = this.shouldConnectTo(upState, upState.isFaceSturdy(world, upPos, Direction.UP));
+		boolean down = this.shouldConnectTo(downState, downState.isFaceSturdy(world, downPos, Direction.DOWN));
+		boolean north = this.shouldConnectTo(northState, northState.isFaceSturdy(world, northPos, Direction.SOUTH));
+		boolean east = this.shouldConnectTo(eastState, eastState.isFaceSturdy(world, eastPos, Direction.WEST));
+		boolean south = this.shouldConnectTo(southState, southState.isFaceSturdy(world, southPos, Direction.NORTH));
+		boolean west = this.shouldConnectTo(westState, westState.isFaceSturdy(world, westPos, Direction.EAST));
 
-		return this.getDefaultState()
-				.with(UP, up)
-				.with(DOWN, down)
-				.with(NORTH, north)
-				.with(EAST, east)
-				.with(SOUTH, south)
-				.with(WEST, west)
-				.with(WATERLOGGED, fluid.getFluid() == Fluids.WATER);
+		return this.defaultBlockState()
+				.setValue(UP, up)
+				.setValue(DOWN, down)
+				.setValue(NORTH, north)
+				.setValue(EAST, east)
+				.setValue(SOUTH, south)
+				.setValue(WEST, west)
+				.setValue(WATERLOGGED, fluid.getType() == Fluids.WATER);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
 	@Override
-	public BlockState rotate(BlockState state, BlockRotation rotation) {
+	public BlockState rotate(BlockState state, Rotation rotation) {
 		return switch (rotation) {
 			case CLOCKWISE_180 ->
-					state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
+					state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST)).setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
 			case COUNTERCLOCKWISE_90 ->
-					state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
+					state.setValue(NORTH, state.getValue(EAST)).setValue(EAST, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(WEST)).setValue(WEST, state.getValue(NORTH));
 			case CLOCKWISE_90 ->
-					state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
+					state.setValue(NORTH, state.getValue(WEST)).setValue(EAST, state.getValue(NORTH)).setValue(SOUTH, state.getValue(EAST)).setValue(WEST, state.getValue(SOUTH));
 			default -> state;
 		};
 	}
 
 	@Override
-	public BlockState mirror(BlockState state, BlockMirror mirror) {
+	public BlockState mirror(BlockState state, Mirror mirror) {
 		return switch (mirror) {
-			case LEFT_RIGHT -> state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
-			case FRONT_BACK -> state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
+			case LEFT_RIGHT -> state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
+			case FRONT_BACK -> state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
 			default -> super.mirror(state, mirror);
 		};
 	}
 
 	@Override
-	public boolean canPathfindThrough(BlockState state, NavigationType type) {
+	public boolean isPathfindable(BlockState state, PathComputationType type) {
 		return false;
 	}
 
-	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.DOWN)) || state.get(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.UP)) || state.get(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.SOUTH)) || state.get(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.WEST)) || state.get(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.NORTH)) || state.get(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.EAST)) || state.get(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.DOWN)) || state.getValue(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.UP)) || state.getValue(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.SOUTH)) || state.getValue(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.WEST)) || state.getValue(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.NORTH)) || state.getValue(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.EAST)) || state.getValue(WEST);
 
 		return state
-				.with(UP, up)
-				.with(DOWN, down)
-				.with(NORTH, north)
-				.with(EAST, east)
-				.with(SOUTH, south)
-				.with(WEST, west);
+				.setValue(UP, up)
+				.setValue(DOWN, down)
+				.setValue(NORTH, north)
+				.setValue(EAST, east)
+				.setValue(SOUTH, south)
+				.setValue(WEST, west);
 	}
 
 	@Override
-	public boolean isTransparent(BlockState state) {
-		return !state.get(WATERLOGGED);
+	public boolean propagatesSkylightDown(BlockState state) {
+		return !state.getValue(WATERLOGGED);
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
 		return this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 

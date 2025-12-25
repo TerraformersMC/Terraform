@@ -1,13 +1,12 @@
 package com.terraformersmc.terraform.dirt.api.registry;
 
 import java.util.Optional;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.Block;
 import com.terraformersmc.terraform.dirt.api.DirtBlocks;
 import com.terraformersmc.terraform.dirt.api.TerraformDirtBlockTags;
 import com.terraformersmc.terraform.dirt.impl.registry.TerraformDirtRegistryImpl;
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.TestableWorld;
 
 public final class TerraformDirtRegistry {
 	private TerraformDirtRegistry() {
@@ -24,7 +23,7 @@ public final class TerraformDirtRegistry {
 	 * else things will not work properly!</p>
 	 *
 	 * @param blocks the DirtBlocks to register with Terraform. Note that you are still responsible for registering the
-	 *               block instances with {@link net.minecraft.registry.Registries#BLOCK} yourself, this method does
+	 *               block instances with {@link net.minecraft.core.registries.BuiltInRegistries#BLOCK} yourself, this method does
 	 *               not do that for you.
 	 * @return the registered DirtBlocks instance for convenience
 	 */
@@ -45,7 +44,7 @@ public final class TerraformDirtRegistry {
 	 * @param pos the block position in the world to check
 	 * @return optional of the matching {@link DirtBlocks} if any
      */
-    public static Optional<DirtBlocks> getFromWorld(TestableWorld world, BlockPos pos) {
+    public static Optional<DirtBlocks> getFromWorld(LevelSimulatedReader world, BlockPos pos) {
 		return TerraformDirtRegistryImpl.getFromWorld(world, pos);
 	}
 

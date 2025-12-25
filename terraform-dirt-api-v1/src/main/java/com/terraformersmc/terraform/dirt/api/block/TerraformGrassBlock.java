@@ -1,16 +1,21 @@
 package com.terraformersmc.terraform.dirt.api.block;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.*;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LightType;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.chunk.light.ChunkLightProvider;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.lighting.LightEngine;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -25,7 +30,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	public static final Map<Block, Block> GRASS_SPREADS_TO = new HashMap<>();
 	private static final int MAX_LIGHT_LEVEL = 15;
 
-	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings) {
+	public TerraformGrassBlock(Block dirt, Supplier<Block> path, BlockBehaviour.Properties settings) {
 		this(dirt, path, settings, ImmutableMap.of(Blocks.DIRT, Blocks.GRASS_BLOCK));
 	}
 
@@ -33,7 +38,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	 * @param dirt      The dirt block that this block turns back to when it loses its grass
 	 * @param spreadsTo Maps dirt blocks to the grass they turn into when spreaded to.
 	 */
-	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings, Map<Block, Block> spreadsTo) {
+	public TerraformGrassBlock(Block dirt, Supplier<Block> path, BlockBehaviour.Properties settings, Map<Block, Block> spreadsTo) {
 		this(dirt, path, settings, spreadsTo, true);
 	}
 
@@ -42,7 +47,7 @@ public class TerraformGrassBlock extends GrassBlock {
 	 * @param spreadsTo      Maps dirt blocks to the grass they turn into when spreaded to.
 	 * @param grassSpreadsTo If true, grass will spread to the block specified in the 'dirt' parameter, turning into this block
 	 */
-	public TerraformGrassBlock(Block dirt, Supplier<Block> path, Block.Settings settings, Map<Block, Block> spreadsTo, boolean grassSpreadsTo) {
+	public TerraformGrassBlock(Block dirt, Supplier<Block> path, BlockBehaviour.Properties settings, Map<Block, Block> spreadsTo, boolean grassSpreadsTo) {
 		super(settings);
 		this.dirt = dirt;
 		this.spreadsTo = spreadsTo;
@@ -52,51 +57,51 @@ public class TerraformGrassBlock extends GrassBlock {
 		}
 	}
 
-	private static boolean canSurvive(BlockState state, WorldView world, BlockPos pos) {
-		BlockPos above = pos.up();
+	private static boolean canBeGrass(BlockState state, LevelReader world, BlockPos pos) {
+		BlockPos above = pos.above();
 		BlockState aboveState = world.getBlockState(above);
 
-		if (aboveState.isOf(Blocks.SNOW) && aboveState.get(SnowBlock.LAYERS) == 1) {
+		if (aboveState.is(Blocks.SNOW) && aboveState.getValue(SnowLayerBlock.LAYERS) == 1) {
 			return true;
-		} else if (aboveState.getFluidState().getLevel() == 8) {
+		} else if (aboveState.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int lightingAt = ChunkLightProvider.getRealisticOpacity(state, aboveState, Direction.UP, aboveState.getOpacity());
+			int lightingAt = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightBlock());
 			return lightingAt < MAX_LIGHT_LEVEL;
 		}
 	}
 
-	public static boolean canSpread(BlockState state, WorldView world, BlockPos pos) {
-		BlockPos above = pos.up();
-		return canSurvive(state, world, pos) && !world.getFluidState(above).isIn(FluidTags.WATER);
+	public static boolean canPropagate(BlockState state, LevelReader world, BlockPos pos) {
+		BlockPos above = pos.above();
+		return canBeGrass(state, world, pos) && !world.getFluidState(above).is(FluidTags.WATER);
 	}
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (world.isClient()) {
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		if (world.isClientSide()) {
 			return;
 		}
 
-		if (!canSurvive(state, world, pos)) {
-			world.setBlockState(pos, dirt.getDefaultState());
-		} else if (world.getLightLevel(LightType.SKY, pos.up()) >= 4) {
-			if (world.getLightLevel(LightType.SKY, pos.up()) >= 9) {
-				BlockState defaultState = this.getDefaultState();
+		if (!canBeGrass(state, world, pos)) {
+			world.setBlockAndUpdate(pos, dirt.defaultBlockState());
+		} else if (world.getBrightness(LightLayer.SKY, pos.above()) >= 4) {
+			if (world.getBrightness(LightLayer.SKY, pos.above()) >= 9) {
+				BlockState defaultState = this.defaultBlockState();
 
 				for (int int_1 = 0; int_1 < 4; ++int_1) {
-					BlockPos spreadingPos = pos.add(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+					BlockPos spreadingPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 
 					Block spreadTarget = world.getBlockState(spreadingPos).getBlock();
-					if (spreadTarget == dirt && canSpread(defaultState, world, spreadingPos)) {
-						world.setBlockState(spreadingPos, defaultState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW));
+					if (spreadTarget == dirt && canPropagate(defaultState, world, spreadingPos)) {
+						world.setBlockAndUpdate(spreadingPos, defaultState.setValue(SNOWY, world.getBlockState(spreadingPos.above()).getBlock() == Blocks.SNOW));
 					}
 					Block spreadedBlock = spreadsTo.get(spreadTarget);
-					if (spreadedBlock != null && canSpread(defaultState, world, spreadingPos)) {
-						BlockState spreadedState = spreadedBlock.getDefaultState();
-						if (spreadedBlock instanceof SnowyBlock) {
-							spreadedState = spreadedState.with(SNOWY, world.getBlockState(spreadingPos.up()).getBlock() == Blocks.SNOW);
+					if (spreadedBlock != null && canPropagate(defaultState, world, spreadingPos)) {
+						BlockState spreadedState = spreadedBlock.defaultBlockState();
+						if (spreadedBlock instanceof SnowyDirtBlock) {
+							spreadedState = spreadedState.setValue(SNOWY, world.getBlockState(spreadingPos.above()).getBlock() == Blocks.SNOW);
 						}
-						world.setBlockState(spreadingPos, spreadedState);
+						world.setBlockAndUpdate(spreadingPos, spreadedState);
 					}
 				}
 			}

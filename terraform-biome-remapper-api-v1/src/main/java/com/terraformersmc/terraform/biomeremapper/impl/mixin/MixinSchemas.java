@@ -4,9 +4,6 @@ import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.RemappingRecord;
-import net.minecraft.datafixer.Schemas;
-import net.minecraft.datafixer.TypeReferences;
-import net.minecraft.datafixer.fix.GameEventRenamesFix;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,19 +15,22 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
+import net.minecraft.util.datafix.DataFixers;
+import net.minecraft.util.datafix.fixes.NamespacedTypeRenameFix;
+import net.minecraft.util.datafix.fixes.References;
 
 import static com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.BIOME_REMAPPING_REGISTRY;
 
-@Mixin(Schemas.class)
+@Mixin(DataFixers.class)
 public class MixinSchemas {
 	@Shadow
 	@Final
-	private static BiFunction<Integer, Schema, Schema> EMPTY_IDENTIFIER_NORMALIZE;
+	private static BiFunction<Integer, Schema, Schema> SAME_NAMESPACED;
 
 	@Shadow
-	private static UnaryOperator<String> replacing(Map<String, String> replacements) { return null; }
+	private static UnaryOperator<String> createRenamer(Map<String, String> replacements) { return null; }
 
-	@Inject(method = "build", at = @At("TAIL"))
+	@Inject(method = "addFixers", at = @At("TAIL"))
 	private static void terraformBiomeRemapper$injectDataFixers(DataFixerBuilder builder, CallbackInfo ci) {
 		final Hashtable<Integer, Schema> SCHEMA_CACHE = new Hashtable<>(2);
 
@@ -43,14 +43,14 @@ public class MixinSchemas {
 			// We use a single schema for each targeted Minecraft data version.
 			Schema schema = SCHEMA_CACHE.computeIfAbsent(
 					remappingRecord.dataVersion(),
-					dataVersion -> builder.addSchema(dataVersion, EMPTY_IDENTIFIER_NORMALIZE)
+					dataVersion -> builder.addSchema(dataVersion, SAME_NAMESPACED)
 			);
 			// Associate the requested schema with a freshly built fix for each remapping.
-			builder.addFixer(new GameEventRenamesFix(
+			builder.addFixer(new NamespacedTypeRenameFix(
 					schema,
 					"Terraform biome remapper fix for " + remappingRecord.modId() + " at data version " + remappingRecord.dataVersion(),
-					TypeReferences.BIOME,
-					replacing(remappingRecord.remapping())
+					References.BIOME,
+					createRenamer(remappingRecord.remapping())
 			));
 		}
 	}

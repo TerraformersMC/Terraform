@@ -1,12 +1,11 @@
 package com.terraformersmc.terraform.shapes.api;
 
-import net.minecraft.util.math.BlockPos;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import net.minecraft.core.BlockPos;
 
 
 public interface Position {
@@ -81,7 +80,7 @@ public interface Position {
     }
 
     default BlockPos toBlockPos() {
-        return BlockPos.ofFloored(this.getX(), this.getY(), this.getZ());
+        return BlockPos.containing(this.getX(), this.getY(), this.getZ());
     }
 
     static Stream<Position> stream(Position start, Position end) {

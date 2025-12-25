@@ -6,8 +6,6 @@ import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
 import com.terraformersmc.terraform.leaves.api.data.TerraformExtendedDistanceFix;
 import com.terraformersmc.terraform.leaves.impl.data.TerraformLeavesDfu;
-import net.minecraft.datafixer.Schemas;
-import net.minecraft.datafixer.schema.IdentifierNormalizingSchema;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,15 +13,17 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BiFunction;
+import net.minecraft.util.datafix.DataFixers;
+import net.minecraft.util.datafix.schemas.NamespacedSchema;
 
-@Mixin(Schemas.class)
+@Mixin(DataFixers.class)
 public class MixinSchemas {
 	/*
 	 * The following provides a mechanism for mods to register their leaves IDs early enough for the DFU.
 	 * This is required in order for Terraform extended leaves to be upgraded from <1.21.5 to >=1.21.5.
 	 * Extended leaves not registered in this manner may decay after upgrading.
 	 */
-	@Inject(method = "create", at = @At("HEAD"))
+	@Inject(method = "createFixerUpper", at = @At("HEAD"))
 	private static void create(CallbackInfoReturnable<DataFixerBuilder.Result> cir) {
 		TerraformLeavesDfu.init();
 	}
@@ -32,15 +32,15 @@ public class MixinSchemas {
 	 * This fix updates Terraform API ExtendedLeaves from a globally expanded DISTANCE property to the standard
 	 * DISTANCE property with an auxiliary EXTENDED_DISTANCE property.
 	 */
-	@WrapOperation(method = "build",
+	@WrapOperation(method = "addFixers",
 			slice = @Slice(
-					from = @At(value = "NEW", target = "net/minecraft/datafixer/fix/EntityFallDistanceFloatToDoubleFix")
+					from = @At(value = "NEW", target = "net/minecraft/util/datafix/fixes/EntityFallDistanceFloatToDoubleFix")
 			),
 			at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/DataFixerBuilder;addSchema(ILjava/util/function/BiFunction;)Lcom/mojang/datafixers/schemas/Schema;", ordinal = 0)
 	)
 	@SuppressWarnings("unused")
 	private static Schema terraform$injectExtendedDistanceFix(DataFixerBuilder builder, int version, BiFunction<Integer, Schema, Schema> factory, Operation<Schema> original) {
-		Schema extendedDistanceSchema = builder.addSchema(4304, IdentifierNormalizingSchema::new);
+		Schema extendedDistanceSchema = builder.addSchema(4304, NamespacedSchema::new);
 		builder.addFixer(new TerraformExtendedDistanceFix(extendedDistanceSchema, false));
 
 		return original.call(builder, version, factory);

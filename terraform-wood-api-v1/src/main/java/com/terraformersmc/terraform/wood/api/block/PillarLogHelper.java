@@ -1,11 +1,11 @@
 package com.terraformersmc.terraform.wood.api.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
 @SuppressWarnings("unused")
 public final class PillarLogHelper {
@@ -20,12 +20,12 @@ public final class PillarLogHelper {
 	 * @param color Map color for all faces of log
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createSettings(MapColor color) {
-		return AbstractBlock.Settings.create()
+	public static BlockBehaviour.Properties createSettings(MapColor color) {
+		return BlockBehaviour.Properties.of()
 				.mapColor(color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable();
+				.sound(SoundType.WOOD)
+				.ignitedByLava();
 	}
 
 	/**
@@ -36,12 +36,12 @@ public final class PillarLogHelper {
 	 * @param bark Map color for bark faces of log (sides)
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createSettings(MapColor wood, MapColor bark) {
-		return AbstractBlock.Settings.create()
-				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
+	public static BlockBehaviour.Properties createSettings(MapColor wood, MapColor bark) {
+		return BlockBehaviour.Properties.of()
+				.mapColor((state) -> Direction.Axis.Y.equals(state.getValue(RotatedPillarBlock.AXIS)) ? wood : bark)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable();
+				.sound(SoundType.WOOD)
+				.ignitedByLava();
 	}
 
 	/**
@@ -52,27 +52,27 @@ public final class PillarLogHelper {
 	 * @param bark Map color for bark faces of log
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createQuarterLogSettings(MapColor wood, MapColor bark) {
-		return AbstractBlock.Settings.create()
+	public static BlockBehaviour.Properties createQuarterLogSettings(MapColor wood, MapColor bark) {
+		return BlockBehaviour.Properties.of()
 				.mapColor(
 						(state) ->
-								switch (state.get(PillarBlock.AXIS)) {
+								switch (state.getValue(RotatedPillarBlock.AXIS)) {
 									case Y -> wood;
 									case X ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case NORTHWEST, SOUTHWEST -> bark;
 												case NORTHEAST, SOUTHEAST -> wood;
 											};
 									case Z ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case SOUTHEAST, SOUTHWEST -> bark;
 												case NORTHEAST, NORTHWEST -> wood;
 											};
 								}
 				)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable();
+				.sound(SoundType.WOOD)
+				.ignitedByLava();
 	}
 
 	/**
@@ -86,12 +86,12 @@ public final class PillarLogHelper {
 	 * @param color Map color for all faces of log
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createSmallLogSettings(Block leaves, MapColor color) {
-		return AbstractBlock.Settings.create()
-				.mapColor((state) -> state.get(SmallLogBlock.HAS_LEAVES) ? leaves.getDefaultMapColor() : color)
+	public static BlockBehaviour.Properties createSmallLogSettings(Block leaves, MapColor color) {
+		return BlockBehaviour.Properties.of()
+				.mapColor((state) -> state.getValue(SmallLogBlock.HAS_LEAVES) ? leaves.defaultMapColor() : color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable();
+				.sound(SoundType.WOOD)
+				.ignitedByLava();
 	}
 
 	/**
@@ -106,12 +106,12 @@ public final class PillarLogHelper {
 	 * @param bark Map color for bark faces of log (sides)
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createSmallLogSettings(Block leaves, MapColor wood, MapColor bark) {
-		return AbstractBlock.Settings.create()
-				.mapColor((state) -> state.get(SmallLogBlock.HAS_LEAVES) ? leaves.getDefaultMapColor() : state.get(SmallLogBlock.UP) ? wood : bark)
+	public static BlockBehaviour.Properties createSmallLogSettings(Block leaves, MapColor wood, MapColor bark) {
+		return BlockBehaviour.Properties.of()
+				.mapColor((state) -> state.getValue(SmallLogBlock.HAS_LEAVES) ? leaves.defaultMapColor() : state.getValue(SmallLogBlock.UP) ? wood : bark)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable();
+				.sound(SoundType.WOOD)
+				.ignitedByLava();
 	}
 
 	/**
@@ -121,11 +121,11 @@ public final class PillarLogHelper {
 	 * @param color Map color for all faces of stem
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createNetherSettings(MapColor color) {
-		return AbstractBlock.Settings.create()
+	public static BlockBehaviour.Properties createNetherSettings(MapColor color) {
+		return BlockBehaviour.Properties.of()
 				.mapColor(color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_STEM);
+				.sound(SoundType.STEM);
 	}
 
 	/**
@@ -136,11 +136,11 @@ public final class PillarLogHelper {
 	 * @param bark Map color for bark faces of stem (sides)
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createNetherSettings(MapColor wood, MapColor bark) {
-		return AbstractBlock.Settings.create()
-				.mapColor((state) -> Direction.Axis.Y.equals(state.get(PillarBlock.AXIS)) ? wood : bark)
+	public static BlockBehaviour.Properties createNetherSettings(MapColor wood, MapColor bark) {
+		return BlockBehaviour.Properties.of()
+				.mapColor((state) -> Direction.Axis.Y.equals(state.getValue(RotatedPillarBlock.AXIS)) ? wood : bark)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_STEM);
+				.sound(SoundType.STEM);
 	}
 
 	/**
@@ -151,25 +151,25 @@ public final class PillarLogHelper {
 	 * @param bark Map color for bark faces of log
 	 * @return New AbstractBlock.Settings
 	 */
-	public static AbstractBlock.Settings createQuarterLogNetherSettings(MapColor wood, MapColor bark) {
-		return AbstractBlock.Settings.create()
+	public static BlockBehaviour.Properties createQuarterLogNetherSettings(MapColor wood, MapColor bark) {
+		return BlockBehaviour.Properties.of()
 				.mapColor(
 						(state) ->
-								switch (state.get(PillarBlock.AXIS)) {
+								switch (state.getValue(RotatedPillarBlock.AXIS)) {
 									case Y -> wood;
 									case X ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case NORTHWEST, SOUTHWEST -> bark;
 												case NORTHEAST, SOUTHEAST -> wood;
 											};
 									case Z ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case SOUTHEAST, SOUTHWEST -> bark;
 												case NORTHEAST, NORTHWEST -> wood;
 											};
 								}
 				)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_STEM);
+				.sound(SoundType.STEM);
 	}
 }

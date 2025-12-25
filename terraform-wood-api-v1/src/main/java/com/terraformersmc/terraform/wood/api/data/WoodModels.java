@@ -1,7 +1,7 @@
 package com.terraformersmc.terraform.wood.api.data;
 
 import com.terraformersmc.terraform.wood.api.block.*;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 /**
  * Convenience Identifiers for Terraform wood API models.
@@ -114,10 +114,10 @@ public final class WoodModels {
 	}
 
 	private static Identifier block(String path) {
-		return Identifier.of("terraform", "block/" + path);
+		return Identifier.fromNamespaceAndPath("terraform", "block/" + path);
 	}
 
 	private static Identifier item(String path) {
-		return Identifier.of("terraform", "item/" + path);
+		return Identifier.fromNamespaceAndPath("terraform", "item/" + path);
 	}
 }

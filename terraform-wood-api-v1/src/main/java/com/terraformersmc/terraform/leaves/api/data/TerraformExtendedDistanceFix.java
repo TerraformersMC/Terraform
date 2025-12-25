@@ -7,11 +7,10 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
 import com.terraformersmc.terraform.leaves.api.block.ExtendedLeavesBlock;
 import com.terraformersmc.terraform.leaves.impl.data.TerraformLeavesDfu;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.datafixer.TypeReferences;
-import net.minecraft.util.math.MathHelper;
-
 import java.util.Collection;
+import net.minecraft.util.Mth;
+import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.world.level.block.LeavesBlock;
 
 public class TerraformExtendedDistanceFix extends DataFix {
 	public TerraformExtendedDistanceFix(Schema schema, boolean changesType) {
@@ -21,7 +20,7 @@ public class TerraformExtendedDistanceFix extends DataFix {
 	@Override
 	public TypeRewriteRule makeRule() {
 		return this.fixTypeEverywhereTyped("TerraformExtendedDistanceFix",
-				this.getInputSchema().getType(TypeReferences.BLOCK_STATE), blockStateTyped -> blockStateTyped
+				this.getInputSchema().getType(References.BLOCK_STATE), blockStateTyped -> blockStateTyped
 						.update(DSL.remainderFinder(), TerraformExtendedDistanceFix::updateExtendedLeavesDistance));
 	}
 
@@ -37,12 +36,12 @@ public class TerraformExtendedDistanceFix extends DataFix {
 					.asString(Integer.toString(ExtendedLeavesBlock.MAX_TOTAL_DISTANCE)));
 
 			propertiesDynamic = propertiesDynamic.set("distance",
-					propertiesDynamic.createString(Integer.toString(MathHelper.clamp(
-							totalDistance, 1, LeavesBlock.MAX_DISTANCE))));
+					propertiesDynamic.createString(Integer.toString(Mth.clamp(
+							totalDistance, 1, LeavesBlock.DECAY_DISTANCE))));
 
 			propertiesDynamic = propertiesDynamic.set("extended_distance",
-					propertiesDynamic.createString(Integer.toString(MathHelper.clamp(
-							totalDistance - LeavesBlock.MAX_DISTANCE, 0, ExtendedLeavesBlock.MAX_EXTENDED_DISTANCE))));
+					propertiesDynamic.createString(Integer.toString(Mth.clamp(
+							totalDistance - LeavesBlock.DECAY_DISTANCE, 0, ExtendedLeavesBlock.MAX_EXTENDED_DISTANCE))));
 
 			return propertiesDynamic;
 		});

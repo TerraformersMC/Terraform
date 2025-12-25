@@ -2,14 +2,13 @@ package com.terraformersmc.terraform.dirt.api.registry;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.datafixers.util.Pair;
 
 import com.terraformersmc.terraform.dirt.impl.registry.TillableBlockRegistryImpl;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemUsageContext;
 
 /**
  * Allows the addition of custom tillable block mappings. You probably don't need to use this directly if you're using
@@ -28,7 +27,7 @@ public final class TillableBlockRegistry {
 	 * @param block the block being tilled
 	 * @param pair the interaction between the blocks
 	 */
-	public static void add(Block block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>> pair) {
+	public static void add(Block block, Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair) {
 		TillableBlockRegistryImpl.add(block, pair);
 	}
 	
@@ -41,6 +40,6 @@ public final class TillableBlockRegistry {
 	 * @param state the block to be replaced with
 	 */
 	public static void add(Block block, BlockState state) {
-		TillableBlockRegistryImpl.add(block, Pair.of(HoeItem::canTillFarmland, HoeItem.createTillAction(state)));
+		TillableBlockRegistryImpl.add(block, Pair.of(HoeItem::onlyIfAirAbove, HoeItem.changeIntoState(state)));
 	}
 }

@@ -3,33 +3,32 @@ package com.terraformersmc.terraform.shapes.impl.layer.transform;
 import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.Shape;
 import com.terraformersmc.terraform.shapes.api.layer.Layer;
-import net.minecraft.util.math.random.Random;
-
 import java.util.function.Predicate;
+import net.minecraft.util.RandomSource;
 
 public class NoiseTranslateLayer implements Layer {
     private final double magnitude;
-    private final Random random;
+    private final RandomSource random;
 
-    public NoiseTranslateLayer(double magnitude, Random random) {
+    public NoiseTranslateLayer(double magnitude, RandomSource random) {
         this.magnitude = magnitude;
         this.random = random;
     }
 
 	/**
-	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.math.random.Random} instead.
+	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.RandomSource} instead.
 	 */
 	@Deprecated
     public NoiseTranslateLayer(double magnitude, java.util.Random random) {
-		this(magnitude, Random.create(random.nextLong()));
+		this(magnitude, RandomSource.create(random.nextLong()));
 	}
 
-	public static NoiseTranslateLayer of(double magnitude, Random random) {
+	public static NoiseTranslateLayer of(double magnitude, RandomSource random) {
 		return new NoiseTranslateLayer(magnitude, random);
 	}
 
 	/**
-	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.math.random.Random} instead.
+	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.RandomSource} instead.
 	 */
 	@Deprecated
 	public static NoiseTranslateLayer of(double magnitude, java.util.Random random) {

@@ -4,32 +4,31 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.terraformersmc.terraform.wood.api.block.SmallLogBlock;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ParticleUtil;
-import net.minecraft.particle.TintedParticleEffect;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
-
 import java.util.Optional;
 import java.util.OptionalInt;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
 /**
  * <p>
@@ -55,23 +54,23 @@ import java.util.OptionalInt;
 public class ExtendedLeavesBlock extends LeavesBlock {
 	public static final MapCodec<ExtendedLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(
 			(instance) -> instance.group(
-							Codecs.rangedInclusiveFloat(0.0f, 1.0f).fieldOf("leaf_particle_chance")
+							ExtraCodecs.floatRange(0.0f, 1.0f).fieldOf("leaf_particle_chance")
 									.forGetter(arg -> arg.leafParticleChance),
-							ParticleTypes.TYPE_CODEC.optionalFieldOf("leaf_particle")
+							ParticleTypes.CODEC.optionalFieldOf("leaf_particle")
 									.forGetter(arg -> arg.leafParticleEffect),
 							Codec.BOOL.fieldOf("opti")
 									.forGetter(arg -> arg.opti),
 							Codec.BOOL.fieldOf("transparent")
 									.forGetter(arg -> arg.transparent),
-							ExtendedLeavesBlock.createSettingsCodec()
+							ExtendedLeavesBlock.propertiesCodec()
 					)
 					.apply(instance, ExtendedLeavesBlock::new));
 
 	public static final int MAX_EXTENDED_DISTANCE = 7;
-	public static final int MAX_TOTAL_DISTANCE = MAX_DISTANCE + MAX_EXTENDED_DISTANCE;
-	public static final IntProperty EXTENDED_DISTANCE = IntProperty.of("extended_distance", 0, MAX_EXTENDED_DISTANCE);
+	public static final int MAX_TOTAL_DISTANCE = DECAY_DISTANCE + MAX_EXTENDED_DISTANCE;
+	public static final IntegerProperty EXTENDED_DISTANCE = IntegerProperty.create("extended_distance", 0, MAX_EXTENDED_DISTANCE);
 
-	protected final Optional<ParticleEffect> leafParticleEffect;
+	protected final Optional<ParticleOptions> leafParticleEffect;
 	protected final boolean opti;
 	protected final boolean transparent;
 
@@ -79,23 +78,23 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * Full options constructor for Terraform ExtendedLeaves.
 	 *
 	 * @param leafParticleChance The relative likelihood of each leaf block spawning leaf particles
-	 * @param leafParticleEffect Optional {@link ParticleEffect} to use instead of biome tinted falling leaf particles
+	 * @param leafParticleEffect Optional {@link ParticleOptions} to use instead of biome tinted falling leaf particles
 	 * @param opti Whether to enable the opti-leaves feature
 	 * @param transparent Whether to allow light to pass freely through the block
 	 * @param settings The block settings
 	 */
-	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleEffect> leafParticleEffect, boolean opti, boolean transparent, AbstractBlock.Settings settings) {
+	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleEffect, boolean opti, boolean transparent, BlockBehaviour.Properties settings) {
 		super(leafParticleChance, settings);
 
 		this.leafParticleEffect = leafParticleEffect;
 		this.opti = opti;
 		this.transparent = transparent;
 
-		this.setDefaultState(this.stateManager.getDefaultState()
-				.with(DISTANCE, MAX_DISTANCE)
-				.with(EXTENDED_DISTANCE, MAX_EXTENDED_DISTANCE)
-				.with(PERSISTENT, false)
-				.with(WATERLOGGED, false));
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(DISTANCE, DECAY_DISTANCE)
+				.setValue(EXTENDED_DISTANCE, MAX_EXTENDED_DISTANCE)
+				.setValue(PERSISTENT, false)
+				.setValue(WATERLOGGED, false));
 	}
 
 	/**
@@ -109,61 +108,61 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 *
 	 * @param settings The block settings
 	 */
-	public ExtendedLeavesBlock(AbstractBlock.Settings settings) {
+	public ExtendedLeavesBlock(BlockBehaviour.Properties settings) {
 		this(0.01f, Optional.empty(), false, true, settings);
 	}
 
-	public MapCodec<? extends ExtendedLeavesBlock> getCodec() {
+	public MapCodec<? extends ExtendedLeavesBlock> codec() {
 		return CODEC;
 	}
 
 	@Override
-	protected void spawnLeafParticle(World world, BlockPos pos, Random random) {
-		ParticleUtil.spawnParticle(world, pos, random, leafParticleEffect
-				.orElse(TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, world.getBlockColor(pos))));
+	protected void spawnFallingLeavesParticle(Level world, BlockPos pos, RandomSource random) {
+		ParticleUtils.spawnParticleBelow(world, pos, random, leafParticleEffect
+				.orElse(ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, world.getClientLeafTintColor(pos))));
 	}
 
 	@Override
-	public boolean hasRandomTicks(BlockState state) {
-		return getExtendedDistance(state) == MAX_TOTAL_DISTANCE && !state.get(PERSISTENT);
+	public boolean isRandomlyTicking(BlockState state) {
+		return getExtendedDistance(state) == MAX_TOTAL_DISTANCE && !state.getValue(PERSISTENT);
 	}
 
 	@Override
-	public boolean shouldDecay(BlockState state) {
-		return !state.get(PERSISTENT) && getExtendedDistance(state) == MAX_TOTAL_DISTANCE;
+	public boolean decaying(BlockState state) {
+		return !state.getValue(PERSISTENT) && getExtendedDistance(state) == MAX_TOTAL_DISTANCE;
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		world.setBlockState(pos, ExtendedLeavesBlock.updateDistanceFromLogs(state, world, pos), 3);
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		world.setBlock(pos, ExtendedLeavesBlock.updateDistance(state, world, pos), 3);
 	}
 
 	@Override
-	public int getOpacity(BlockState state) {
+	public int getLightBlock(BlockState state) {
 		return transparent ? 0 : 1;
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-		if (state.get(WATERLOGGED)) {
-			tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+		if (state.getValue(WATERLOGGED)) {
+			tickView.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		int distance = ExtendedLeavesBlock.getDistanceFromLog(neighborState) + 1;
+		int distance = ExtendedLeavesBlock.getDistanceAt(neighborState) + 1;
 		if (distance != 1 || getExtendedDistance(state) != distance) {
-			tickView.scheduleBlockTick(pos, this, 1);
+			tickView.scheduleTick(pos, this, 1);
 		}
 
 		return state;
 	}
 
-	private static BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
+	private static BlockState updateDistance(BlockState state, LevelAccessor world, BlockPos pos) {
 		int distance = MAX_TOTAL_DISTANCE;
-		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (Direction direction : Direction.values()) {
-			mutable.set(pos, direction);
-			distance = Math.min(distance, ExtendedLeavesBlock.getDistanceFromLog(world.getBlockState(mutable)) + 1);
+			mutable.setWithOffset(pos, direction);
+			distance = Math.min(distance, ExtendedLeavesBlock.getDistanceAt(world.getBlockState(mutable)) + 1);
 			if (distance == 1) {
 				break;
 			}
@@ -172,8 +171,8 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 		return setExtendedDistance(state, distance);
 	}
 
-	private static int getDistanceFromLog(BlockState state) {
-		return ExtendedLeavesBlock.getOptionalDistanceFromLog(state).orElse(MAX_TOTAL_DISTANCE);
+	private static int getDistanceAt(BlockState state) {
+		return ExtendedLeavesBlock.getOptionalDistanceAt(state).orElse(MAX_TOTAL_DISTANCE);
 	}
 
 	/**
@@ -189,33 +188,33 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @param state Target block state for which to fetch extended optional distance
 	 * @return OptionalInt of the previously calculated distance, if present
 	 */
-	public static OptionalInt getOptionalDistanceFromLog(BlockState state) {
-		if (state.isIn(BlockTags.LOGS)) {
+	public static OptionalInt getOptionalDistanceAt(BlockState state) {
+		if (state.is(BlockTags.LOGS)) {
 			return OptionalInt.of(0);
 		}
 
 		Block block = state.getBlock();
 		if (block instanceof ExtendedLeavesBlock) {
 			return OptionalInt.of(getExtendedDistance(state));
-		} else if (state.contains(DISTANCE)) {
-			int distance = state.get(DISTANCE);
-			return OptionalInt.of(distance < LeavesBlock.MAX_DISTANCE ? distance : MAX_TOTAL_DISTANCE);
+		} else if (state.hasProperty(DISTANCE)) {
+			int distance = state.getValue(DISTANCE);
+			return OptionalInt.of(distance < LeavesBlock.DECAY_DISTANCE ? distance : MAX_TOTAL_DISTANCE);
 		}
 
 		return OptionalInt.empty();
 	}
 
 	private static int getDistanceFromLogx(BlockState state) {
-		if (state.isIn(BlockTags.LOGS)) {
+		if (state.is(BlockTags.LOGS)) {
 			return 0;
 		}
 
 		Block block = state.getBlock();
 		if (block instanceof ExtendedLeavesBlock) {
 			return getExtendedDistance(state);
-		} else if (state.contains(DISTANCE)) {
-			int distance = state.get(DISTANCE);
-			return distance < LeavesBlock.MAX_DISTANCE ? distance : MAX_TOTAL_DISTANCE;
+		} else if (state.hasProperty(DISTANCE)) {
+			int distance = state.getValue(DISTANCE);
+			return distance < LeavesBlock.DECAY_DISTANCE ? distance : MAX_TOTAL_DISTANCE;
 		}
 
 		return MAX_TOTAL_DISTANCE;
@@ -237,7 +236,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @return Extended distance value of the target block state
 	 */
 	public static int getExtendedDistance(BlockState state) {
-		return state.get(DISTANCE) + state.getOrEmpty(EXTENDED_DISTANCE).orElse(0);
+		return state.getValue(DISTANCE) + state.getOptionalValue(EXTENDED_DISTANCE).orElse(0);
 	}
 
 	/**
@@ -257,35 +256,35 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @return The modified block state
 	 */
 	public static BlockState setExtendedDistance(BlockState state, int distance) {
-		if (state.contains(EXTENDED_DISTANCE)) {
-			if (distance > MAX_DISTANCE) {
-				return state.with(DISTANCE, MAX_DISTANCE).with(EXTENDED_DISTANCE, distance - MAX_DISTANCE);
+		if (state.hasProperty(EXTENDED_DISTANCE)) {
+			if (distance > DECAY_DISTANCE) {
+				return state.setValue(DISTANCE, DECAY_DISTANCE).setValue(EXTENDED_DISTANCE, distance - DECAY_DISTANCE);
 			} else {
-				return state.with(DISTANCE, distance).with(EXTENDED_DISTANCE, 0);
+				return state.setValue(DISTANCE, distance).setValue(EXTENDED_DISTANCE, 0);
 			}
 		} else {
-			return state.with(DISTANCE, distance);
+			return state.setValue(DISTANCE, distance);
 		}
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 
 		builder.add(EXTENDED_DISTANCE);
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) {
-		FluidState fluidState = context.getWorld().getFluidState(context.getBlockPos());
-		BlockState blockState = this.getDefaultState().with(PERSISTENT, true).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+		BlockState blockState = this.defaultBlockState().setValue(PERSISTENT, true).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
 
-		return ExtendedLeavesBlock.updateDistanceFromLogs(blockState, context.getWorld(), context.getBlockPos());
+		return ExtendedLeavesBlock.updateDistance(blockState, context.getLevel(), context.getClickedPos());
 	}
 
 	@Override
-	public boolean isSideInvisible(BlockState state, BlockState neighborState, Direction offset) {
+	public boolean skipRendering(BlockState state, BlockState neighborState, Direction offset) {
 		// OptiLeaves optimization: Cull faces with identical neighbors to reduce geometry dense forests.
-		return opti && neighborState.isOf(state.getBlock());
+		return opti && neighborState.is(state.getBlock());
 	}
 }

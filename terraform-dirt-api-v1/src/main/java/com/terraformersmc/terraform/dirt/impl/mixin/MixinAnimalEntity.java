@@ -3,22 +3,22 @@ package com.terraformersmc.terraform.dirt.impl.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.terraformersmc.terraform.dirt.api.TerraformDirtBlockTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(AnimalEntity.class)
+@Mixin(Animal.class)
 public class MixinAnimalEntity {
 	@WrapOperation(
-			method = "isValidNaturalSpawn",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
+			method = "checkAnimalSpawnRules",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z")
 	)
 	@SuppressWarnings("unused")
 	private static boolean terraformDirt$spawnOnCustomGrass(BlockState instance, TagKey<Block> grassTag, Operation<Boolean> operation) {
-		if (instance.isIn(TerraformDirtBlockTags.GRASS_BLOCKS)) {
+		if (instance.is(TerraformDirtBlockTags.GRASS_BLOCKS)) {
 			return true;
 		}
 

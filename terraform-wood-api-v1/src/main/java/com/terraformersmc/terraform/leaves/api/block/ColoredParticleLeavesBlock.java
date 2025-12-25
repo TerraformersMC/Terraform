@@ -2,14 +2,14 @@ package com.terraformersmc.terraform.leaves.api.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ParticleUtil;
-import net.minecraft.particle.TintedParticleEffect;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeavesBlock;
 
 /**
  * This leaves block provides an easy way to implement non-tinted colored leaves with non-tinted colored particles.
@@ -23,11 +23,11 @@ public class ColoredParticleLeavesBlock extends LeavesBlock {
 
 	public static final MapCodec<ColoredParticleLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(
 			(instance) -> instance.group(
-							Codecs.rangedInclusiveFloat(0.0f, 1.0f).fieldOf("leaf_particle_chance")
+							ExtraCodecs.floatRange(0.0f, 1.0f).fieldOf("leaf_particle_chance")
 									.forGetter(arg -> arg.leafParticleChance),
-							Codecs.RGB.fieldOf("leaf_particle_color")
+							ExtraCodecs.RGB_COLOR_CODEC.fieldOf("leaf_particle_color")
 									.forGetter(arg -> arg.leafParticleColor),
-							ColoredParticleLeavesBlock.createSettingsCodec()
+							ColoredParticleLeavesBlock.propertiesCodec()
 					)
 					.apply(instance, ColoredParticleLeavesBlock::new));
 
@@ -38,19 +38,19 @@ public class ColoredParticleLeavesBlock extends LeavesBlock {
 	 * @param blockColor The RGB color of falling leaf particles emitted by the block
 	 * @param settings The block settings
 	 */
-	public ColoredParticleLeavesBlock(float leafParticleChance, int blockColor, Settings settings) {
+	public ColoredParticleLeavesBlock(float leafParticleChance, int blockColor, Properties settings) {
 		super(leafParticleChance, settings);
 
 		this.leafParticleColor = blockColor;
 	}
 
 	@Override
-	protected void spawnLeafParticle(World world, BlockPos pos, Random random) {
-		TintedParticleEffect effect = TintedParticleEffect.create(ParticleTypes.TINTED_LEAVES, leafParticleColor);
-		ParticleUtil.spawnParticle(world, pos, random, effect);
+	protected void spawnFallingLeavesParticle(Level world, BlockPos pos, RandomSource random) {
+		ColorParticleOption effect = ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, leafParticleColor);
+		ParticleUtils.spawnParticleBelow(world, pos, random, effect);
 	}
 
-	public MapCodec<? extends ColoredParticleLeavesBlock> getCodec() {
+	public MapCodec<? extends ColoredParticleLeavesBlock> codec() {
 		return CODEC;
 	}
 }

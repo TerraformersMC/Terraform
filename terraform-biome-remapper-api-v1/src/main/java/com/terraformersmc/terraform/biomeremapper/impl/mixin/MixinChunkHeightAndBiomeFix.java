@@ -2,7 +2,7 @@ package com.terraformersmc.terraform.biomeremapper.impl.mixin;
 
 import com.terraformersmc.terraform.biomeremapper.impl.fix.BiomeIdFixData;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.datafixer.fix.ChunkHeightAndBiomeFix;
+import net.minecraft.util.datafix.fixes.ChunkHeightAndBiomeFix;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

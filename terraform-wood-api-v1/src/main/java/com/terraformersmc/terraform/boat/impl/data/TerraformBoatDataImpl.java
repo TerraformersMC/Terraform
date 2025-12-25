@@ -1,21 +1,20 @@
 package com.terraformersmc.terraform.boat.impl.data;
 
 import com.terraformersmc.terraform.boat.api.data.TerraformBoatData;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.entity.vehicle.ChestBoatEntity;
-import net.minecraft.entity.vehicle.ChestRaftEntity;
-import net.minecraft.entity.vehicle.RaftEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
+import net.minecraft.world.entity.vehicle.boat.ChestRaft;
+import net.minecraft.world.entity.vehicle.boat.Raft;
+import net.minecraft.world.item.Item;
 
 /**
  * This internal implementation class provides data records used by
@@ -24,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Immutable access is available via the {@linkplain TerraformBoatData} API class.
  */
-public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEntityType, EntityType<ChestBoatEntity> chestBoatEntityType, EntityType<RaftEntity> raftEntityType, EntityType<ChestRaftEntity> chestRaftEntityType) implements TerraformBoatData {
+public record TerraformBoatDataImpl(Identifier id, EntityType<Boat> boatEntityType, EntityType<ChestBoat> chestBoatEntityType, EntityType<Raft> raftEntityType, EntityType<ChestRaft> chestRaftEntityType) implements TerraformBoatData {
 	private static final Map<Identifier, TerraformBoatDataImpl> BOAT_DATA = new ConcurrentHashMap<>();
 
 	public TerraformBoatDataImpl {
@@ -58,7 +57,7 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 		return new TerraformBoatDataImpl(id, null, null, null, null);
 	}
 
-	public static void addBoat(Identifier id, EntityType<BoatEntity> boatEntity) {
+	public static void addBoat(Identifier id, EntityType<Boat> boatEntity) {
 		if (BOAT_DATA.containsKey(id)) {
 			TerraformBoatDataImpl old = BOAT_DATA.get(id);
 			if (old.boatEntityType != null) {
@@ -70,7 +69,7 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 		}
 	}
 
-	public static void addChestBoat(Identifier id, EntityType<ChestBoatEntity> chestBoatEntity) {
+	public static void addChestBoat(Identifier id, EntityType<ChestBoat> chestBoatEntity) {
 		if (BOAT_DATA.containsKey(id)) {
 			TerraformBoatDataImpl old = BOAT_DATA.get(id);
 			if (old.chestBoatEntityType != null) {
@@ -82,7 +81,7 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 		}
 	}
 
-	public static void addRaft(Identifier id, EntityType<RaftEntity> raftEntity) {
+	public static void addRaft(Identifier id, EntityType<Raft> raftEntity) {
 		if (BOAT_DATA.containsKey(id)) {
 			TerraformBoatDataImpl old = BOAT_DATA.get(id);
 			if (old.raftEntityType != null) {
@@ -94,7 +93,7 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 		}
 	}
 
-	public static void addChestRaft(Identifier id, EntityType<ChestRaftEntity> chestRaftEntity) {
+	public static void addChestRaft(Identifier id, EntityType<ChestRaft> chestRaftEntity) {
 		if (BOAT_DATA.containsKey(id)) {
 			TerraformBoatDataImpl old = BOAT_DATA.get(id);
 			if (old.chestRaftEntityType != null) {
@@ -109,22 +108,22 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 
 	@Override
 	public Identifier boatId() {
-		return id.withSuffixedPath("_boat");
+		return id.withSuffix("_boat");
 	}
 
 	@Override
 	public Identifier chestBoatId() {
-		return id.withSuffixedPath("_chest_boat");
+		return id.withSuffix("_chest_boat");
 	}
 
 	@Override
-	public RegistryKey<Item> boatKey() {
-		return RegistryKey.of(RegistryKeys.ITEM, boatId());
+	public ResourceKey<Item> boatKey() {
+		return ResourceKey.create(Registries.ITEM, boatId());
 	}
 
 	@Override
-	public RegistryKey<Item> chestBoatKey() {
-		return RegistryKey.of(RegistryKeys.ITEM, chestBoatId());
+	public ResourceKey<Item> chestBoatKey() {
+		return ResourceKey.create(Registries.ITEM, chestBoatId());
 	}
 
 	@Override
@@ -138,43 +137,43 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 	}
 
 	@Override
-	public RegistryKey<EntityType<?>> boatEntityTypeKey() {
-		return RegistryKey.of(RegistryKeys.ENTITY_TYPE, boatEntityTypeId());
+	public ResourceKey<EntityType<?>> boatEntityTypeKey() {
+		return ResourceKey.create(Registries.ENTITY_TYPE, boatEntityTypeId());
 	}
 
 	@Override
-	public RegistryKey<EntityType<?>> chestBoatEntityTypeKey() {
-		return RegistryKey.of(RegistryKeys.ENTITY_TYPE, chestBoatEntityTypeId());
+	public ResourceKey<EntityType<?>> chestBoatEntityTypeKey() {
+		return ResourceKey.create(Registries.ENTITY_TYPE, chestBoatEntityTypeId());
 	}
 
 	@Override
-	public EntityModelLayer boatModelLayer() {
-		return new EntityModelLayer(id.withPrefixedPath("boat/"), "main");
+	public ModelLayerLocation boatModelLayer() {
+		return new ModelLayerLocation(id.withPrefix("boat/"), "main");
 	}
 
 	@Override
-	public EntityModelLayer chestBoatModelLayer() {
-		return new EntityModelLayer(id.withPrefixedPath("chest_boat/"), "main");
+	public ModelLayerLocation chestBoatModelLayer() {
+		return new ModelLayerLocation(id.withPrefix("chest_boat/"), "main");
 	}
 
 	@Override
 	public Identifier raftId() {
-		return id.withSuffixedPath("_raft");
+		return id.withSuffix("_raft");
 	}
 
 	@Override
 	public Identifier chestRaftId() {
-		return id.withSuffixedPath("_chest_raft");
+		return id.withSuffix("_chest_raft");
 	}
 
 	@Override
-	public RegistryKey<Item> raftKey() {
-		return RegistryKey.of(RegistryKeys.ITEM, raftId());
+	public ResourceKey<Item> raftKey() {
+		return ResourceKey.create(Registries.ITEM, raftId());
 	}
 
 	@Override
-	public RegistryKey<Item> chestRaftKey() {
-		return RegistryKey.of(RegistryKeys.ITEM, chestRaftId());
+	public ResourceKey<Item> chestRaftKey() {
+		return ResourceKey.create(Registries.ITEM, chestRaftId());
 	}
 
 	@Override
@@ -188,22 +187,22 @@ public record TerraformBoatDataImpl(Identifier id, EntityType<BoatEntity> boatEn
 	}
 
 	@Override
-	public RegistryKey<EntityType<?>> raftEntityTypeKey() {
-		return RegistryKey.of(RegistryKeys.ENTITY_TYPE, raftEntityTypeId());
+	public ResourceKey<EntityType<?>> raftEntityTypeKey() {
+		return ResourceKey.create(Registries.ENTITY_TYPE, raftEntityTypeId());
 	}
 
 	@Override
-	public RegistryKey<EntityType<?>> chestRaftEntityTypeKey() {
-		return RegistryKey.of(RegistryKeys.ENTITY_TYPE, chestRaftEntityTypeId());
+	public ResourceKey<EntityType<?>> chestRaftEntityTypeKey() {
+		return ResourceKey.create(Registries.ENTITY_TYPE, chestRaftEntityTypeId());
 	}
 
 	@Override
-	public EntityModelLayer raftModelLayer() {
-		return new EntityModelLayer(id.withPrefixedPath("raft/"), "main");
+	public ModelLayerLocation raftModelLayer() {
+		return new ModelLayerLocation(id.withPrefix("raft/"), "main");
 	}
 
 	@Override
-	public EntityModelLayer chestRaftModelLayer() {
-		return new EntityModelLayer(id.withPrefixedPath("chest_raft/"), "main");
+	public ModelLayerLocation chestRaftModelLayer() {
+		return new ModelLayerLocation(id.withPrefix("chest_raft/"), "main");
 	}
 }

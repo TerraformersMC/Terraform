@@ -6,15 +6,15 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.TexturedModelDataProvider;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.render.entity.BoatEntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.RaftEntityRenderer;
-import net.minecraft.client.render.entity.model.BoatEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.RaftEntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.object.boat.BoatModel;
+import net.minecraft.client.model.object.boat.RaftModel;
+import net.minecraft.client.renderer.entity.BoatRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.RaftRenderer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 @Environment(EnvType.CLIENT)
 public final class TerraformBoatClientHelperImpl {
@@ -22,7 +22,7 @@ public final class TerraformBoatClientHelperImpl {
 		return;
 	}
 
-	private static <T extends Entity> void registerEntityRenderer(EntityType<? extends T> entityType, EntityModelLayer modelLayer, TexturedModelDataProvider texturedModelDataProvider, EntityRendererFactory<T> entityRendererFactory) {
+	private static <T extends Entity> void registerEntityRenderer(EntityType<? extends T> entityType, ModelLayerLocation modelLayer, TexturedModelDataProvider texturedModelDataProvider, EntityRendererProvider<T> entityRendererFactory) {
 		EntityModelLayerRegistry.registerModelLayer(modelLayer, texturedModelDataProvider);
 		EntityRendererRegistry.register(entityType, entityRendererFactory);
 	}
@@ -32,23 +32,23 @@ public final class TerraformBoatClientHelperImpl {
 
 		if (boatData.boatEntityType() != null) {
 			registerEntityRenderer(boatData.boatEntityType(), boatData.boatModelLayer(),
-					BoatEntityModel::getTexturedModelData,
-					context -> new BoatEntityRenderer(context, boatData.boatModelLayer()));
+					BoatModel::createBoatModel,
+					context -> new BoatRenderer(context, boatData.boatModelLayer()));
 		}
 		if (boatData.chestBoatEntityType() != null) {
 			registerEntityRenderer(boatData.chestBoatEntityType(), boatData.chestBoatModelLayer(),
-					BoatEntityModel::getChestTexturedModelData,
-					context -> new BoatEntityRenderer(context, boatData.chestBoatModelLayer()));
+					BoatModel::createChestBoatModel,
+					context -> new BoatRenderer(context, boatData.chestBoatModelLayer()));
 		}
 		if (boatData.raftEntityType() != null) {
 			registerEntityRenderer(boatData.raftEntityType(), boatData.raftModelLayer(),
-					RaftEntityModel::getTexturedModelData,
-					context -> new RaftEntityRenderer(context, boatData.raftModelLayer()));
+					RaftModel::createRaftModel,
+					context -> new RaftRenderer(context, boatData.raftModelLayer()));
 		}
 		if (boatData.chestRaftEntityType() != null) {
 			registerEntityRenderer(boatData.chestRaftEntityType(), boatData.chestRaftModelLayer(),
-					RaftEntityModel::getChestTexturedModelData,
-					context -> new RaftEntityRenderer(context, boatData.chestRaftModelLayer()));
+					RaftModel::createChestRaftModel,
+					context -> new RaftRenderer(context, boatData.chestRaftModelLayer()));
 		}
 	}
 }

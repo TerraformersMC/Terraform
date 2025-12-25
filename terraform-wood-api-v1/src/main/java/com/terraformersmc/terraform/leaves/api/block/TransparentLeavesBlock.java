@@ -1,8 +1,8 @@
 package com.terraformersmc.terraform.leaves.api.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.TintedParticleLeavesBlock;
+import net.minecraft.world.level.block.TintedParticleLeavesBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * A tintable leaf block that does not block light.
@@ -13,7 +13,7 @@ public class TransparentLeavesBlock extends TintedParticleLeavesBlock {
 	 * @param leafParticleChance The relative frequency of falling leaf particles emitted by the block
 	 * @param settings The block settings
 	 */
-	public TransparentLeavesBlock(float leafParticleChance, AbstractBlock.Settings settings) {
+	public TransparentLeavesBlock(float leafParticleChance, BlockBehaviour.Properties settings) {
 		super(leafParticleChance, settings);
 	}
 
@@ -25,12 +25,12 @@ public class TransparentLeavesBlock extends TintedParticleLeavesBlock {
 	 * @param settings The block settings
 	 */
 	@Deprecated(since = "14.0.0")
-	public TransparentLeavesBlock(AbstractBlock.Settings settings) {
+	public TransparentLeavesBlock(BlockBehaviour.Properties settings) {
 		super(0.01f, settings);
 	}
 
 	@Override
-	public int getOpacity(BlockState state) {
+	public int getLightBlock(BlockState state) {
 		return 0;
 	}
 }

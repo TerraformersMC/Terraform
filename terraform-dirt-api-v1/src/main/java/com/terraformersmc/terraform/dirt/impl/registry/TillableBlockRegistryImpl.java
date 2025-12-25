@@ -1,21 +1,20 @@
 package com.terraformersmc.terraform.dirt.impl.registry;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.ToolMaterial;
-
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
 
 public final class TillableBlockRegistryImpl extends HoeItem {
-	private TillableBlockRegistryImpl(ToolMaterial material, float attackDamage, float attackSpeed, Settings settings) {
+	private TillableBlockRegistryImpl(ToolMaterial material, float attackDamage, float attackSpeed, Properties settings) {
 		super(material, attackDamage, attackSpeed, settings);
 		return;
 	}
 
-	public static void add(Block block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>> pair) {
-		TILLING_ACTIONS.put(block, pair);
+	public static void add(Block block, Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair) {
+		TILLABLES.put(block, pair);
 	}
 }

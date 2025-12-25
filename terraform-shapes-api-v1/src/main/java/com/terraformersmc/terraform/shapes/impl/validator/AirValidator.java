@@ -1,39 +1,39 @@
 package com.terraformersmc.terraform.shapes.impl.validator;
 
 import com.terraformersmc.terraform.shapes.api.validator.AllMeetValidator;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LevelSimulatedReader;
 import com.terraformersmc.terraform.shapes.api.Position;
-import net.minecraft.world.TestableWorld;
-import net.minecraft.world.WorldView;
 
 public class AirValidator extends AllMeetValidator {
 
-    private final WorldView worldView;
-    private final TestableWorld testableWorld;
+    private final LevelReader worldView;
+    private final LevelSimulatedReader testableWorld;
 
-    public AirValidator(WorldView world) {
+    public AirValidator(LevelReader world) {
         this.worldView = world;
         this.testableWorld = null;
     }
 
-    public AirValidator(TestableWorld world) {
+    public AirValidator(LevelSimulatedReader world) {
         this.worldView = null;
         this.testableWorld = world;
     }
 
-    public static AirValidator of(WorldView world) {
+    public static AirValidator of(LevelReader world) {
         return new AirValidator(world);
     }
 
-    public static AirValidator of(TestableWorld world) {
+    public static AirValidator of(LevelSimulatedReader world) {
         return new AirValidator(world);
     }
 
     @Override
     public boolean test(Position position) {
         if (worldView != null) {
-            return worldView.isAir(position.toBlockPos());
+            return worldView.isEmptyBlock(position.toBlockPos());
         } else if (testableWorld != null) {
-            return testableWorld.testBlockState(position.toBlockPos(), (state) -> state.isAir());
+            return testableWorld.isStateAtPosition(position.toBlockPos(), (state) -> state.isAir());
         } else {
             return false;
         }

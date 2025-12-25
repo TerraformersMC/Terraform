@@ -2,27 +2,32 @@ package com.terraformersmc.terraform.wood.api.block;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.ParticleUtil;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 // Rather complex: combine the function of leaves, logs, and cobblestone walls.
 
@@ -31,22 +36,22 @@ import net.minecraft.world.WorldAccess;
  * Used for things like the Sakura tree.
  */
 public class SmallLogBlock extends BareSmallLogBlock {
-	public static final BooleanProperty HAS_LEAVES = BooleanProperty.of("has_leaves");
+	public static final BooleanProperty HAS_LEAVES = BooleanProperty.create("has_leaves");
 
 	private final Block leaves;
 
-	public SmallLogBlock(Block leaves, Settings settings) {
+	public SmallLogBlock(Block leaves, Properties settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState()
-				.with(AXIS, Direction.Axis.Y)
-				.with(UP, false)
-				.with(DOWN, false)
-				.with(WEST, false)
-				.with(EAST, false)
-				.with(NORTH, false)
-				.with(SOUTH, false)
-				.with(WATERLOGGED, false)
-				.with(HAS_LEAVES, false)
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(AXIS, Direction.Axis.Y)
+				.setValue(UP, false)
+				.setValue(DOWN, false)
+				.setValue(WEST, false)
+				.setValue(EAST, false)
+				.setValue(NORTH, false)
+				.setValue(SOUTH, false)
+				.setValue(WATERLOGGED, false)
+				.setValue(HAS_LEAVES, false)
 		);
 
 		this.leaves = leaves;
@@ -63,11 +68,11 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static SmallLogBlock of(Block leaves, MapColor color) {
-		return new SmallLogBlock(leaves, AbstractBlock.Settings.create()
-				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : color)
+		return new SmallLogBlock(leaves, BlockBehaviour.Properties.of()
+				.mapColor((state) -> state.getValue(HAS_LEAVES) ? leaves.defaultMapColor() : color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
@@ -83,88 +88,88 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static SmallLogBlock of(Block leaves, MapColor wood, MapColor bark) {
-		return new SmallLogBlock(leaves, AbstractBlock.Settings.create()
-				.mapColor((state) -> state.get(HAS_LEAVES) ? leaves.getDefaultMapColor() : state.get(UP) ? wood : bark)
+		return new SmallLogBlock(leaves, BlockBehaviour.Properties.of()
+				.mapColor((state) -> state.getValue(HAS_LEAVES) ? leaves.defaultMapColor() : state.getValue(UP) ? wood : bark)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
 	@Environment(EnvType.CLIENT)
 	@Override
-	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		if (!state.get(HAS_LEAVES)) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+		if (!state.getValue(HAS_LEAVES)) {
 			return;
 		}
 		// Below here this is a copy of LeavesBlock.randomDisplayTick() from vanilla.
 		// This is because some other mods crash when we call the vanilla method on a non-LeavesBlock.
 		// To merge changes, you should typically be able to just replace vv with a copy from vanilla.
-		if (!world.hasRain(pos.up())) {
+		if (!world.isRainingAt(pos.above())) {
 			return;
 		}
 		if (random.nextInt(15) != 1) {
 			return;
 		}
-		BlockPos lv = pos.down();
+		BlockPos lv = pos.below();
 		BlockState lv2 = world.getBlockState(lv);
-		if (lv2.isOpaque() && lv2.isSideSolidFullSquare(world, lv, Direction.UP)) {
+		if (lv2.canOcclude() && lv2.isFaceSturdy(world, lv, Direction.UP)) {
 			return;
 		}
-		ParticleUtil.spawnParticle(world, pos, random, ParticleTypes.DRIPPING_WATER);
+		ParticleUtils.spawnParticleBelow(world, pos, random, ParticleTypes.DRIPPING_WATER);
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult result) {
-		ItemStack held = player.getActiveItem();
+	public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult result) {
+		ItemStack held = player.getUseItem();
 
-		if (held.getCount() >= 1 && held.getItem() == Item.BLOCK_ITEMS.get(leaves) && !state.get(HAS_LEAVES)) {
+		if (held.getCount() >= 1 && held.getItem() == Item.BY_BLOCK.get(leaves) && !state.getValue(HAS_LEAVES)) {
 			if (!player.isCreative()) {
-				held.decrement(1);
+				held.shrink(1);
 			}
 
-			BlockSoundGroup sounds = leaves.getDefaultState().getSoundGroup();
-			world.playSound(player, pos, sounds.getPlaceSound(), SoundCategory.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F, sounds.getPitch() * 0.8F);
+			SoundType sounds = leaves.defaultBlockState().getSoundType();
+			world.playSound(player, pos, sounds.getPlaceSound(), SoundSource.BLOCKS, (sounds.getVolume() + 1.0F) / 2.0F, sounds.getPitch() * 0.8F);
 
 			BlockState previous = state;
 
-			state = state.with(HAS_LEAVES, true);
+			state = state.setValue(HAS_LEAVES, true);
 
-			if (state.get(UP) && world.getBlockState(pos.up()).getBlock() instanceof LeavesBlock) {
-				state = state.with(UP, false);
+			if (state.getValue(UP) && world.getBlockState(pos.above()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(UP, false);
 			}
 
-			if (state.get(DOWN) && world.getBlockState(pos.down()).getBlock() instanceof LeavesBlock) {
-				state = state.with(DOWN, false);
+			if (state.getValue(DOWN) && world.getBlockState(pos.below()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(DOWN, false);
 			}
 
-			if (state.get(WEST) && world.getBlockState(pos.west()).getBlock() instanceof LeavesBlock) {
-				state = state.with(WEST, false);
+			if (state.getValue(WEST) && world.getBlockState(pos.west()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(WEST, false);
 			}
 
-			if (state.get(EAST) && world.getBlockState(pos.east()).getBlock() instanceof LeavesBlock) {
-				state = state.with(EAST, false);
+			if (state.getValue(EAST) && world.getBlockState(pos.east()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(EAST, false);
 			}
 
-			if (state.get(NORTH) && world.getBlockState(pos.north()).getBlock() instanceof LeavesBlock) {
-				state = state.with(NORTH, false);
+			if (state.getValue(NORTH) && world.getBlockState(pos.north()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(NORTH, false);
 			}
 
-			if (state.get(SOUTH) && world.getBlockState(pos.south()).getBlock() instanceof LeavesBlock) {
-				state = state.with(SOUTH, false);
+			if (state.getValue(SOUTH) && world.getBlockState(pos.south()).getBlock() instanceof LeavesBlock) {
+				state = state.setValue(SOUTH, false);
 			}
 
-			world.setBlockState(pos, pushEntitiesUpBeforeBlockChange(previous, state, world, pos));
+			world.setBlockAndUpdate(pos, pushEntitiesUp(previous, state, world, pos));
 
-			return ActionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
-		return ActionResult.FAIL;
+		return InteractionResult.FAIL;
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 
 		builder.add(HAS_LEAVES);
 	}
@@ -176,46 +181,46 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	@Override
-	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		boolean leaves = state.get(HAS_LEAVES);
+		boolean leaves = state.getValue(HAS_LEAVES);
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.DOWN), leaves) || state.get(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.UP), leaves) || state.get(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.SOUTH), leaves) || state.get(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.WEST), leaves) || state.get(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.NORTH), leaves) || state.get(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isSideSolidFullSquare(world, neighborPos, Direction.EAST), leaves) || state.get(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.DOWN), leaves) || state.getValue(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.UP), leaves) || state.getValue(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.SOUTH), leaves) || state.getValue(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.WEST), leaves) || state.getValue(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.NORTH), leaves) || state.getValue(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.EAST), leaves) || state.getValue(WEST);
 
 		return state
-				.with(UP, up)
-				.with(DOWN, down)
-				.with(NORTH, north)
-				.with(EAST, east)
-				.with(SOUTH, south)
-				.with(WEST, west);
+				.setValue(UP, up)
+				.setValue(DOWN, down)
+				.setValue(NORTH, north)
+				.setValue(EAST, east)
+				.setValue(SOUTH, south)
+				.setValue(WEST, west);
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
-		return state.get(HAS_LEAVES) ? VoxelShapes.fullCube() : this.boundingShapes[this.getShapeIndex(state)];
+	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+		return state.getValue(HAS_LEAVES) ? Shapes.block() : this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
-		return state.get(HAS_LEAVES) ? VoxelShapes.fullCube() : this.collisionShapes[this.getShapeIndex(state)];
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+		return state.getValue(HAS_LEAVES) ? Shapes.block() : this.collisionShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	public VoxelShape getCullingShape(BlockState state) {
+	public VoxelShape getOcclusionShape(BlockState state) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+	public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 }

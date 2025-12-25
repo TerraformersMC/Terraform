@@ -1,21 +1,24 @@
 package com.terraformersmc.terraform.boat.impl.item;
 
 import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.BoatDispenserBehavior;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.vehicle.*;
-import net.minecraft.item.BoatItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.dispenser.BoatDispenseItemBehavior;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
+import net.minecraft.world.entity.vehicle.boat.ChestRaft;
+import net.minecraft.world.entity.vehicle.boat.Raft;
+import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.DispenserBlock;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -25,38 +28,38 @@ public final class TerraformBoatItemHelperImpl {
 		return;
 	}
 
-	private static EntityType.EntityFactory<BoatEntity> getBoatFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new BoatEntity(type, world, itemSupplier);
+	private static EntityType.EntityFactory<Boat> getBoatFactory(Supplier<Item> itemSupplier) {
+		return (type, world) -> new Boat(type, world, itemSupplier);
 	}
 
-	private static EntityType.EntityFactory<ChestBoatEntity> getChestBoatFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new ChestBoatEntity(type, world, itemSupplier);
+	private static EntityType.EntityFactory<ChestBoat> getChestBoatFactory(Supplier<Item> itemSupplier) {
+		return (type, world) -> new ChestBoat(type, world, itemSupplier);
 	}
 
-	private static EntityType.EntityFactory<RaftEntity> getRaftFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new RaftEntity(type, world, itemSupplier);
+	private static EntityType.EntityFactory<Raft> getRaftFactory(Supplier<Item> itemSupplier) {
+		return (type, world) -> new Raft(type, world, itemSupplier);
 	}
 
-	private static EntityType.EntityFactory<ChestRaftEntity> getChestRaftFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new ChestRaftEntity(type, world, itemSupplier);
+	private static EntityType.EntityFactory<ChestRaft> getChestRaftFactory(Supplier<Item> itemSupplier) {
+		return (type, world) -> new ChestRaft(type, world, itemSupplier);
 	}
 
 	private static <T extends Entity> EntityType.Builder<T> createEntityTypeBuilder(EntityType.EntityFactory<T> factory) {
-		return EntityType.Builder.create(factory, SpawnGroup.MISC)
-				.dropsNothing()
-				.dimensions(1.375f, 0.5625f)
+		return EntityType.Builder.of(factory, MobCategory.MISC)
+				.noLootTable()
+				.sized(1.375f, 0.5625f)
 				.eyeHeight(0.5625f)
-				.maxTrackingRange(10);
+				.clientTrackingRange(10);
 	}
 
-	private static <T extends Entity> EntityType<T> registerEntityType(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
-		return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
+	private static <T extends Entity> EntityType<T> registerEntityType(ResourceKey<EntityType<?>> key, EntityType.Builder<T> type) {
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, type.build(key));
 	}
 
-	private static <T extends AbstractBoatEntity> BoatItem registerBoat(Identifier id, RegistryKey<Item> itemKey, RegistryKey<EntityType<?>> entityTypeKey, Item.Settings settings, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
+	private static <T extends AbstractBoat> BoatItem registerBoat(Identifier id, ResourceKey<Item> itemKey, ResourceKey<EntityType<?>> entityTypeKey, Item.Properties settings, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
 		DelayedItemSupplier itemSupplier = new DelayedItemSupplier();
 		EntityType<T> entityType = registerEntityType(entityTypeKey, createEntityTypeBuilder(factory.apply(itemSupplier)));
-		BoatItem item = Registry.register(Registries.ITEM, itemKey, new BoatItem(entityType, settings.registryKey(itemKey)));
+		BoatItem item = Registry.register(BuiltInRegistries.ITEM, itemKey, new BoatItem(entityType, settings.setId(itemKey)));
 		itemSupplier.set(item);
 
 		registry.accept(id, entityType);
@@ -66,7 +69,7 @@ public final class TerraformBoatItemHelperImpl {
 	}
 
 
-	public static BoatItem registerBoatItem(Identifier id, Item.Settings settings, boolean chest, boolean raft) {
+	public static BoatItem registerBoatItem(Identifier id, Item.Properties settings, boolean chest, boolean raft) {
 		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.empty(id);
 
 		if (raft) {
@@ -88,8 +91,8 @@ public final class TerraformBoatItemHelperImpl {
 		}
 	}
 
-	public static void registerBoatDispenserBehavior(ItemConvertible item, EntityType<? extends AbstractBoatEntity> boatEntity) {
-		DispenserBlock.registerBehavior(item, new BoatDispenserBehavior(boatEntity));
+	public static void registerBoatDispenserBehavior(ItemLike item, EntityType<? extends AbstractBoat> boatEntity) {
+		DispenserBlock.registerBehavior(item, new BoatDispenseItemBehavior(boatEntity));
 	}
 
 

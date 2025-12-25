@@ -1,29 +1,33 @@
 package com.terraformersmc.terraform.wood.api.block;
 
-import net.minecraft.block.*;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * A log block that has 4 different corners that combine to form a huge and continuous 2x2 log.
  * Used for the mega variants of Redwood, Fir, etc
  */
 @SuppressWarnings("unused")
-public class QuarterLogBlock extends PillarBlock {
-	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.of("bark_side", BarkSide.class);
+public class QuarterLogBlock extends RotatedPillarBlock {
+	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.create("bark_side", BarkSide.class);
 
-	public QuarterLogBlock(AbstractBlock.Settings settings) {
+	public QuarterLogBlock(BlockBehaviour.Properties settings) {
 		super(settings);
 
-		this.setDefaultState(this.stateManager.getDefaultState()
-				.with(AXIS, Direction.Axis.Y)
-				.with(BARK_SIDE, BarkSide.NORTHEAST));
+		this.registerDefaultState(this.stateDefinition.any()
+				.setValue(AXIS, Direction.Axis.Y)
+				.setValue(BARK_SIDE, BarkSide.NORTHEAST));
 	}
 
 	/**
@@ -36,11 +40,11 @@ public class QuarterLogBlock extends PillarBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock of(MapColor color) {
-		return new QuarterLogBlock(AbstractBlock.Settings.create()
+		return new QuarterLogBlock(BlockBehaviour.Properties.of()
 				.mapColor(color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
@@ -55,26 +59,26 @@ public class QuarterLogBlock extends PillarBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(AbstractBlock.Settings.create()
+		return new QuarterLogBlock(BlockBehaviour.Properties.of()
 				.mapColor(
 						(state) ->
-								switch (state.get(PillarBlock.AXIS)) {
+								switch (state.getValue(RotatedPillarBlock.AXIS)) {
 									case Y -> wood;
 									case X ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case NORTHWEST, SOUTHWEST -> bark;
 												case NORTHEAST, SOUTHEAST -> wood;
 											};
 									case Z ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case SOUTHEAST, SOUTHWEST -> bark;
 												case NORTHEAST, NORTHWEST -> wood;
 											};
 								}
 				)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.WOOD)
-				.burnable()
+				.sound(SoundType.WOOD)
+				.ignitedByLava()
 		);
 	}
 
@@ -88,10 +92,10 @@ public class QuarterLogBlock extends PillarBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock ofNether(MapColor color) {
-		return new QuarterLogBlock(AbstractBlock.Settings.create()
+		return new QuarterLogBlock(BlockBehaviour.Properties.of()
 				.mapColor(color)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_WOOD)
+				.sound(SoundType.NETHER_WOOD)
 		);
 	}
 
@@ -106,54 +110,54 @@ public class QuarterLogBlock extends PillarBlock {
 	 */
 	@Deprecated(since = "12.0.0", forRemoval = true)
 	public static QuarterLogBlock ofNether(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(AbstractBlock.Settings.create()
+		return new QuarterLogBlock(BlockBehaviour.Properties.of()
 				.mapColor(
 						(state) ->
-								switch (state.get(PillarBlock.AXIS)) {
+								switch (state.getValue(RotatedPillarBlock.AXIS)) {
 									case Y -> wood;
 									case X ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case NORTHWEST, SOUTHWEST -> bark;
 												case NORTHEAST, SOUTHEAST -> wood;
 											};
 									case Z ->
-											switch (state.get(QuarterLogBlock.BARK_SIDE)) {
+											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
 												case SOUTHEAST, SOUTHWEST -> bark;
 												case NORTHEAST, NORTHWEST -> wood;
 											};
 								}
 				)
 				.strength(2.0F)
-				.sounds(BlockSoundGroup.NETHER_WOOD)
+				.sound(SoundType.NETHER_WOOD)
 		);
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		super.appendProperties(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 
 		builder.add(BARK_SIDE);
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext context) {
-		Vec3d pos = context.getHitPos();
-		BlockPos blockPos = context.getBlockPos();
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Vec3 pos = context.getClickLocation();
+		BlockPos blockPos = context.getClickedPos();
 
-		float hitX = (float) (pos.getX() - blockPos.getX());
-		float hitY = (float) (pos.getY() - blockPos.getY());
-		float hitZ = (float) (pos.getZ() - blockPos.getZ());
+		float hitX = (float) (pos.x() - blockPos.getX());
+		float hitY = (float) (pos.y() - blockPos.getY());
+		float hitZ = (float) (pos.z() - blockPos.getZ());
 
-		BarkSide side = BarkSide.fromHit(context.getSide().getAxis(), hitX, hitY, hitZ);
+		BarkSide side = BarkSide.fromHit(context.getClickedFace().getAxis(), hitX, hitY, hitZ);
 
-		return super.getPlacementState(context).with(BARK_SIDE, side);
+		return super.getStateForPlacement(context).setValue(BARK_SIDE, side);
 	}
 
 	/**
 	 * Represents the two sides of the log the bark appears on. SOUTHEAST for example indicates that the South and East
 	 * sides have bark applied, while the North and West sides are bare.
 	 */
-	public enum BarkSide implements StringIdentifiable {
+	public enum BarkSide implements StringRepresentable {
 		SOUTHWEST("southwest"),
 		NORTHWEST("northwest"),
 		NORTHEAST("northeast"),
@@ -228,7 +232,7 @@ public class QuarterLogBlock extends PillarBlock {
 		}
 
 		@Override
-		public String asString() {
+		public String getSerializedName() {
 			return this.name;
 		}
 	}

@@ -3,12 +3,11 @@ package com.terraformersmc.terraform.tree.api.placer;
 import com.mojang.serialization.MapCodec;
 import com.terraformersmc.terraform.tree.impl.mixin.InvokerFoliagePlacerType;
 import com.terraformersmc.terraform.tree.impl.mixin.InvokerTrunkPlacerType;
-
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
-import net.minecraft.world.gen.trunk.TrunkPlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 public final class PlacerTypes {
 	private PlacerTypes() {

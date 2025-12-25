@@ -1,17 +1,16 @@
 package com.terraformersmc.terraform.boat.api.data;
 
 import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.entity.vehicle.ChestBoatEntity;
-import net.minecraft.entity.vehicle.ChestRaftEntity;
-import net.minecraft.entity.vehicle.RaftEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
-
 import java.util.Optional;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
+import net.minecraft.world.entity.vehicle.boat.ChestRaft;
+import net.minecraft.world.entity.vehicle.boat.Raft;
+import net.minecraft.world.item.Item;
 
 /**
  * Read-only access interface for boat data records used by the boat API to register boats.
@@ -61,14 +60,14 @@ public interface TerraformBoatData {
 	 *
 	 * @return RegistryKey of the boat item
 	 */
-	RegistryKey<Item> boatKey();
+	ResourceKey<Item> boatKey();
 
 	/**
 	 * Get the chest boat item's registry key.
 	 *
 	 * @return RegistryKey of the chest boat item
 	 */
-	RegistryKey<Item> chestBoatKey();
+	ResourceKey<Item> chestBoatKey();
 
 	/**
 	 * Get the boat's EntityType ID.
@@ -89,42 +88,42 @@ public interface TerraformBoatData {
 	 *
 	 * @return RegistryKey of the boat entity type
 	 */
-	RegistryKey<EntityType<?>> boatEntityTypeKey();
+	ResourceKey<EntityType<?>> boatEntityTypeKey();
 
 	/**
 	 * Get the chest boat entity type's registry key.
 	 *
 	 * @return RegistryKey of the chest boat entity type
 	 */
-	RegistryKey<EntityType<?>> chestBoatEntityTypeKey();
+	ResourceKey<EntityType<?>> chestBoatEntityTypeKey();
 
 	/**
 	 * Get the boat's {@link EntityType<BoatEntity>} object.
 	 *
 	 * @return EntityType of the boat.
 	 */
-	EntityType<BoatEntity> boatEntityType();
+	EntityType<Boat> boatEntityType();
 
 	/**
 	 * Get the chest boat's {@link EntityType<ChestBoatEntity>} object.
 	 *
 	 * @return EntityType of the chest boat.
 	 */
-	EntityType<ChestBoatEntity> chestBoatEntityType();
+	EntityType<ChestBoat> chestBoatEntityType();
 
 	/**
 	 * Get the boat's model layers.
 	 *
 	 * @return EntityModelLayer of the boat
 	 */
-	EntityModelLayer boatModelLayer();
+	ModelLayerLocation boatModelLayer();
 
 	/**
 	 * Get the chest boat's model layers.
 	 *
 	 * @return EntityModelLayer of the chest boat
 	 */
-	EntityModelLayer chestBoatModelLayer();
+	ModelLayerLocation chestBoatModelLayer();
 
 
 	/**
@@ -146,14 +145,14 @@ public interface TerraformBoatData {
 	 *
 	 * @return RegistryKey of the raft item
 	 */
-	RegistryKey<Item> raftKey();
+	ResourceKey<Item> raftKey();
 
 	/**
 	 * Get the chest raft item's registry key.
 	 *
 	 * @return RegistryKey of the chest raft item
 	 */
-	RegistryKey<Item> chestRaftKey();
+	ResourceKey<Item> chestRaftKey();
 
 	/**
 	 * Get the raft's EntityType ID.
@@ -174,40 +173,40 @@ public interface TerraformBoatData {
 	 *
 	 * @return RegistryKey of the raft entity type
 	 */
-	RegistryKey<EntityType<?>> raftEntityTypeKey();
+	ResourceKey<EntityType<?>> raftEntityTypeKey();
 
 	/**
 	 * Get the chest raft entity type's registry key.
 	 *
 	 * @return RegistryKey of the chest raft entity type
 	 */
-	RegistryKey<EntityType<?>> chestRaftEntityTypeKey();
+	ResourceKey<EntityType<?>> chestRaftEntityTypeKey();
 
 	/**
 	 * Get the raft's {@link EntityType<RaftEntity>} object.
 	 *
 	 * @return EntityType of the raft.
 	 */
-	EntityType<RaftEntity> raftEntityType();
+	EntityType<Raft> raftEntityType();
 
 	/**
 	 * Get the chest raft's {@link EntityType<ChestRaftEntity>} object.
 	 *
 	 * @return EntityType of the chest raft.
 	 */
-	EntityType<ChestRaftEntity> chestRaftEntityType();
+	EntityType<ChestRaft> chestRaftEntityType();
 
 	/**
 	 * Get the raft's model layers.
 	 *
 	 * @return EntityModelLayer of the raft
 	 */
-	EntityModelLayer raftModelLayer();
+	ModelLayerLocation raftModelLayer();
 
 	/**
 	 * Get the chest raft's model layers.
 	 *
 	 * @return EntityModelLayer of the chest raft
 	 */
-	EntityModelLayer chestRaftModelLayer();
+	ModelLayerLocation chestRaftModelLayer();
 }

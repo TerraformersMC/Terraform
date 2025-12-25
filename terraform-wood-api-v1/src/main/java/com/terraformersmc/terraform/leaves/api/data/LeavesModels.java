@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.leaves.api.data;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 /**
  * Convenience Identifiers for Terraform leaves API models.
@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 @SuppressWarnings({"unused", "SameParameterValue"})
 public final class LeavesModels {
 	/**
-	 * Extend this model for pillar-textured {@linkplain net.minecraft.block.LeavesBlock} models.  F.e.:
+	 * Extend this model for pillar-textured {@linkplain net.minecraft.world.level.block.LeavesBlock} models.  F.e.:
 	 *
 	 * <pre>{@code
 	 * {
@@ -35,10 +35,10 @@ public final class LeavesModels {
 	}
 
 	private static Identifier block(String path) {
-		return Identifier.of("terraform", "block/" + path);
+		return Identifier.fromNamespaceAndPath("terraform", "block/" + path);
 	}
 
 	private static Identifier item(String path) {
-		return Identifier.of("terraform", "item/" + path);
+		return Identifier.fromNamespaceAndPath("terraform", "item/" + path);
 	}
 }

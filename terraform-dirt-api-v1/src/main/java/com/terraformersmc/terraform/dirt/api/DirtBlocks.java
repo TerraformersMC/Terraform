@@ -4,8 +4,7 @@ import com.terraformersmc.terraform.dirt.api.block.TerraformDirtPathBlock;
 import com.terraformersmc.terraform.dirt.api.block.TerraformFarmlandBlock;
 import com.terraformersmc.terraform.dirt.api.block.TerraformGrassBlock;
 import com.terraformersmc.terraform.dirt.api.block.TerraformSnowyBlock;
-
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class DirtBlocks {
 	private Block dirt;

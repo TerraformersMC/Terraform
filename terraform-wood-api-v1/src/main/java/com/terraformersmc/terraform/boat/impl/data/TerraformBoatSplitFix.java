@@ -4,12 +4,11 @@ import com.mojang.datafixers.*;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.datafixer.FixUtil;
-import net.minecraft.datafixer.TypeReferences;
-import net.minecraft.datafixer.schema.IdentifierNormalizingSchema;
-import net.minecraft.util.Identifier;
-
 import java.util.Optional;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.datafix.ExtraDataFixUtils;
+import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.util.datafix.schemas.NamespacedSchema;
 
 public class TerraformBoatSplitFix extends DataFix {
 	public TerraformBoatSplitFix(Schema outputSchema, boolean changesType) {
@@ -29,7 +28,7 @@ public class TerraformBoatSplitFix extends DataFix {
 	}
 
 	private static String getNewBoatIdFromOldType(String type) {
-		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.of(type));
+		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.parse(type));
 		String newId = null;
 
 		if (boatData.isPresent()) {
@@ -48,7 +47,7 @@ public class TerraformBoatSplitFix extends DataFix {
 	}
 
 	private static String getNewChestBoatIdFromOldType(String type) {
-		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.of(type));
+		Optional<TerraformBoatDataImpl> boatData = TerraformBoatDataImpl.getOptional(Identifier.parse(type));
 		String newId = null;
 
 		if (boatData.isPresent()) {
@@ -68,9 +67,9 @@ public class TerraformBoatSplitFix extends DataFix {
 
 	@Override
 	protected TypeRewriteRule makeRule() {
-		OpticFinder<String> opticFinder = DSL.fieldFinder("id", IdentifierNormalizingSchema.getIdentifierType());
-		Type<?> type = this.getInputSchema().getType(TypeReferences.ENTITY);
-		Type<?> type2 = this.getOutputSchema().getType(TypeReferences.ENTITY);
+		OpticFinder<String> opticFinder = DSL.fieldFinder("id", NamespacedSchema.namespacedString());
+		Type<?> type = this.getInputSchema().getType(References.ENTITY);
+		Type<?> type2 = this.getOutputSchema().getType(References.ENTITY);
 
 		return this.fixTypeEverywhereTyped("TerraformBoatSplitFix", type, type2, typed -> {
 			Optional<String> optional = typed.getOptional(opticFinder);
@@ -86,9 +85,9 @@ public class TerraformBoatSplitFix extends DataFix {
 					string = optional2.map(TerraformBoatSplitFix::getNewBoatIdFromOldType).orElse("minecraft:oak_boat");
 				}
 
-				return FixUtil.withType(type2, typed).update(DSL.remainderFinder(), dynamicx -> dynamicx.remove("TerraformBoat")).set(opticFinder, string);
+				return ExtraDataFixUtils.cast(type2, typed).update(DSL.remainderFinder(), dynamicx -> dynamicx.remove("TerraformBoat")).set(opticFinder, string);
 			} else {
-				return FixUtil.withType(type2, typed);
+				return ExtraDataFixUtils.cast(type2, typed);
 			}
 		});
 	}
