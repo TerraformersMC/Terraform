@@ -9,8 +9,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 
 public final class TillableBlockRegistryImpl extends HoeItem {
-	private TillableBlockRegistryImpl(ToolMaterial material, float attackDamage, float attackSpeed, Properties settings) {
-		super(material, attackDamage, attackSpeed, settings);
+	@SuppressWarnings("UnnecessaryReturnStatement")
+	private TillableBlockRegistryImpl(ToolMaterial material, float attackDamage, float attackSpeed, Properties properties) {
+		super(material, attackDamage, attackSpeed, properties);
 		return;
 	}
 

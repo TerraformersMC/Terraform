@@ -5,6 +5,7 @@ import com.terraformersmc.terraform.shapes.api.Shape;
 
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public interface Layer {
     Position modifyMax(Shape shape);
 

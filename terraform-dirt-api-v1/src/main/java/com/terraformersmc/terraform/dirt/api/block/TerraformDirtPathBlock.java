@@ -1,18 +1,13 @@
 package com.terraformersmc.terraform.dirt.api.block;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirtPathBlock;
 
+/**
+ * Custom dirt path block used to apply dirt path fixes to modded dirt path blocks.
+ */
+@SuppressWarnings("unused")
 public class TerraformDirtPathBlock extends DirtPathBlock {
-	/**
-	 * @deprecated the "dirt" block is no longer used by TerraformDirtPathBlock, use the other constructor.
-	 */
-	@Deprecated
-	public TerraformDirtPathBlock(Block dirt, Properties settings) {
-		super(settings);
-	}
-
-	public TerraformDirtPathBlock(Properties settings) {
-		super(settings);
+	public TerraformDirtPathBlock(Properties properties) {
+		super(properties);
 	}
 }

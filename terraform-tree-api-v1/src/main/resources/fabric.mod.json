@@ -45,6 +45,6 @@
     }
   },
   "mixins": [
-    "mixins.terraform-tree-api-v1.json"
+    "mixins.main.terraform.tree.json"
   ]
 }

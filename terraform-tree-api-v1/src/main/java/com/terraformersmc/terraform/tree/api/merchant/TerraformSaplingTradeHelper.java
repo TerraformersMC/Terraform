@@ -6,7 +6,9 @@ import net.minecraft.world.level.ItemLike;
 /**
  * A helper class for merchant trades regarding saplings.
  */
+@SuppressWarnings("unused")
 public final class TerraformSaplingTradeHelper {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformSaplingTradeHelper() {
 		return;
 	}

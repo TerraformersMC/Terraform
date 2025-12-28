@@ -4,7 +4,6 @@ import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.layer.TransformationLayer;
 
 public class TranslateLayer extends TransformationLayer {
-
     private final Position translation;
 
     public TranslateLayer(Position translation) {
@@ -20,6 +19,7 @@ public class TranslateLayer extends TransformationLayer {
         pos.setX(pos.getX() + translation.getX());
         pos.setY(pos.getY() + translation.getY());
         pos.setZ(pos.getZ() + translation.getZ());
+
         return pos;
     }
 
@@ -28,6 +28,7 @@ public class TranslateLayer extends TransformationLayer {
         pos.setX(pos.getX() - translation.getX());
         pos.setY(pos.getY() - translation.getY());
         pos.setZ(pos.getZ() - translation.getZ());
+
         return pos;
     }
 }

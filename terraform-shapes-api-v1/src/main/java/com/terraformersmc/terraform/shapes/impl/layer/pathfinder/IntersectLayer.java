@@ -7,7 +7,6 @@ import com.terraformersmc.terraform.shapes.api.layer.PathfinderLayer;
 import java.util.function.Predicate;
 
 public class IntersectLayer extends PathfinderLayer {
-
     private final Shape shape;
 
     public IntersectLayer(Shape shape) {

@@ -9,6 +9,7 @@ import java.util.function.Predicate;
  * @author <Wtoll> Will Toll on 2020-06-07
  * @project Shapes
  */
+@SuppressWarnings("unused")
 public abstract class AllMeetValidator implements Validator, Predicate<Position> {
     @Override
     public boolean validate(Shape shape) {

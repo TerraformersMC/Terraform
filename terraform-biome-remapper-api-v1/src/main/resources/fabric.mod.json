@@ -44,6 +44,6 @@
     }
   },
   "mixins": [
-    "mixins.terraform-biome-remapper.json"
+    "mixins.main.terraform.biome-remapper.json"
   ]
 }

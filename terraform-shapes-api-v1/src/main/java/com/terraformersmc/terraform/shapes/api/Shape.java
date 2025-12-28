@@ -8,11 +8,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+@SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
 public interface Shape {
-
     static Shape of(Predicate<Position> equation, Position max, Position min) {
         return new Shape() {
-
             private Optional<Boolean> valid = Optional.empty();
 
             @Override
@@ -35,6 +34,7 @@ public interface Shape {
                 boolean valid = validator.validate(this);
                 if (valid) consumer.accept(this);
                 this.valid = Optional.of(valid);
+
                 return this;
             }
 
@@ -59,6 +59,7 @@ public interface Shape {
 
     default Shape validate(Validator validator, Consumer<Shape> consumer) {
         if (validator.validate(this)) consumer.accept(this);
+
         return this;
     }
 

@@ -81,10 +81,10 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @param leafParticleEffect Optional {@link ParticleOptions} to use instead of biome tinted falling leaf particles
 	 * @param opti Whether to enable the opti-leaves feature
 	 * @param transparent Whether to allow light to pass freely through the block
-	 * @param settings The block settings
+	 * @param properties The block properties
 	 */
-	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleEffect, boolean opti, boolean transparent, BlockBehaviour.Properties settings) {
-		super(leafParticleChance, settings);
+	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleEffect, boolean opti, boolean transparent, BlockBehaviour.Properties properties) {
+		super(leafParticleChance, properties);
 
 		this.leafParticleEffect = leafParticleEffect;
 		this.opti = opti;
@@ -106,10 +106,10 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * <li>enable light transparency</li>
 	 * </ul>
 	 *
-	 * @param settings The block settings
+	 * @param properties The block properties
 	 */
-	public ExtendedLeavesBlock(BlockBehaviour.Properties settings) {
-		this(0.01f, Optional.empty(), false, true, settings);
+	public ExtendedLeavesBlock(BlockBehaviour.Properties properties) {
+		this(0.01f, Optional.empty(), false, true, properties);
 	}
 
 	public MapCodec<? extends ExtendedLeavesBlock> codec() {
@@ -117,9 +117,9 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	protected void spawnFallingLeavesParticle(Level world, BlockPos pos, RandomSource random) {
-		ParticleUtils.spawnParticleBelow(world, pos, random, leafParticleEffect
-				.orElse(ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, world.getClientLeafTintColor(pos))));
+	protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
+		ParticleUtils.spawnParticleBelow(level, pos, random, leafParticleEffect
+				.orElse(ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, level.getClientLeafTintColor(pos))));
 	}
 
 	@Override
@@ -133,8 +133,8 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-		world.setBlock(pos, ExtendedLeavesBlock.updateDistance(state, world, pos), 3);
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		level.setBlock(pos, ExtendedLeavesBlock.updateDistance(state, level, pos), 3);
 	}
 
 	@Override
@@ -143,26 +143,26 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+	public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
 		if (state.getValue(WATERLOGGED)) {
-			tickView.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+			ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 
 		int distance = ExtendedLeavesBlock.getDistanceAt(neighborState) + 1;
 		if (distance != 1 || getExtendedDistance(state) != distance) {
-			tickView.scheduleTick(pos, this, 1);
+			ticks.scheduleTick(pos, this, 1);
 		}
 
 		return state;
 	}
 
-	private static BlockState updateDistance(BlockState state, LevelAccessor world, BlockPos pos) {
+	private static BlockState updateDistance(BlockState state, LevelAccessor level, BlockPos pos) {
 		int distance = MAX_TOTAL_DISTANCE;
 		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		for (Direction direction : Direction.values()) {
 			mutable.setWithOffset(pos, direction);
-			distance = Math.min(distance, ExtendedLeavesBlock.getDistanceAt(world.getBlockState(mutable)) + 1);
+			distance = Math.min(distance, ExtendedLeavesBlock.getDistanceAt(level.getBlockState(mutable)) + 1);
 			if (distance == 1) {
 				break;
 			}
@@ -202,22 +202,6 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 		}
 
 		return OptionalInt.empty();
-	}
-
-	private static int getDistanceFromLogx(BlockState state) {
-		if (state.is(BlockTags.LOGS)) {
-			return 0;
-		}
-
-		Block block = state.getBlock();
-		if (block instanceof ExtendedLeavesBlock) {
-			return getExtendedDistance(state);
-		} else if (state.hasProperty(DISTANCE)) {
-			int distance = state.getValue(DISTANCE);
-			return distance < LeavesBlock.DECAY_DISTANCE ? distance : MAX_TOTAL_DISTANCE;
-		}
-
-		return MAX_TOTAL_DISTANCE;
 	}
 
 	/**
@@ -283,7 +267,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public boolean skipRendering(BlockState state, BlockState neighborState, Direction offset) {
+	public boolean skipRendering(BlockState state, BlockState neighborState, Direction direction) {
 		// OptiLeaves optimization: Cull faces with identical neighbors to reduce geometry dense forests.
 		return opti && neighborState.is(state.getBlock());
 	}

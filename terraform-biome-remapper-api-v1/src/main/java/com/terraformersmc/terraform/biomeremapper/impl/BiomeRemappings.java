@@ -25,9 +25,9 @@ public class BiomeRemappings {
 	public static void register(String modId, int dataVersion, ImmutableMap<String, String> remapping) {
 		String key = dataVersion + "_" + modId;
 		if (BIOME_REMAPPING_REGISTRY.containsKey(key)) {
-			BiomeRemapper.LOGGER.debug("Ignored duplicate remapping: " + key);
+			BiomeRemapper.LOGGER.debug("Ignored duplicate remapping: {}", key);
 		} else {
-			BiomeRemapper.LOGGER.debug("Added remapping: " + key);
+			BiomeRemapper.LOGGER.debug("Added remapping: {}", key);
 			BIOME_REMAPPING_REGISTRY.put(key, new RemappingRecord(modId, dataVersion, remapping));
 		}
 	}

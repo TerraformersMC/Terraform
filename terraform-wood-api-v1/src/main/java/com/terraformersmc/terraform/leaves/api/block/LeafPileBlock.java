@@ -22,25 +22,25 @@ public class LeafPileBlock extends Block {
 			0.0D, 0.0D, 0.0D,
 			16.0D, 1.0D, 16.0D);
 
-	public LeafPileBlock(Properties settings) {
-		super(settings);
+	public LeafPileBlock(Properties properties) {
+		super(properties);
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
-		return !state.canSurvive(world, pos) ?
+	public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+		return !state.canSurvive(level, pos) ?
 				Blocks.AIR.defaultBlockState() :
-				super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+				super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		BlockState down = world.getBlockState(pos.below());
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+		BlockState down = level.getBlockState(pos.below());
 
 		return down.canOcclude() || down.getFluidState().is(FluidTags.WATER);
 	}

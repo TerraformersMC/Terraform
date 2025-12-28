@@ -58,8 +58,12 @@
     }
   },
   "mixins": [
-    "mixins.terraform-boat.json",
-    "mixins.terraform-leaves.json",
-    "mixins.terraform-wood.json"
+    {
+      "config": "mixins.client.terraform.leaves.json",
+      "environment": "client"
+    },
+    "mixins.main.terraform.boat.json",
+    "mixins.main.terraform.leaves.json",
+    "mixins.main.terraform.wood.json"
   ]
 }

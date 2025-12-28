@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.tree.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "InvokerFoliagePlacerType",
+    "InvokerTreeDecoratorType",
+    "InvokerTrunkPlacerType",
+    "MixinTrunkPlacer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

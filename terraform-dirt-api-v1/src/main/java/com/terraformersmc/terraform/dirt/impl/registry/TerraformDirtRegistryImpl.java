@@ -18,26 +18,26 @@ public class TerraformDirtRegistryImpl {
 		Objects.requireNonNull(blocks);
 
 		TYPES.add(blocks);
-		BY_GRASS_BLOCK.put(blocks.getGrassBlock(), blocks);
-		BY_FARM_BLOCK.put(blocks.getFarmBlock(), blocks);
+		BY_GRASS_BLOCK.put(blocks.grassBlock(), blocks);
+		BY_FARM_BLOCK.put(blocks.farmBlock(), blocks);
 
-		TillableBlockRegistry.add(blocks.getDirtBlock(), blocks.getFarmBlock().defaultBlockState());
-		TillableBlockRegistry.add(blocks.getGrassBlock(), blocks.getFarmBlock().defaultBlockState());
-		TillableBlockRegistry.add(blocks.getDirtPathBlock(), blocks.getFarmBlock().defaultBlockState());
+		TillableBlockRegistry.add(blocks.dirtBlock(), blocks.farmBlock().defaultBlockState());
+		TillableBlockRegistry.add(blocks.grassBlock(), blocks.farmBlock().defaultBlockState());
+		TillableBlockRegistry.add(blocks.dirtPathBlock(), blocks.farmBlock().defaultBlockState());
 
 		return blocks;
 	}
 
-    public static Optional<DirtBlocks> getFromWorld(LevelSimulatedReader world, BlockPos pos) {
+    public static Optional<DirtBlocks> getFromLevel(LevelSimulatedReader level, BlockPos pos) {
 		for (DirtBlocks blocks: TYPES) {
 			Predicate<BlockState> isDirtLike =
-					state -> state.is(blocks.getDirtBlock()) ||
-							state.is(blocks.getDirtPathBlock()) ||
-							state.is(blocks.getFarmBlock()) ||
-							state.is(blocks.getGrassBlock()) ||
-							state.is(blocks.getPodzolBlock());
+					state -> state.is(blocks.dirtBlock()) ||
+							state.is(blocks.dirtPathBlock()) ||
+							state.is(blocks.farmBlock()) ||
+							state.is(blocks.grassBlock()) ||
+							state.is(blocks.podzolBlock());
 
-			if (world.isStateAtPosition(pos, isDirtLike)) {
+			if (level.isStateAtPosition(pos, isDirtLike)) {
 				return Optional.of(blocks);
 			}
 		}
@@ -45,11 +45,11 @@ public class TerraformDirtRegistryImpl {
 		return Optional.empty();
 	}
 
-	public static Optional<DirtBlocks> getByGrassBlock(Block grass) {
-		return Optional.ofNullable(BY_GRASS_BLOCK.get(grass));
+	public static Optional<DirtBlocks> getByGrassBlock(Block grassBlock) {
+		return Optional.ofNullable(BY_GRASS_BLOCK.get(grassBlock));
 	}
 
-	public static Optional<DirtBlocks> getByFarmBlock(Block farmland) {
-		return Optional.ofNullable(BY_FARM_BLOCK.get(farmland));
+	public static Optional<DirtBlocks> getByFarmBlock(Block farmBlock) {
+		return Optional.ofNullable(BY_FARM_BLOCK.get(farmBlock));
 	}
 }

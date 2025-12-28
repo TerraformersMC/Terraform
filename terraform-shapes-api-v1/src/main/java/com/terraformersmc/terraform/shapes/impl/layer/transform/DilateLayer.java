@@ -4,7 +4,6 @@ import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.layer.TransformationLayer;
 
 public class DilateLayer extends TransformationLayer {
-
     private final Position dilation;
 
     public DilateLayer(Position dilation) {
@@ -21,6 +20,7 @@ public class DilateLayer extends TransformationLayer {
         pos.setX(pos.getX() * this.dilation.getX());
         pos.setY(pos.getY() * this.dilation.getY());
         pos.setZ(pos.getZ() * this.dilation.getZ());
+
         return pos;
     }
 
@@ -29,10 +29,13 @@ public class DilateLayer extends TransformationLayer {
         pos.setX(pos.getX() / this.dilation.getX());
         pos.setY(pos.getY() / this.dilation.getY());
         pos.setZ(pos.getZ() / this.dilation.getZ());
+
         return pos;
     }
 
     private static void checkValidDilation(Position dilation) throws IllegalArgumentException {
-        if (dilation.getX() == 0 || dilation.getY() == 0 || dilation.getZ() == 0) throw new IllegalArgumentException("Cannot dilate by 0");
+        if (dilation.getX() == 0 || dilation.getY() == 0 || dilation.getZ() == 0) {
+			throw new IllegalArgumentException("Cannot dilate by 0");
+		}
     }
 }

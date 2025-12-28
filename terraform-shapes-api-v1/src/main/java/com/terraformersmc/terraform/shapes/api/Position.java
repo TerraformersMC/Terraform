@@ -7,9 +7,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import net.minecraft.core.BlockPos;
 
-
+@SuppressWarnings("unused")
 public interface Position {
-
     double getX();
 
     double getY();
@@ -92,6 +91,7 @@ public interface Position {
                 });
             });
         });
+
         return stream.stream();
     }
 
@@ -119,6 +119,7 @@ public interface Position {
     default Position rotateBy(Quaternion q) {
         Quaternion newQuat = q.copy();
         Quaternion conjugate = q.conjugate();
+
         return newQuat.multiply(this.toQuaternion()).multiply(conjugate).toPosition();
     }
 }

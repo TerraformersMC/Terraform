@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.boat.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "MixinDataFixers"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,11 +23,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 // Rather complex: combine the function of logs, and cobblestone walls.
 
@@ -36,6 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * A very complex smaller log block that can connect on all 6 axes and can be waterlogged.
  * Used for things like the Saguaro Cactus.
  */
+@SuppressWarnings("unused")
 public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	public static final BooleanProperty UP = BlockStateProperties.UP;
@@ -59,8 +59,8 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	protected final VoxelShape[] boundingShapes;
 	protected final Object2IntMap<BlockState> SHAPE_INDEX_CACHE = new Object2IntOpenHashMap<>();
 
-	public BareSmallLogBlock(BlockBehaviour.Properties settings) {
-		super(settings);
+	public BareSmallLogBlock(BlockBehaviour.Properties properties) {
+		super(properties);
 		this.registerDefaultState(this.stateDefinition.any()
 				.setValue(AXIS, Direction.Axis.Y)
 				.setValue(UP, false)
@@ -76,44 +76,8 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 		this.boundingShapes = this.createShapes(LOG_RADIUS);
 	}
 
-	/**
-	 * Factory to create a BareSmallLogBlock with default settings and
-	 * the same map color on all block faces.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor)}
-	 * @param color Map color for all faces of log
-	 * @return New BareSmallLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static BareSmallLogBlock of(MapColor color) {
-		return new BareSmallLogBlock(BlockBehaviour.Properties.of()
-				.mapColor(color)
-				.strength(2.0F)
-				.sound(SoundType.WOOD)
-				.ignitedByLava()
-		);
-	}
-
-	/**
-	 * Factory to create a BareSmallLogBlock with default settings and
-	 * different map colors on the top/bottom versus the sides.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor, MapColor)}
-	 * @param wood Map color for non-bark faces of log (ends)
-	 * @param bark Map color for bark faces of log (sides)
-	 * @return New BareSmallLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static BareSmallLogBlock of(MapColor wood, MapColor bark) {
-		return new BareSmallLogBlock(BlockBehaviour.Properties.of()
-				.mapColor((state) -> state.getValue(UP) ? wood : bark)
-				.strength(2.0F)
-				.sound(SoundType.WOOD)
-				.ignitedByLava()
-		);
-	}
-
 	protected int getShapeIndex(BlockState requested) {
+		//noinspection deprecation
 		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
 			int mask = 0;
 
@@ -211,19 +175,19 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack stack) {
-		super.setPlacedBy(world, pos, state, entity, stack);
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+		super.setPlacedBy(level, pos, state, entity, stack);
 
 		for (Direction direction : Direction.values()) {
 			BlockPos offsetPos = pos.relative(direction);
-			BlockState offsetState = world.getBlockState(offsetPos);
+			BlockState offsetState = level.getBlockState(offsetPos);
 
 			if (offsetState.getBlock() instanceof BareSmallLogBlock) {
-				world.setBlockAndUpdate(offsetPos, getNeighborUpdateState(
+				level.setBlockAndUpdate(offsetPos, getNeighborUpdateState(
 					offsetState,
 					direction.getOpposite(),
 					state,
-					world,
+					level,
 					offsetPos,
 					pos
 				));
@@ -233,8 +197,7 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-
-		LevelReader world = context.getLevel();
+		LevelReader level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		FluidState fluid = context.getLevel().getFluidState(context.getClickedPos());
 
@@ -249,19 +212,19 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 		BlockPos southPos = pos.south();
 		BlockPos westPos = pos.west();
 
-		BlockState upState = world.getBlockState(upPos);
-		BlockState downState = world.getBlockState(downPos);
-		BlockState northState = world.getBlockState(northPos);
-		BlockState eastState = world.getBlockState(eastPos);
-		BlockState southState = world.getBlockState(southPos);
-		BlockState westState = world.getBlockState(westPos);
+		BlockState upState = level.getBlockState(upPos);
+		BlockState downState = level.getBlockState(downPos);
+		BlockState northState = level.getBlockState(northPos);
+		BlockState eastState = level.getBlockState(eastPos);
+		BlockState southState = level.getBlockState(southPos);
+		BlockState westState = level.getBlockState(westPos);
 
-		boolean up = this.shouldConnectTo(upState, upState.isFaceSturdy(world, upPos, Direction.UP));
-		boolean down = this.shouldConnectTo(downState, downState.isFaceSturdy(world, downPos, Direction.DOWN));
-		boolean north = this.shouldConnectTo(northState, northState.isFaceSturdy(world, northPos, Direction.SOUTH));
-		boolean east = this.shouldConnectTo(eastState, eastState.isFaceSturdy(world, eastPos, Direction.WEST));
-		boolean south = this.shouldConnectTo(southState, southState.isFaceSturdy(world, southPos, Direction.NORTH));
-		boolean west = this.shouldConnectTo(westState, westState.isFaceSturdy(world, westPos, Direction.EAST));
+		boolean up = this.shouldConnectTo(upState, upState.isFaceSturdy(level, upPos, Direction.UP));
+		boolean down = this.shouldConnectTo(downState, downState.isFaceSturdy(level, downPos, Direction.DOWN));
+		boolean north = this.shouldConnectTo(northState, northState.isFaceSturdy(level, northPos, Direction.SOUTH));
+		boolean east = this.shouldConnectTo(eastState, eastState.isFaceSturdy(level, eastPos, Direction.WEST));
+		boolean south = this.shouldConnectTo(southState, southState.isFaceSturdy(level, southPos, Direction.NORTH));
+		boolean west = this.shouldConnectTo(westState, westState.isFaceSturdy(level, westPos, Direction.EAST));
 
 		return this.defaultBlockState()
 				.setValue(UP, up)
@@ -305,17 +268,17 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 		return false;
 	}
 
-	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getNeighborUpdateState(BlockState state, Direction fromDirection, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
 		if (state.getValue(WATERLOGGED)) {
-			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 
-		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.DOWN)) || state.getValue(UP);
-		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.UP)) || state.getValue(DOWN);
-		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.SOUTH)) || state.getValue(NORTH);
-		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.WEST)) || state.getValue(EAST);
-		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.NORTH)) || state.getValue(SOUTH);
-		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(world, neighborPos, Direction.EAST)) || state.getValue(WEST);
+		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.DOWN)) || state.getValue(UP);
+		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.UP)) || state.getValue(DOWN);
+		boolean north = fromDirection == Direction.NORTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.SOUTH)) || state.getValue(NORTH);
+		boolean east = fromDirection == Direction.EAST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.WEST)) || state.getValue(EAST);
+		boolean south = fromDirection == Direction.SOUTH && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.NORTH)) || state.getValue(SOUTH);
+		boolean west = fromDirection == Direction.WEST && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.EAST)) || state.getValue(WEST);
 
 		return state
 				.setValue(UP, up)
@@ -332,12 +295,12 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return this.boundingShapes[this.getShapeIndex(state)];
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return this.collisionShapes[this.getShapeIndex(state)];
 	}
 

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.wood.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "InvokerLeavesBlock",
+    "MixinAxeItem"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

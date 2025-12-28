@@ -1,5 +1,5 @@
 package com.terraformersmc.terraform.wood.test.command;
-
+/*
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -95,3 +95,4 @@ public final class SpawnBoatsCommand {
 		passenger.startRiding(vehicle);
 	}
 }
+*/

@@ -5,6 +5,7 @@ import com.terraformersmc.terraform.shapes.api.Shape;
 
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public abstract class TransformationLayer implements Layer {
     protected abstract Position transform(Position pos);
 
@@ -22,6 +23,6 @@ public abstract class TransformationLayer implements Layer {
 
     @Override
     public Predicate<Position> modifyEquation(Shape shape) {
-        return (pos) -> shape.equation().test(this.inverseTransform(pos));
+        return pos -> shape.equation().test(this.inverseTransform(pos));
     }
 }

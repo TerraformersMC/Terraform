@@ -2,7 +2,6 @@ package com.terraformersmc.terraform.boat.api.data;
 
 import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
 import java.util.Optional;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -21,17 +20,21 @@ public interface TerraformBoatData {
 	/**
 	 * Get TerraformBoatData for the requested boat family ID.
 	 * This can be used to fetch various IDs and objects for the boats in the family.
+	 * <p/>
+	 * This method throws an exception if the id has not been registered.
 	 *
 	 * @param id ID of the requested boat family
 	 * @return TerraformBoatData for the requested boat family
 	 */
-	static TerraformBoatDataImpl get(Identifier id) {
+	static TerraformBoatData get(Identifier id) {
 		return TerraformBoatDataImpl.get(id);
 	}
 
 	/**
 	 * Get TerraformBoatData for the requested boat family ID.
 	 * This can be used to fetch various IDs and objects for the boats in the family.
+	 * <p/>
+	 * This method allows the consumer to safely operate on boat data only if it is present.
 	 *
 	 * @param id ID of the requested boat family
 	 * @return TerraformBoatData for the requested boat family
@@ -98,14 +101,14 @@ public interface TerraformBoatData {
 	ResourceKey<EntityType<?>> chestBoatEntityTypeKey();
 
 	/**
-	 * Get the boat's {@link EntityType<BoatEntity>} object.
+	 * Get the boat's {@link EntityType<Boat>} object.
 	 *
 	 * @return EntityType of the boat.
 	 */
 	EntityType<Boat> boatEntityType();
 
 	/**
-	 * Get the chest boat's {@link EntityType<ChestBoatEntity>} object.
+	 * Get the chest boat's {@link EntityType<ChestBoat>} object.
 	 *
 	 * @return EntityType of the chest boat.
 	 */
@@ -114,16 +117,16 @@ public interface TerraformBoatData {
 	/**
 	 * Get the boat's model layers.
 	 *
-	 * @return EntityModelLayer of the boat
+	 * @return Identifier of the boat's entity model layers
 	 */
-	ModelLayerLocation boatModelLayer();
+	Identifier boatModelLayerId();
 
 	/**
 	 * Get the chest boat's model layers.
 	 *
-	 * @return EntityModelLayer of the chest boat
+	 * @return Identifier of the chest boat's entity model layers
 	 */
-	ModelLayerLocation chestBoatModelLayer();
+	Identifier chestBoatModelLayerId();
 
 
 	/**
@@ -183,14 +186,14 @@ public interface TerraformBoatData {
 	ResourceKey<EntityType<?>> chestRaftEntityTypeKey();
 
 	/**
-	 * Get the raft's {@link EntityType<RaftEntity>} object.
+	 * Get the raft's {@link EntityType<Raft>} object.
 	 *
 	 * @return EntityType of the raft.
 	 */
 	EntityType<Raft> raftEntityType();
 
 	/**
-	 * Get the chest raft's {@link EntityType<ChestRaftEntity>} object.
+	 * Get the chest raft's {@link EntityType<ChestRaft>} object.
 	 *
 	 * @return EntityType of the chest raft.
 	 */
@@ -199,14 +202,14 @@ public interface TerraformBoatData {
 	/**
 	 * Get the raft's model layers.
 	 *
-	 * @return EntityModelLayer of the raft
+	 * @return Identifier of the raft's entity model layers
 	 */
-	ModelLayerLocation raftModelLayer();
+	Identifier raftModelLayerId();
 
 	/**
 	 * Get the chest raft's model layers.
 	 *
-	 * @return EntityModelLayer of the chest raft
+	 * @return Identifier of the chest raft's entity model layers
 	 */
-	ModelLayerLocation chestRaftModelLayer();
+	Identifier chestRaftModelLayerId();
 }

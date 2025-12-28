@@ -1,5 +1,18 @@
 package com.terraformersmc.terraform.biomeremapper.api;
 
+/**
+ * Data versions are used to indicate the version of Minecraft upgrading to or
+ * past which should result in a data fixer being applied.  The convenience
+ * versions in this class are the unused data version immediately preceding the
+ * first non-snapshot release (prerelease, release candidate, or release) of
+ * the specified version number.  If there was no unused data version
+ * immediately preceding the first non-snapshot release, the data version of
+ * the release itself is provided instead.
+ * <p/>
+ * You are free to use any data version; see
+ * <a href="https://minecraft.wiki/w/Data_version">the Minecraft Wiki</a>
+ * for a list.
+ */
 @SuppressWarnings("unused")
 public final class DataVersions {
 	@SuppressWarnings("UnnecessaryReturnStatement")

@@ -11,22 +11,22 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TransparentLeavesBlock extends TintedParticleLeavesBlock {
 	/**
 	 * @param leafParticleChance The relative frequency of falling leaf particles emitted by the block
-	 * @param settings The block settings
+	 * @param properties The block properties
 	 */
-	public TransparentLeavesBlock(float leafParticleChance, BlockBehaviour.Properties settings) {
-		super(leafParticleChance, settings);
+	public TransparentLeavesBlock(float leafParticleChance, BlockBehaviour.Properties properties) {
+		super(leafParticleChance, properties);
 	}
 
 	/**
 	 * Default constructor with leaf particle chance of {@code 0.01}, for backward compatibility.
-	 *
+	 * <p/>
 	 * NOTE: this class no longer supports non-tintable leaves.
 	 *
-	 * @param settings The block settings
+	 * @param properties The block properties
 	 */
 	@Deprecated(since = "14.0.0")
-	public TransparentLeavesBlock(BlockBehaviour.Properties settings) {
-		super(0.01f, settings);
+	public TransparentLeavesBlock(BlockBehaviour.Properties properties) {
+		super(0.01f, properties);
 	}
 
 	@Override

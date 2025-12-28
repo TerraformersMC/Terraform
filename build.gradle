@@ -17,27 +17,47 @@ allprojects {
 
 	group = project.maven_group
 
+	loom {
+		splitEnvironmentSourceSets()
+	}
+
 	sourceSets {
 		testmod {
 			compileClasspath += main.compileClasspath
 			runtimeClasspath += main.runtimeClasspath
 		}
+
+		testmodClient {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
+			compileClasspath += client.compileClasspath
+			runtimeClasspath += client.runtimeClasspath
+
+			compileClasspath += testmod.compileClasspath
+			runtimeClasspath += testmod.runtimeClasspath
+		}
+
+		test {
+			compileClasspath += testmodClient.compileClasspath
+			runtimeClasspath += testmodClient.runtimeClasspath
+		}
 	}
 
 	loom {
+		runtimeOnlyLog4j = true
+
 		runs {
 			testmodClient {
 				client()
-				source(sourceSets.testmod)
-
-				name = "Test Mod Client"
+				ideConfigGenerated project.rootProject == project
+				name = "Testmod Client"
+				source sourceSets.testmodClient
 			}
-
 			testmodServer {
 				server()
-				source(sourceSets.testmod)
-
-				name = "Test Mod Server"
+				ideConfigGenerated project.rootProject == project
+				name = "Testmod Server"
+				source sourceSets.testmod
 			}
 		}
 	}
@@ -45,6 +65,8 @@ allprojects {
 	dependencies {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		implementation "net.fabricmc:fabric-loader:$project.loader_version"
+
+		implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
@@ -101,12 +123,12 @@ subprojects {
 	}
 
 	javadoc.enabled = false
+
+	// Apply to each valid subproject.
+	apply from: rootProject.file('gradle/package-info.gradle')
+	apply from: rootProject.file('gradle/validate-annotations.gradle')
 }
 
-dependencies {
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-}
 
 void setupRepositories(RepositoryHandler repositories) {
 	//repositories.mavenLocal() // uncomment for testing

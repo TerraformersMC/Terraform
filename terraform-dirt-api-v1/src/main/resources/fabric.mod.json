@@ -50,6 +50,6 @@
     "moretags": "*"
   },
   "mixins": [
-    "mixins.terraform-dirt.json"
+    "mixins.main.terraform.dirt.json"
   ]
 }

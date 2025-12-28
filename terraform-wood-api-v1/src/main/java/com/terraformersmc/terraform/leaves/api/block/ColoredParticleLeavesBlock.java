@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 /**
  * This leaves block provides an easy way to implement non-tinted colored leaves with non-tinted colored particles.
  * (F.e. like vanilla Cherry leaves.)
- *
+ * <p/>
  * The {@code leaf_particle_color} field accepts an RGB block color which will be applied to the particles.
  */
 @SuppressWarnings("unused")
@@ -36,18 +36,18 @@ public class ColoredParticleLeavesBlock extends LeavesBlock {
 	 *
 	 * @param leafParticleChance The relative frequency of falling leaf particles emitted by the block
 	 * @param blockColor The RGB color of falling leaf particles emitted by the block
-	 * @param settings The block settings
+	 * @param properties The block properties
 	 */
-	public ColoredParticleLeavesBlock(float leafParticleChance, int blockColor, Properties settings) {
-		super(leafParticleChance, settings);
+	public ColoredParticleLeavesBlock(float leafParticleChance, int blockColor, Properties properties) {
+		super(leafParticleChance, properties);
 
 		this.leafParticleColor = blockColor;
 	}
 
 	@Override
-	protected void spawnFallingLeavesParticle(Level world, BlockPos pos, RandomSource random) {
+	protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
 		ColorParticleOption effect = ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, leafParticleColor);
-		ParticleUtils.spawnParticleBelow(world, pos, random, effect);
+		ParticleUtils.spawnParticleBelow(level, pos, random, effect);
 	}
 
 	public MapCodec<? extends ColoredParticleLeavesBlock> codec() {

@@ -25,6 +25,7 @@ import java.util.function.Function;
 public class TerraformSignBlockHelper {
 	private static final Map<Identifier, WoodType> WOOD_TYPE_CACHE = new ConcurrentHashMap<>();
 
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformSignBlockHelper() {
 		return;
 	}
@@ -32,8 +33,8 @@ public class TerraformSignBlockHelper {
 	/**
 	 * Registration helper for vanilla sign types (WallSignBlock, HangingSignBlock, etc.).  The sign block will be
 	 * registered to the block registry, and also as a valid block for the appropriate vanilla sign block entity.
-	 *
-	 * This method requires the block settings applied to the block already had the registry key applied.
+	 * <p/>
+	 * This method requires the block properties applied to the block already had the registry key applied.
 	 *
 	 * @param key The registery key of the sign block to be registered
 	 * @param block The sign block to be registered
@@ -55,18 +56,18 @@ public class TerraformSignBlockHelper {
 	/**
 	 * Registration helper for vanilla sign types (WallSignBlock, HangingSignBlock, etc.).  The sign block will be
 	 * registered to the block registry, and also as a valid block for the appropriate vanilla sign block entity.
-	 *
-	 * This method creates the registry key and applies it to the block settings for you.
+	 * <p/>
+	 * This method creates the registry key and applies it to the block properties for you.
 	 *
 	 * @param id The identifier of the sign block to be registered
-	 * @param factory A factory which creates the block to be registered using the provided block settings
+	 * @param factory A factory which creates the block to be registered using the provided block properties
 	 * @return The registered sign block
 	 * @param <T> A descendant of {@linkplain SignBlock}
 	 */
-	public static <T extends SignBlock> T registerSignBlock(Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties settings) {
+	public static <T extends SignBlock> T registerSignBlock(Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties) {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
 
-		return registerSignBlock(key, factory.apply(settings.setId(key)));
+		return registerSignBlock(key, factory.apply(properties.setId(key)));
 	}
 
 	/**

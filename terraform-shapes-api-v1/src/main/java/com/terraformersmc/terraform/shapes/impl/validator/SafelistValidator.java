@@ -8,29 +8,28 @@ import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SafelistValidator extends AllMeetValidator {
-
     private final List<BlockState> safeStates;
-    private final LevelSimulatedReader testableWorld;
+    private final LevelSimulatedReader level;
 
-    public SafelistValidator(LevelSimulatedReader world, List<BlockState> safeStates) {
+    public SafelistValidator(LevelSimulatedReader level, List<BlockState> safeStates) {
         this.safeStates = safeStates;
-        this.testableWorld = world;
+        this.level = level;
     }
 
-    public SafelistValidator(LevelSimulatedReader world, BlockState ...safeStates) {
-        this(world, Arrays.asList(safeStates));
+    public SafelistValidator(LevelSimulatedReader level, BlockState ...safeStates) {
+        this(level, Arrays.asList(safeStates));
     }
 
-    public static SafelistValidator of(LevelSimulatedReader world, List<BlockState> safeStates) {
-        return new SafelistValidator(world, safeStates);
+    public static SafelistValidator of(LevelSimulatedReader level, List<BlockState> safeStates) {
+        return new SafelistValidator(level, safeStates);
     }
 
-    public static SafelistValidator of(LevelSimulatedReader world, BlockState ...safeStates) {
-        return new SafelistValidator(world, safeStates);
+    public static SafelistValidator of(LevelSimulatedReader level, BlockState ...safeStates) {
+        return new SafelistValidator(level, safeStates);
     }
 
     @Override
     public boolean test(Position position) {
-        return testableWorld.isStateAtPosition(position.toBlockPos(), (state) -> state.isAir() || safeStates.contains(state));
+        return level.isStateAtPosition(position.toBlockPos(), state -> state.isAir() || safeStates.contains(state));
     }
 }

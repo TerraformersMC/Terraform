@@ -3,8 +3,8 @@ package com.terraformersmc.terraform.shapes.api;
 import org.joml.Quaterniondc;
 import org.joml.Quaternionfc;
 
+@SuppressWarnings("unused")
 public interface Quaternion {
-
     static Quaternion of(double ofW, double ofI, double ofJ, double ofK) {
         return new Quaternion() {
             private double w = ofW;

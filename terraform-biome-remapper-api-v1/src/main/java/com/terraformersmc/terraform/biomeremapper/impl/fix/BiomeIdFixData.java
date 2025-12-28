@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import java.util.Map;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 public class BiomeIdFixData {
+	@Nullable
 	public static Int2ObjectArrayMap<Identifier> ACTIVE_BIOME_RAW_ID_MAP = null;
 
 	public static void applyFabricDynamicRegistryMap(Map<Identifier, Object2IntMap<Identifier>> registryMap) {

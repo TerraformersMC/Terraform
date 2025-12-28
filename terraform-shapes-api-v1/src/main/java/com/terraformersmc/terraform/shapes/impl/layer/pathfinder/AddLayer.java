@@ -7,7 +7,6 @@ import com.terraformersmc.terraform.shapes.api.layer.PathfinderLayer;
 import java.util.function.Predicate;
 
 public class AddLayer extends PathfinderLayer {
-
     private final Shape shape;
 
     public AddLayer(Shape shape) {

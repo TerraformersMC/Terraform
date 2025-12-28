@@ -6,12 +6,10 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -22,114 +20,12 @@ import net.minecraft.world.phys.Vec3;
 public class QuarterLogBlock extends RotatedPillarBlock {
 	public static final EnumProperty<BarkSide> BARK_SIDE = EnumProperty.create("bark_side", BarkSide.class);
 
-	public QuarterLogBlock(BlockBehaviour.Properties settings) {
-		super(settings);
+	public QuarterLogBlock(BlockBehaviour.Properties properties) {
+		super(properties);
 
 		this.registerDefaultState(this.stateDefinition.any()
 				.setValue(AXIS, Direction.Axis.Y)
 				.setValue(BARK_SIDE, BarkSide.NORTHEAST));
-	}
-
-	/**
-	 * Factory to create a QuarterLogBlock with default settings and
-	 * the same map color on all block faces.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createSettings(MapColor)}
-	 * @param color Map color for all faces of log
-	 * @return New QuarterLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static QuarterLogBlock of(MapColor color) {
-		return new QuarterLogBlock(BlockBehaviour.Properties.of()
-				.mapColor(color)
-				.strength(2.0F)
-				.sound(SoundType.WOOD)
-				.ignitedByLava()
-		);
-	}
-
-	/**
-	 * Factory to create a QuarterLogBlock with default settings and
-	 * different map colors on the exposed wood versus the bark sides.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createQuarterLogSettings(MapColor, MapColor)}
-	 * @param wood Map color for non-bark faces of log
-	 * @param bark Map color for bark faces of log
-	 * @return New QuarterLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static QuarterLogBlock of(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(BlockBehaviour.Properties.of()
-				.mapColor(
-						(state) ->
-								switch (state.getValue(RotatedPillarBlock.AXIS)) {
-									case Y -> wood;
-									case X ->
-											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
-												case NORTHWEST, SOUTHWEST -> bark;
-												case NORTHEAST, SOUTHEAST -> wood;
-											};
-									case Z ->
-											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
-												case SOUTHEAST, SOUTHWEST -> bark;
-												case NORTHEAST, NORTHWEST -> wood;
-											};
-								}
-				)
-				.strength(2.0F)
-				.sound(SoundType.WOOD)
-				.ignitedByLava()
-		);
-	}
-
-	/**
-	 * Factory to create a Nether QuarterLogBlock with default settings and
-	 * the same map color on all block faces.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createNetherSettings(MapColor)}
-	 * @param color Map color for all faces of log
-	 * @return New QuarterLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static QuarterLogBlock ofNether(MapColor color) {
-		return new QuarterLogBlock(BlockBehaviour.Properties.of()
-				.mapColor(color)
-				.strength(2.0F)
-				.sound(SoundType.NETHER_WOOD)
-		);
-	}
-
-	/**
-	 * Factory to create a Nether QuarterLogBlock with default settings and
-	 * different map colors on the exposed wood versus the bark sides.
-	 *
-	 * @deprecated Use {@linkplain PillarLogHelper#createQuarterLogNetherSettings(MapColor, MapColor)}
-	 * @param wood Map color for non-bark faces of log
-	 * @param bark Map color for bark faces of log
-	 * @return New QuarterLogBlock
-	 */
-	@Deprecated(since = "12.0.0", forRemoval = true)
-	public static QuarterLogBlock ofNether(MapColor wood, MapColor bark) {
-		return new QuarterLogBlock(BlockBehaviour.Properties.of()
-				.mapColor(
-						(state) ->
-								switch (state.getValue(RotatedPillarBlock.AXIS)) {
-									case Y -> wood;
-									case X ->
-											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
-												case NORTHWEST, SOUTHWEST -> bark;
-												case NORTHEAST, SOUTHEAST -> wood;
-											};
-									case Z ->
-											switch (state.getValue(QuarterLogBlock.BARK_SIDE)) {
-												case SOUTHEAST, SOUTHWEST -> bark;
-												case NORTHEAST, NORTHWEST -> wood;
-											};
-								}
-				)
-				.strength(2.0F)
-				.sound(SoundType.NETHER_WOOD)
-		);
 	}
 
 	@Override

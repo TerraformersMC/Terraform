@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.leaves.mixin.client",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "MixinItemBlockRenderTypes"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

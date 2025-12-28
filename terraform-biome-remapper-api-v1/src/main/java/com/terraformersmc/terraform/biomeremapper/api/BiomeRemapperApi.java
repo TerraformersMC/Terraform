@@ -5,7 +5,7 @@ import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
 
 /**
  * BiomeRemapperApi provides an interface to declare biomes to remap during data upgrades.
- *
+ * <p/>
  * To declare remappings, implement the interface in a public class and call the interface's register()
  * method once for each Minecraft data version requiring remappings at upgrade.  In most cases, mods will
  * only require one set of remappings (to the current version), but multiple sets can be needed in certain
@@ -14,13 +14,12 @@ import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
  */
 @SuppressWarnings("unused")
 public interface BiomeRemapperApi {
-
 	/**
 	 * The BiomeRemapperApi.init() method will be called by the biome remapper early during Minecraft
 	 * start-up.  It must be safe to call before the implementing mod has been initialized.  When
 	 * BiomeRemapperApi.init() is called it must immediately register() all required biome remappings.
-	 * See the docs for register() for more details.
-	 *
+	 * See the docs for {@linkplain #register} for more details.
+	 * <p/>
 	 * To use the biome remapper API, something similar to the following must be added to fabric.mod.json
 	 * (where com.something.yourmod.init.BiomeRemapperInit is the class implementing BiomeRemapperApi):
 	 *
@@ -37,10 +36,10 @@ public interface BiomeRemapperApi {
 	/**
 	 * Use BiomeRemapperApi.register() to register remapping maps with the biome remapper.  This must be
 	 * done in the BiomeRemapperApi implementor's init() method.
-	 *
+	 * <p/>
 	 * The modId should be the mod's identifier string, and the dataVersion should be a Minecraft data version.
 	 * Convenience variables for recent versions of Minecraft are available in the DataVersions class.
-	 *
+	 * <p/>
 	 * The remapping is an immutable map of pairs of String values.  In each pair, the first value is the old
 	 * biome identifier string and the second value is the new biome identifier string.
 	 * For example, "traverse:mini_jungle" -> "minecraft:jungle".

@@ -8,7 +8,9 @@ import com.terraformersmc.terraform.dirt.api.DirtBlocks;
 import com.terraformersmc.terraform.dirt.api.TerraformDirtBlockTags;
 import com.terraformersmc.terraform.dirt.impl.registry.TerraformDirtRegistryImpl;
 
+@SuppressWarnings("unused")
 public final class TerraformDirtRegistry {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformDirtRegistry() {
 		return;
 	}
@@ -16,18 +18,17 @@ public final class TerraformDirtRegistry {
 	/**
 	 * Registers a new set of dirt blocks to Terraform.
 	 *
-	 * <p>This is needed to make sure that the dirt can be tilled into farmland, that plants and saplings will work with
-	 * your dirt, and make most other interactions work.</p>
+	 * <p>This is needed to make sure that the dirt can be tilled into farm blocks, that plants and saplings will work
+	 * with your dirt, and make most other interactions work.</p>
 	 *
 	 * <p>Please note that you must add your blocks to the correct {@link TerraformDirtBlockTags tags}</p> as well, or
 	 * else things will not work properly!</p>
 	 *
 	 * @param blocks the DirtBlocks to register with Terraform. Note that you are still responsible for registering the
-	 *               block instances with {@link net.minecraft.core.registries.BuiltInRegistries#BLOCK} yourself, this method does
-	 *               not do that for you.
+	 *               block instances with {@link net.minecraft.core.registries.BuiltInRegistries#BLOCK} yourself, this
+	 *               method does not do that for you.
 	 * @return the registered DirtBlocks instance for convenience
 	 */
-	@SuppressWarnings("unused")
 	public static DirtBlocks register(DirtBlocks blocks) {
 		return TerraformDirtRegistryImpl.register(blocks);
 	}
@@ -38,35 +39,35 @@ public final class TerraformDirtRegistry {
 	 *
 	 * <p>If you are looking for only specific dirt variants, see
 	 * {@link TerraformDirtRegistry#getByGrassBlock(Block)} and
-	 * {@link TerraformDirtRegistry#getByFarmland(Block)}.</p>
+	 * {@link TerraformDirtRegistry#getByFarmBlock(Block)}.</p>
 	 *
-	 * @param world the world to check
-	 * @param pos the block position in the world to check
+	 * @param level the level to check
+	 * @param pos the block position in the level to check
 	 * @return optional of the matching {@link DirtBlocks} if any
      */
-    public static Optional<DirtBlocks> getFromWorld(LevelSimulatedReader world, BlockPos pos) {
-		return TerraformDirtRegistryImpl.getFromWorld(world, pos);
+    public static Optional<DirtBlocks> getFromLevel(LevelSimulatedReader level, BlockPos pos) {
+		return TerraformDirtRegistryImpl.getFromLevel(level, pos);
 	}
 
 	/**
 	 * Return the corresponding DirtBlocks if the given grass block is any Terraform API dirt variant;
 	 * otherwise returns {@link Optional#empty()}.
 	 *
-	 * @param grass the grass block to check
+	 * @param grassBlock the grass block to check
 	 * @return optional of the matching {@link DirtBlocks} if any
 	 */
-	public static Optional<DirtBlocks> getByGrassBlock(Block grass) {
-		return TerraformDirtRegistryImpl.getByGrassBlock(grass);
+	public static Optional<DirtBlocks> getByGrassBlock(Block grassBlock) {
+		return TerraformDirtRegistryImpl.getByGrassBlock(grassBlock);
 	}
 
 	/**
-	 * Return the corresponding DirtBlocks if the given farmland is any Terraform API dirt variant;
+	 * Return the corresponding DirtBlocks if the given farm block is any Terraform API dirt variant;
 	 * otherwise returns {@link Optional#empty()}.
 	 *
-	 * @param farmland the farmland block to check
+	 * @param farmBlock the farm block to check
 	 * @return optional of the matching {@link DirtBlocks} if any
 	 */
-	public static Optional<DirtBlocks> getByFarmland(Block farmland) {
-		return TerraformDirtRegistryImpl.getByFarmBlock(farmland);
+	public static Optional<DirtBlocks> getByFarmBlock(Block farmBlock) {
+		return TerraformDirtRegistryImpl.getByFarmBlock(farmBlock);
 	}
 }

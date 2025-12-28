@@ -10,6 +10,7 @@ import net.minecraft.world.level.ItemLike;
 
 @SuppressWarnings("unused")
 public final class TerraformBoatItemHelper {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformBoatItemHelper() {
 		return;
 	}
@@ -19,14 +20,14 @@ public final class TerraformBoatItemHelper {
 	 * {@linkplain net.minecraft.world.entity.vehicle.boat.Boat boat entity} of the requested type
 	 * and with the default {@linkplain Item.Properties}.  This method assumes the type is a boat
 	 * instead of a raft.
-	 *
+	 * <p/>
 	 * This method should be called once for each boat type.
 	 * Created items and entities will have identifiers similar to
-	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 * {@code id.withSuffix("_boat")} and {@code id.withPrefix("chest_raft/")}.
 	 *
 	 * <pre>{@code
-	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), false);
-	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), true);
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), true);
 	 * }</pre>
 	 *
 	 * @param id The identifier of the boat family
@@ -44,11 +45,11 @@ public final class TerraformBoatItemHelper {
 	 *
 	 * This method should be called once for each boat type.  Both boat and raft may be registered
 	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
-	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 * {@code id.withSuffix("_boat")} and {@code id.withPrefix("chest_raft/")}.
 	 *
 	 * <pre>{@code
-	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), false, false);
-	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), true, false);
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), false, false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), true, false);
 	 * }</pre>
 	 *
 	 * @param id The identifier of the boat family
@@ -67,21 +68,21 @@ public final class TerraformBoatItemHelper {
 	 *
 	 * This method should be called once for each boat type.  Both boat and raft may be registered
 	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
-	 * {@code id.withSuffixedPath("_boat")} and {@code id.withPrefixedPath("chest_raft/")}.
+	 * {@code id.withSuffix("_boat")} and {@code id.withPrefix("chest_raft/")}.
 	 *
 	 * <pre>{@code
-	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), settings, false, false);
-	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.of("examplemod", "mahogany"), settings, true, false);
+	 *     BoatItem boat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), properties, false, false);
+	 *     BoatItem chestBoat = TerraformBoatItemHelper.registerBoatItem(Identifier.fromNamespaceAndPath("examplemod", "mahogany"), properties, true, false);
 	 * }</pre>
 	 *
 	 * @param id The identifier of the boat family
-	 * @param settings Non-default item settings (f.e. changing stack size)
+	 * @param properties Non-default item properties (f.e. changing stack size)
 	 * @param chest Whether the boat is a chest boat
 	 * @param raft Whether the boat is a raft
 	 * @return The created, registered boat item
 	 */
-	public static BoatItem registerBoatItem(Identifier id, Item.Properties settings, boolean chest, boolean raft) {
-		return TerraformBoatItemHelperImpl.registerBoatItem(id, settings, chest, raft);
+	public static BoatItem registerBoatItem(Identifier id, Item.Properties properties, boolean chest, boolean raft) {
+		return TerraformBoatItemHelperImpl.registerBoatItem(id, properties, chest, raft);
 	}
 
 	/**

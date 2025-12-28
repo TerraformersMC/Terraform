@@ -14,14 +14,16 @@ import com.terraformersmc.terraform.dirt.impl.registry.TillableBlockRegistryImpl
  * Allows the addition of custom tillable block mappings. You probably don't need to use this directly if you're using
  * {@link TerraformDirtRegistry}.
  */
+@SuppressWarnings("unused")
 public final class TillableBlockRegistry {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TillableBlockRegistry() {
 		return;
 	}
 
 	/**
 	 * Adds a custom tillable block mapping.
-	 *
+	 * <p/>
 	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
 	 *
 	 * @param block the block being tilled
@@ -33,7 +35,7 @@ public final class TillableBlockRegistry {
 	
 	/**
 	 * Adds a custom tillable block mapping.
-	 *
+	 * <p/>
 	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
 	 *
 	 * @param block the block being tilled

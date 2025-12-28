@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "com.terraformersmc.terraform.dirt.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "MixinAlterGroundDecorator",
+    "MixinAnimal",
+    "MixinCropBlock",
+    "MixinEatBlockGoal",
+    "MixinFarmBlock",
+    "MixinFeature",
+    "MixinVegetationBlock",
+    "MixinPlantingOnFarmland",
+    "MixinRabbitRaidGardenGoal",
+    "MixinSpreadingSnowyDirtBlock",
+    "MixinStemBlock",
+    "MixinSugarCaneBlock",
+    "MixinTrunkPlacer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

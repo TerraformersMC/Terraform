@@ -15,26 +15,9 @@ public class NoiseTranslateLayer implements Layer {
         this.random = random;
     }
 
-	/**
-	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.RandomSource} instead.
-	 */
-	@Deprecated
-    public NoiseTranslateLayer(double magnitude, java.util.Random random) {
-		this(magnitude, RandomSource.create(random.nextLong()));
-	}
-
 	public static NoiseTranslateLayer of(double magnitude, RandomSource random) {
 		return new NoiseTranslateLayer(magnitude, random);
 	}
-
-	/**
-	 * @deprecated Use the version accepting Mojang's {@link net.minecraft.util.RandomSource} instead.
-	 */
-	@Deprecated
-	public static NoiseTranslateLayer of(double magnitude, java.util.Random random) {
-		return new NoiseTranslateLayer(magnitude, random);
-	}
-
 
     @Override
     public Position modifyMax(Shape shape) {
@@ -42,6 +25,7 @@ public class NoiseTranslateLayer implements Layer {
         pos.setX(pos.getX() + magnitude);
         pos.setY(pos.getY() + magnitude);
         pos.setZ(pos.getZ() + magnitude);
+
         return pos;
     }
 
@@ -51,6 +35,7 @@ public class NoiseTranslateLayer implements Layer {
         pos.setX(pos.getX() - magnitude);
         pos.setY(pos.getY() - magnitude);
         pos.setZ(pos.getZ() - magnitude);
+
         return pos;
     }
 
@@ -60,6 +45,7 @@ public class NoiseTranslateLayer implements Layer {
             pos.setX(pos.getX() + (random.nextFloat() * this.magnitude) - (random.nextFloat() * this.magnitude));
             pos.setY(pos.getY() + (random.nextFloat() * this.magnitude) - (random.nextFloat() * this.magnitude));
             pos.setZ(pos.getZ() + (random.nextFloat() * this.magnitude) - (random.nextFloat() * this.magnitude));
+
             return shape.equation().test(pos);
         };
     }

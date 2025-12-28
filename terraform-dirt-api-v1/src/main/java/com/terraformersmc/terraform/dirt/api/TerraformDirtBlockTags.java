@@ -5,6 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
+@SuppressWarnings("unused")
 public final class TerraformDirtBlockTags {
 	/**
 	 * Dirts, grass blocks, and podzol.
@@ -13,6 +14,7 @@ public final class TerraformDirtBlockTags {
 	public static final TagKey<Block> GRASS_BLOCKS = register("grass_blocks");
 	public static final TagKey<Block> FARMLAND = register("farmland");
 
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformDirtBlockTags() {
 		return;
 	}

@@ -4,7 +4,6 @@ import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.Shape;
 
 public class Shapes {
-
     public static Shape rectangle(double w, double d) {
         return Shape.of(
                 (pos) -> pos.getY() > 0 && pos.getY() <= 1,

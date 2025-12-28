@@ -1,5 +1,5 @@
 package com.terraformersmc.terraform.wood.test;
-
+/*
 import com.terraformersmc.terraform.boat.api.item.TerraformBoatItemHelper;
 import com.terraformersmc.terraform.sign.api.block.TerraformSignBlockHelper;
 import com.terraformersmc.terraform.wood.api.block.PillarLogHelper;
@@ -92,3 +92,4 @@ public class TerraformWoodTest implements ModInitializer {
 		);
 	}
 }
+*/

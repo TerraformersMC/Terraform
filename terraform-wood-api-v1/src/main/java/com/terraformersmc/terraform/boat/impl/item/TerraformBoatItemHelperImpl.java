@@ -24,24 +24,25 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class TerraformBoatItemHelperImpl {
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private TerraformBoatItemHelperImpl() {
 		return;
 	}
 
 	private static EntityType.EntityFactory<Boat> getBoatFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new Boat(type, world, itemSupplier);
+		return (type, level) -> new Boat(type, level, itemSupplier);
 	}
 
 	private static EntityType.EntityFactory<ChestBoat> getChestBoatFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new ChestBoat(type, world, itemSupplier);
+		return (type, level) -> new ChestBoat(type, level, itemSupplier);
 	}
 
 	private static EntityType.EntityFactory<Raft> getRaftFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new Raft(type, world, itemSupplier);
+		return (type, level) -> new Raft(type, level, itemSupplier);
 	}
 
 	private static EntityType.EntityFactory<ChestRaft> getChestRaftFactory(Supplier<Item> itemSupplier) {
-		return (type, world) -> new ChestRaft(type, world, itemSupplier);
+		return (type, level) -> new ChestRaft(type, level, itemSupplier);
 	}
 
 	private static <T extends Entity> EntityType.Builder<T> createEntityTypeBuilder(EntityType.EntityFactory<T> factory) {
@@ -56,10 +57,10 @@ public final class TerraformBoatItemHelperImpl {
 		return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, type.build(key));
 	}
 
-	private static <T extends AbstractBoat> BoatItem registerBoat(Identifier id, ResourceKey<Item> itemKey, ResourceKey<EntityType<?>> entityTypeKey, Item.Properties settings, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
+	private static <T extends AbstractBoat> BoatItem registerBoat(Identifier id, ResourceKey<Item> itemKey, ResourceKey<EntityType<?>> entityTypeKey, Item.Properties properties, Function<Supplier<Item>, EntityType.EntityFactory<T>> factory, BiConsumer<Identifier, EntityType<T>> registry) {
 		DelayedItemSupplier itemSupplier = new DelayedItemSupplier();
 		EntityType<T> entityType = registerEntityType(entityTypeKey, createEntityTypeBuilder(factory.apply(itemSupplier)));
-		BoatItem item = Registry.register(BuiltInRegistries.ITEM, itemKey, new BoatItem(entityType, settings.setId(itemKey)));
+		BoatItem item = Registry.register(BuiltInRegistries.ITEM, itemKey, new BoatItem(entityType, properties.setId(itemKey)));
 		itemSupplier.set(item);
 
 		registry.accept(id, entityType);
@@ -69,23 +70,23 @@ public final class TerraformBoatItemHelperImpl {
 	}
 
 
-	public static BoatItem registerBoatItem(Identifier id, Item.Properties settings, boolean chest, boolean raft) {
+	public static BoatItem registerBoatItem(Identifier id, Item.Properties properties, boolean chest, boolean raft) {
 		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.empty(id);
 
 		if (raft) {
 			if (chest) {
-				return registerBoat(id, boatData.chestRaftKey(), boatData.chestRaftEntityTypeKey(), settings,
+				return registerBoat(id, boatData.chestRaftKey(), boatData.chestRaftEntityTypeKey(), properties,
 						TerraformBoatItemHelperImpl::getChestRaftFactory, TerraformBoatDataImpl::addChestRaft);
 			} else {
-				return registerBoat(id, boatData.raftKey(), boatData.raftEntityTypeKey(), settings,
+				return registerBoat(id, boatData.raftKey(), boatData.raftEntityTypeKey(), properties,
 						TerraformBoatItemHelperImpl::getRaftFactory, TerraformBoatDataImpl::addRaft);
 			}
 		} else {
 			if (chest) {
-				return registerBoat(id, boatData.chestBoatKey(), boatData.chestBoatEntityTypeKey(), settings,
+				return registerBoat(id, boatData.chestBoatKey(), boatData.chestBoatEntityTypeKey(), properties,
 						TerraformBoatItemHelperImpl::getChestBoatFactory, TerraformBoatDataImpl::addChestBoat);
 			} else {
-				return registerBoat(id, boatData.boatKey(), boatData.boatEntityTypeKey(), settings,
+				return registerBoat(id, boatData.boatKey(), boatData.boatEntityTypeKey(), properties,
 						TerraformBoatItemHelperImpl::getBoatFactory, TerraformBoatDataImpl::addBoat);
 			}
 		}
