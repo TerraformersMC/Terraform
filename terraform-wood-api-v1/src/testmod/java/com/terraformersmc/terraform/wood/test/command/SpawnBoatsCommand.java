@@ -1,98 +1,97 @@
 package com.terraformersmc.terraform.wood.test.command;
-/*
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.terraformersmc.terraform.boat.impl.data.TerraformBoatDataImpl;
+import com.terraformersmc.terraform.boat.api.data.TerraformBoatData;
 import com.terraformersmc.terraform.wood.test.TerraformWoodTest;
-
-import net.minecraft.advancement.AdvancementEntry;
-import net.minecraft.advancement.AdvancementProgress;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ShulkerEntity;
-import net.minecraft.entity.passive.GoatEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.entity.vehicle.ChestBoatEntity;
-import net.minecraft.entity.vehicle.ChestRaftEntity;
-import net.minecraft.entity.vehicle.RaftEntity;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
+import net.minecraft.world.entity.vehicle.boat.ChestRaft;
+import net.minecraft.world.entity.vehicle.boat.Raft;
+import net.minecraft.world.phys.Vec3;
 
 public final class SpawnBoatsCommand {
-	private static final Identifier ADVANCEMENT_ID = Identifier.ofVanilla("husbandry/ride_a_boat_with_a_goat");
+	private static final Identifier ADVANCEMENT_ID = Identifier.withDefaultNamespace("husbandry/ride_a_boat_with_a_goat");
 
+	@SuppressWarnings("UnnecessaryReturnStatement")
 	private SpawnBoatsCommand() {
 		return;
 	}
 
-	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(CommandManager.literal("terraform_spawn_boats").executes(SpawnBoatsCommand::execute));
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+		dispatcher.register(Commands.literal("terraform_spawn_boats").executes(SpawnBoatsCommand::execute));
 	}
 
-	private static int execute(CommandContext<ServerCommandSource> context) {
-		ServerCommandSource source = context.getSource();
+	private static int execute(CommandContext<CommandSourceStack> context) {
+		CommandSourceStack source = context.getSource();
 
-		ServerWorld world = source.getWorld();
-		Vec3d pos = source.getPosition();
+		ServerLevel level = source.getLevel();
+		Vec3 pos = source.getPosition();
 
-		TerraformBoatDataImpl boatData = TerraformBoatDataImpl.get(TerraformWoodTest.CUSTOM_BOATS_ID);
+		TerraformBoatData boatData = TerraformBoatData.get(TerraformWoodTest.CUSTOM_BOATS_ID);
 
 		// Revoke advancement
-		ServerPlayerEntity player = source.getPlayer();
+		ServerPlayer player = source.getPlayer();
 
 		if (player != null) {
-			AdvancementEntry advancement = source.getServer().getAdvancementLoader().get(ADVANCEMENT_ID);
+			AdvancementHolder advancement = source.getServer().getAdvancements().get(ADVANCEMENT_ID);
 
 			if (advancement != null) {
-				AdvancementProgress progress = player.getAdvancementTracker().getProgress(advancement);
+				AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 
-				if (progress.isAnyObtained()) {
-					for (String criterion : progress.getObtainedCriteria()) {
-						player.getAdvancementTracker().revokeCriterion(advancement, criterion);
+				if (progress.hasProgress()) {
+					for (String criterion : progress.getCompletedCriteria()) {
+						player.getAdvancements().revoke(advancement, criterion);
 					}
 				}
 			}
 		}
 
 		// Spawn boats
-		BoatEntity boat = new BoatEntity(boatData.boatEntityType(), world, () -> TerraformWoodTest.customBoatItem);
-		boat.setPos(pos.getX(), pos.getY(), pos.getZ());
-		world.spawnEntity(boat);
+		Boat boat = new Boat(boatData.boatEntityType(), level, () -> TerraformWoodTest.customBoatItem);
+		boat.setPos(pos.x(), pos.y(), pos.z());
+		level.addFreshEntity(boat);
 
-		ChestBoatEntity chestBoat = new ChestBoatEntity(boatData.chestBoatEntityType(), world, () -> TerraformWoodTest.customChestBoatItem);
-		chestBoat.setPos(pos.getX() - 2, pos.getY(), pos.getZ());
-		world.spawnEntity(chestBoat);
+		ChestBoat chestBoat = new ChestBoat(boatData.chestBoatEntityType(), level, () -> TerraformWoodTest.customChestBoatItem);
+		chestBoat.setPos(pos.x() - 2, pos.y(), pos.z());
+		level.addFreshEntity(chestBoat);
 
-		RaftEntity raft = new RaftEntity(boatData.raftEntityType(), world, () -> TerraformWoodTest.customRaftItem);
-		raft.setPos(pos.getX() - 4, pos.getY(), pos.getZ());
-		world.spawnEntity(raft);
+		Raft raft = new Raft(boatData.raftEntityType(), level, () -> TerraformWoodTest.customRaftItem);
+		raft.setPos(pos.x() - 4, pos.y(), pos.z());
+		level.addFreshEntity(raft);
 
-		ChestRaftEntity chestRaft = new ChestRaftEntity(boatData.chestRaftEntityType(), world, () -> TerraformWoodTest.customChestRaftItem);
-		chestRaft.setPos(pos.getX() - 6, pos.getY(), pos.getZ());
-		world.spawnEntity(chestRaft);
+		ChestRaft chestRaft = new ChestRaft(boatData.chestRaftEntityType(), level, () -> TerraformWoodTest.customChestRaftItem);
+		chestRaft.setPos(pos.x() - 6, pos.y(), pos.z());
+		level.addFreshEntity(chestRaft);
 
 		// Spawn passengers
-		addPassenger(world, new GoatEntity(EntityType.GOAT, world), boat);
-		addPassenger(world, new ShulkerEntity(EntityType.SHULKER, world), chestBoat);
+		addPassenger(level, new Goat(EntityType.GOAT, level), boat);
+		addPassenger(level, new Shulker(EntityType.SHULKER, level), chestBoat);
 
-		addPassenger(world, new GoatEntity(EntityType.GOAT, world), raft);
-		addPassenger(world, new ShulkerEntity(EntityType.SHULKER, world), chestRaft);
+		addPassenger(level, new Goat(EntityType.GOAT, level), raft);
+		addPassenger(level, new Shulker(EntityType.SHULKER, level), chestRaft);
 
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private static void addPassenger(ServerWorld world, MobEntity passenger, Entity vehicle) {
-		passenger.setAiDisabled(true);
-		passenger.setSilent(true);
+	private static void addPassenger(ServerLevel level, Mob passenger, Entity vehicle) {
+		passenger.setNoAi(true);
+		passenger.setNoAi(true);
 
-		world.spawnEntity(passenger);
+		level.addFreshEntity(passenger);
 		passenger.startRiding(vehicle);
 	}
 }
-*/

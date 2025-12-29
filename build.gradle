@@ -70,7 +70,12 @@ allprojects {
 
 		compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
-		testImplementation sourceSets.main.output
+		testmodImplementation sourceSets.main.output
+		testmodClientImplementation sourceSets.main.output
+		testmodClientImplementation sourceSets.client.output
+		testmodClientImplementation sourceSets.testmod.output
+
+		testImplementation sourceSets.testmodClient.output
 	}
 
 	repositories {

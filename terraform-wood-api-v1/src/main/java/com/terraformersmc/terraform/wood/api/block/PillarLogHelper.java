@@ -15,7 +15,7 @@ public final class PillarLogHelper {
 	}
 
 	/**
-	 * Factory to create default block properties for a PillarBlock, QuarterLogBlock,
+	 * Factory to create default block properties for a RotatedPillarBlock, QuarterLogBlock,
 	 * or BareSmallLogBlock log with the same map color on all block faces.
 	 *
 	 * @param color Map color for all faces of log
@@ -30,7 +30,7 @@ public final class PillarLogHelper {
 	}
 
 	/**
-	 * Factory to create default block properties for a PillarBlock or BareSmallLogBlock
+	 * Factory to create default block properties for a RotatedPillarBlock or BareSmallLogBlock
 	 * log with different map colors on the top/bottom versus the sides.
 	 *
 	 * @param wood Map color for non-bark faces of log (ends)

@@ -17,7 +17,5 @@ public interface InvokerLeavesBlock {
 	}
 
 	@Invoker
-	default void callMakeFallingLeavesParticles(Level level, BlockPos pos, RandomSource random, BlockState belowState, BlockPos below) {
-		throw new UnsupportedOperationException();
-	}
+	void callMakeFallingLeavesParticles(Level level, BlockPos pos, RandomSource random, BlockState belowState, BlockPos below);
 }
