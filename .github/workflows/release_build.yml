@@ -6,7 +6,8 @@ jobs:
       matrix:
         # Use these Java versions
         java: [ 25 ]
-        # and run on both Linux and Windows
+        distro: [ zulu ]
+        # and run on these operating systems
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
