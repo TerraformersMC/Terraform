@@ -64,7 +64,7 @@ public final class TerraformBoatItemHelperImpl {
 		itemSupplier.set(item);
 
 		registry.accept(id, entityType);
-		registerBoatDispenserBehavior(item, entityType);
+		registerBoatDispenseItemBehavior(item, entityType);
 
 		return item;
 	}
@@ -92,7 +92,7 @@ public final class TerraformBoatItemHelperImpl {
 		}
 	}
 
-	public static void registerBoatDispenserBehavior(ItemLike item, EntityType<? extends AbstractBoat> boatEntity) {
+	public static void registerBoatDispenseItemBehavior(ItemLike item, EntityType<? extends AbstractBoat> boatEntity) {
 		DispenserBlock.registerBehavior(item, new BoatDispenseItemBehavior(boatEntity));
 	}
 

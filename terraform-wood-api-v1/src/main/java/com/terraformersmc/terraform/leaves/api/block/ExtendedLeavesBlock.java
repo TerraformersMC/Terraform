@@ -48,7 +48,7 @@ import net.minecraft.world.level.material.Fluids;
  * </p>
  */
 /* This class must override every LeavesBlock function that references (compiler inlined) MAX_DISTANCE.
- * The DISTANCE_1_7 property used by LeavesBlock is complemented by our EXTENDED_DISTANCE property.
+ * The DECAY_DISTANCE property used by LeavesBlock is complemented by our EXTENDED_DISTANCE property.
  */
 @SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
 public class ExtendedLeavesBlock extends LeavesBlock {
@@ -57,7 +57,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 							ExtraCodecs.floatRange(0.0f, 1.0f).fieldOf("leaf_particle_chance")
 									.forGetter(arg -> arg.leafParticleChance),
 							ParticleTypes.CODEC.optionalFieldOf("leaf_particle")
-									.forGetter(arg -> arg.leafParticleEffect),
+									.forGetter(arg -> arg.leafParticleOptions),
 							Codec.BOOL.fieldOf("opti")
 									.forGetter(arg -> arg.opti),
 							Codec.BOOL.fieldOf("transparent")
@@ -70,7 +70,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	public static final int MAX_TOTAL_DISTANCE = DECAY_DISTANCE + MAX_EXTENDED_DISTANCE;
 	public static final IntegerProperty EXTENDED_DISTANCE = IntegerProperty.create("extended_distance", 0, MAX_EXTENDED_DISTANCE);
 
-	protected final Optional<ParticleOptions> leafParticleEffect;
+	protected final Optional<ParticleOptions> leafParticleOptions;
 	protected final boolean opti;
 	protected final boolean transparent;
 
@@ -78,15 +78,15 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * Full options constructor for Terraform ExtendedLeaves.
 	 *
 	 * @param leafParticleChance The relative likelihood of each leaf block spawning leaf particles
-	 * @param leafParticleEffect Optional {@link ParticleOptions} to use instead of biome tinted falling leaf particles
+	 * @param leafParticleOptions Optional {@link ParticleOptions} to use instead of biome tinted falling leaf particles
 	 * @param opti Whether to enable the opti-leaves feature
 	 * @param transparent Whether to allow light to pass freely through the block
 	 * @param properties The block properties
 	 */
-	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleEffect, boolean opti, boolean transparent, BlockBehaviour.Properties properties) {
+	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleOptions, boolean opti, boolean transparent, BlockBehaviour.Properties properties) {
 		super(leafParticleChance, properties);
 
-		this.leafParticleEffect = leafParticleEffect;
+		this.leafParticleOptions = leafParticleOptions;
 		this.opti = opti;
 		this.transparent = transparent;
 
@@ -118,7 +118,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 
 	@Override
 	protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
-		ParticleUtils.spawnParticleBelow(level, pos, random, leafParticleEffect
+		ParticleUtils.spawnParticleBelow(level, pos, random, leafParticleOptions
 				.orElse(ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, level.getClientLeafTintColor(pos))));
 	}
 

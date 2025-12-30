@@ -68,6 +68,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 			BlockState belowState = level.getBlockState(below);
 
 			InvokerLeavesBlock.callMakeDrippingWaterParticles(level, pos, random, belowState, below);
+			//noinspection ReferenceToMixin
 			((InvokerLeavesBlock) this.leaves).callMakeFallingLeavesParticles(level, pos, random, belowState, below);
 		}
 	}

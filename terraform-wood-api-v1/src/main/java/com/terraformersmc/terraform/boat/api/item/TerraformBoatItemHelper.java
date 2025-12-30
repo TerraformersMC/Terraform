@@ -96,7 +96,7 @@ public final class TerraformBoatItemHelper {
 	 * @param item The item for which to register the dispenser behavior
 	 * @param boatEntity The boat entity which should be dispensed
 	 */
-	public static void registerBoatDispenserBehavior(ItemLike item, EntityType<? extends AbstractBoat> boatEntity) {
-		TerraformBoatItemHelperImpl.registerBoatDispenserBehavior(item, boatEntity);
+	public static void registerBoatDispenseItemBehavior(ItemLike item, EntityType<? extends AbstractBoat> boatEntity) {
+		TerraformBoatItemHelperImpl.registerBoatDispenseItemBehavior(item, boatEntity);
 	}
 }

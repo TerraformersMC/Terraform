@@ -9,12 +9,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class BiomeConfigHandler {
 	private final String namespace;
-	private File file;
-	private BiomeConfig config;
+	private @Nullable File file;
+	private @Nullable BiomeConfig config;
 
 	public BiomeConfigHandler(String namespace) {
 		this.namespace = namespace;

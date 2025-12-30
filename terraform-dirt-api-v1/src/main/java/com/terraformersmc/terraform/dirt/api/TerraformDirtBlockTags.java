@@ -19,7 +19,7 @@ public final class TerraformDirtBlockTags {
 		return;
 	}
 
-	private static TagKey<Block> register(String id) {
-		return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("terraform", id));
+	private static TagKey<Block> register(String name) {
+		return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("terraform", name));
 	}
 }

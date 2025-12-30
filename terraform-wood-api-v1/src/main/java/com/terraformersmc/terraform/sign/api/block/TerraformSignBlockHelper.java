@@ -36,7 +36,7 @@ public class TerraformSignBlockHelper {
 	 * <p/>
 	 * This method requires the block properties applied to the block already had the registry key applied.
 	 *
-	 * @param key The registery key of the sign block to be registered
+	 * @param key The resource key of the sign block to be registered
 	 * @param block The sign block to be registered
 	 * @return The registered sign block
 	 * @param <T> A descendant of {@linkplain SignBlock}
@@ -57,7 +57,7 @@ public class TerraformSignBlockHelper {
 	 * Registration helper for vanilla sign types (WallSignBlock, HangingSignBlock, etc.).  The sign block will be
 	 * registered to the block registry, and also as a valid block for the appropriate vanilla sign block entity.
 	 * <p/>
-	 * This method creates the registry key and applies it to the block properties for you.
+	 * This method creates the resource key and applies it to the block properties for you.
 	 *
 	 * @param id The identifier of the sign block to be registered
 	 * @param factory A factory which creates the block to be registered using the provided block properties

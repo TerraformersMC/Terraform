@@ -5,8 +5,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.terraformersmc.terraform.boat.api.data.TerraformBoatData;
 import com.terraformersmc.terraform.wood.test.TerraformWoodTest;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.Identifier;
@@ -22,16 +24,18 @@ import net.minecraft.world.entity.vehicle.boat.ChestBoat;
 import net.minecraft.world.entity.vehicle.boat.ChestRaft;
 import net.minecraft.world.entity.vehicle.boat.Raft;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NullMarked;
 
-public final class SpawnBoatsCommand {
+@NullMarked
+public final class SpawnBoatsCommand implements CommandRegistrationCallback {
+	public static final SpawnBoatsCommand INSTANCE = new SpawnBoatsCommand();
 	private static final Identifier ADVANCEMENT_ID = Identifier.withDefaultNamespace("husbandry/ride_a_boat_with_a_goat");
 
-	@SuppressWarnings("UnnecessaryReturnStatement")
 	private SpawnBoatsCommand() {
-		return;
 	}
 
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+	@Override
+	public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
 		dispatcher.register(Commands.literal("terraform_spawn_boats").executes(SpawnBoatsCommand::execute));
 	}
 
@@ -89,7 +93,7 @@ public final class SpawnBoatsCommand {
 
 	private static void addPassenger(ServerLevel level, Mob passenger, Entity vehicle) {
 		passenger.setNoAi(true);
-		passenger.setNoAi(true);
+		passenger.setSilent(true);
 
 		level.addFreshEntity(passenger);
 		passenger.startRiding(vehicle);

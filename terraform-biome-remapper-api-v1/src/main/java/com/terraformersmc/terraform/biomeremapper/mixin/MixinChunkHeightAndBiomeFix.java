@@ -18,6 +18,7 @@ public class MixinChunkHeightAndBiomeFix {
 				return (V) map.get(rawId).toString();
 			}
 		}
+
 		return instance.getOrDefault(rawId, defaultValue);
 	}
 }

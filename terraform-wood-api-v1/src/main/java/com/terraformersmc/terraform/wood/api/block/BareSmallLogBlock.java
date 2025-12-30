@@ -77,8 +77,7 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	protected int getShapeIndex(BlockState requested) {
-		//noinspection deprecation
-		return this.SHAPE_INDEX_CACHE.computeIntIfAbsent(requested, state -> {
+		return this.SHAPE_INDEX_CACHE.computeIfAbsent(requested, (BlockState state) -> {
 			int mask = 0;
 
 			if (state.getValue(UP)) {
@@ -305,7 +304,7 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	/**
-	 * You can call this method on Terraformers API small logs to get the log radius.
+	 * You can call this method on Terraform API small logs to get the log radius.
 	 * The trunk will occupy 2*getLogRadius() centered in the block.
 	 *
 	 * <pre>{@code

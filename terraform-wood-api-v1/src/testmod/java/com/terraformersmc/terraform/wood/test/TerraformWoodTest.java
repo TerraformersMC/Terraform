@@ -76,21 +76,19 @@ public class TerraformWoodTest implements ModInitializer {
 		Registry.register(BuiltInRegistries.ITEM, CUSTOM_SIGN_ID, signItem);
 		Registry.register(BuiltInRegistries.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
-			entries.addAfter(Items.CHERRY_BUTTON, customLogItem, customPlanksItem);
-		});
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries ->
+			entries.addAfter(Items.CHERRY_BUTTON, customLogItem, customPlanksItem)
+		);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
-			entries.addAfter(Items.CHERRY_HANGING_SIGN, signItem, hangingSignItem);
-		});
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries ->
+			entries.addAfter(Items.CHERRY_HANGING_SIGN, signItem, hangingSignItem)
+		);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
-			entries.addAfter(Items.CHERRY_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem);
-		});
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries ->
+			entries.addAfter(Items.CHERRY_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem)
+		);
 
 		// Utility commands
-		CommandRegistrationCallback.EVENT.register(
-				(dispatcher, registryAccess, environment) -> SpawnBoatsCommand.register(dispatcher)
-		);
+		CommandRegistrationCallback.EVENT.register(SpawnBoatsCommand.INSTANCE);
 	}
 }

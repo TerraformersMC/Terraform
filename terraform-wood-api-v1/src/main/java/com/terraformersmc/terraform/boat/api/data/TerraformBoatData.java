@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 
 /**
  * Read-only access interface for boat data records used by the boat API to register boats.
- * Provides access to identifiers, entity types, and model layer data.
+ * Provides access to identifiers and entity types.
  */
 @SuppressWarnings("unused")
 public interface TerraformBoatData {

@@ -5,9 +5,9 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 public class BiomeConfig {
-	private boolean freeze;
-	private Map<String, BiomeConfigNode.Continental> continental = new HashMap<>();
-	private Map<String, BiomeConfigNode.Variant> variants = new HashMap<>();
+	private final boolean freeze;
+	private final Map<String, BiomeConfigNode.Continental> continental = new HashMap<>();
+	private final Map<String, BiomeConfigNode.Variant> variants = new HashMap<>();
 
 	public BiomeConfig() {
 		this(false);

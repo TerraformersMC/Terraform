@@ -17,18 +17,6 @@ public class TransparentLeavesBlock extends TintedParticleLeavesBlock {
 		super(leafParticleChance, properties);
 	}
 
-	/**
-	 * Default constructor with leaf particle chance of {@code 0.01}, for backward compatibility.
-	 * <p/>
-	 * NOTE: this class no longer supports non-tintable leaves.
-	 *
-	 * @param properties The block properties
-	 */
-	@Deprecated(since = "14.0.0")
-	public TransparentLeavesBlock(BlockBehaviour.Properties properties) {
-		super(0.01f, properties);
-	}
-
 	@Override
 	public int getLightBlock(BlockState state) {
 		return 0;
