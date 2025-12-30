@@ -5,9 +5,9 @@ jobs:
     strategy:
       matrix:
         # Use these Java versions
-        java: [21]
+        java: [ 25 ]
         # and run on both Linux and Windows
-        os: [ubuntu-24.04]
+        os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -17,7 +17,7 @@ jobs:
       - name: Setup JDK ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: ${{ matrix.distro }}
           java-version: ${{ matrix.java }}
       - name: Make Gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
@@ -29,7 +29,7 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
       - name: Capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '21' }} # Only upload artifacts built from LTS java on one OS
+        if: ${{ runner.os == 'Linux' && matrix.java == '25' }} # Only upload artifacts built from LTS java on one OS
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
