@@ -6,7 +6,7 @@ import com.terraformersmc.terraform.wood.api.block.PillarLogHelper;
 import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -76,16 +76,16 @@ public class TerraformWoodTest implements ModInitializer {
 		Registry.register(BuiltInRegistries.ITEM, CUSTOM_SIGN_ID, signItem);
 		Registry.register(BuiltInRegistries.ITEM, CUSTOM_HANGING_SIGN_ID, hangingSignItem);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries ->
-			entries.addAfter(Items.CHERRY_BUTTON, customLogItem, customPlanksItem)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS).register(output ->
+			output.insertAfter(Items.CHERRY_BUTTON, customLogItem, customPlanksItem)
 		);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries ->
-			entries.addAfter(Items.CHERRY_HANGING_SIGN, signItem, hangingSignItem)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output ->
+			output.insertAfter(Items.CHERRY_HANGING_SIGN, signItem, hangingSignItem)
 		);
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries ->
-			entries.addAfter(Items.CHERRY_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output ->
+			output.insertAfter(Items.CHERRY_CHEST_BOAT, customBoatItem, customChestBoatItem, customRaftItem, customChestRaftItem)
 		);
 
 		// Utility commands

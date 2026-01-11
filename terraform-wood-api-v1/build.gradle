@@ -9,5 +9,5 @@ dependencies {
 	implementation fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
 
 	testmodImplementation fabricApi.module("fabric-command-api-v2", project.fabric_version)
-	testmodImplementation fabricApi.module("fabric-item-group-api-v1", project.fabric_version)
+	testmodImplementation fabricApi.module("fabric-creative-tab-api-v1", project.fabric_version)
 }
