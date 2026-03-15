@@ -1,9 +1,9 @@
 package com.terraformersmc.terraform.dirt.api;
 
 import com.terraformersmc.terraform.dirt.api.block.TerraformDirtPathBlock;
-import com.terraformersmc.terraform.dirt.api.block.TerraformFarmBlock;
+import com.terraformersmc.terraform.dirt.api.block.TerraformFarmlandBlock;
 import com.terraformersmc.terraform.dirt.api.block.TerraformGrassBlock;
-import com.terraformersmc.terraform.dirt.api.block.TerraformSnowyDirtBlock;
+import com.terraformersmc.terraform.dirt.api.block.TerraformSnowyBlock;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -14,7 +14,7 @@ public record DirtBlocks(
 	Block dirtBlock,
 	TerraformGrassBlock grassBlock,
 	TerraformDirtPathBlock dirtPathBlock,
-	TerraformSnowyDirtBlock podzolBlock,
-	TerraformFarmBlock farmBlock
+	TerraformSnowyBlock podzolBlock,
+	TerraformFarmlandBlock farmBlock
 ) {
 }

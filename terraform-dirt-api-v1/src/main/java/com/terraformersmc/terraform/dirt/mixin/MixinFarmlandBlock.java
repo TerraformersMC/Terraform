@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(FarmBlock.class)
-public class MixinFarmBlock extends Block {
-	public MixinFarmBlock(Properties properties) {
+@Mixin(FarmlandBlock.class)
+public class MixinFarmlandBlock extends Block {
+	public MixinFarmlandBlock(Properties properties) {
 		super(properties);
 	}
 
@@ -43,7 +43,7 @@ public class MixinFarmBlock extends Block {
 		// Note: as of 1.20.2, vanilla uses FarmlandBlock.setToDirt() for all trample-able blocks;
 		// we are not responsible for evaluating whether the block can be trampled, here.
 		TerraformDirtRegistryImpl.getFromLevel(level, pos).ifPresent(blocks -> {
-			BlockState dirtState = FarmBlock.pushEntitiesUp(state, blocks.dirtBlock().defaultBlockState(), level, pos);
+			BlockState dirtState = FarmlandBlock.pushEntitiesUp(state, blocks.dirtBlock().defaultBlockState(), level, pos);
 			level.setBlockAndUpdate(pos, dirtState);
 			level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, dirtState));
 

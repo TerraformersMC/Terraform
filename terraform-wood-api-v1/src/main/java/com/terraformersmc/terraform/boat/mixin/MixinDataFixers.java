@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BiFunction;
 import net.minecraft.util.datafix.DataFixers;
@@ -26,8 +26,8 @@ public class MixinDataFixers {
 	 * This is required in order for Terraform boats to be upgraded from <1.21.2 to >=1.21.2.
 	 * Boats not registered in this manner will be converted to oak wood type at upgrade.
 	 */
-	@Inject(method = "createFixerUpper", at = @At("HEAD"))
-	private static void create(CallbackInfoReturnable<DataFixerBuilder.Result> cir) {
+	@Inject(method = "addFixers", at = @At("TAIL"))
+	private static void create(CallbackInfo ci) {
 		TerraformBoatDfu.init();
 	}
 

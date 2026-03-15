@@ -138,7 +138,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public int getLightBlock(BlockState state) {
+	public int getLightDampening(BlockState state) {
 		return transparent ? 0 : 1;
 	}
 

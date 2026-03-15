@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
+import net.minecraft.world.level.block.SpreadingSnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(SpreadingSnowyDirtBlock.class)
-public abstract class MixinSpreadingSnowyDirtBlock {
+@Mixin(SpreadingSnowyBlock.class)
+public abstract class MixinSpreadingSnowyBlock {
 	@Inject(method = "randomTick",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"),
 			locals = LocalCapture.CAPTURE_FAILHARD
@@ -25,7 +25,7 @@ public abstract class MixinSpreadingSnowyDirtBlock {
 		if (grassBlock != null) {
 			BlockState grassDefaultState = grassBlock.defaultBlockState();
 			if (TerraformGrassBlock.canPropagate(grassDefaultState, level, spreadingPos)) {
-				level.setBlockAndUpdate(spreadingPos, grassDefaultState.setValue(SpreadingSnowyDirtBlock.SNOWY, level.getBlockState(spreadingPos.above()).getBlock() == Blocks.SNOW));
+				level.setBlockAndUpdate(spreadingPos, grassDefaultState.setValue(SpreadingSnowyBlock.SNOWY, level.getBlockState(spreadingPos.above()).getBlock() == Blocks.SNOW));
 			}
 		}
 	}

@@ -8,11 +8,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrassBlock;
-import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
@@ -69,7 +65,7 @@ public class TerraformGrassBlock extends GrassBlock {
 		} else if (aboveState.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int lightingAt = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightBlock());
+			int lightingAt = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightDampening());
 
 			return lightingAt < MAX_LIGHT_LEVEL;
 		}
@@ -100,7 +96,7 @@ public class TerraformGrassBlock extends GrassBlock {
 					Block spreadedBlock = spreadsTo.get(spreadTarget);
 					if (spreadedBlock != null && canPropagate(defaultState, level, spreadingPos)) {
 						BlockState spreadedState = spreadedBlock.defaultBlockState();
-						if (spreadedBlock instanceof SnowyDirtBlock) {
+						if (spreadedBlock instanceof SnowyBlock) {
 							spreadedState = spreadedState.setValue(SNOWY, level.getBlockState(spreadingPos.above()).getBlock() == Blocks.SNOW);
 						}
 						level.setBlockAndUpdate(spreadingPos, spreadedState);

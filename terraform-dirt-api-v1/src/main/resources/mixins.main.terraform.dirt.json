@@ -7,15 +7,15 @@
     "MixinAnimal",
     "MixinCropBlock",
     "MixinEatBlockGoal",
-    "MixinFarmBlock",
+    "MixinFarmlandBlock",
     "MixinFeature",
-    "MixinVegetationBlock",
     "MixinPlantingOnFarmland",
     "MixinRabbitRaidGardenGoal",
-    "MixinSpreadingSnowyDirtBlock",
+    "MixinSpreadingSnowyBlock",
     "MixinStemBlock",
     "MixinSugarCaneBlock",
     "MixinTrunkPlacer"
+    "MixinVegetationBlock"
   ],
   "injectors": {
     "defaultRequire": 1
