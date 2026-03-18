@@ -14,7 +14,7 @@
     "MixinSpreadingSnowyBlock",
     "MixinStemBlock",
     "MixinSugarCaneBlock",
-    "MixinTrunkPlacer"
+    "MixinTrunkPlacer",
     "MixinVegetationBlock"
   ],
   "injectors": {
