@@ -1,19 +1,25 @@
 package com.terraformersmc.terraform.dirt.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.terraformersmc.terraform.dirt.api.TerraformDirtBlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Feature.class)
 public class MixinFeature {
-	@Inject(method = "isDirt(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At("HEAD"), cancellable = true)
-	private static void terraformDirt$includeCustomSoil(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-		if (state.is(TerraformDirtBlockTags.SOIL)) {
-			cir.setReturnValue(true);
+	@WrapMethod(
+		method = "lambda$isReplaceable$0"
+	)
+	private static boolean terraformDirt$includeCustomSoil(TagKey<Block> cannotReplaceTag, BlockState state, Operation<Boolean> operation) {
+		if (Blocks.DIRT.defaultBlockState().is(cannotReplaceTag) && state.is(TerraformDirtBlockTags.SOIL)) {
+			return false;
 		}
+
+		return operation.call(cannotReplaceTag, state);
 	}
 }

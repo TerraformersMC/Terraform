@@ -36,6 +36,7 @@ public class MixinLevelStorageAccess {
 			CompoundTag nbt = NbtIo.readCompressed(fileInputStream, NbtAccounter.unlimitedHeap());
 			fileInputStream.close();
 
+			//noinspection UnstableApiUsage
 			BiomeIdFixData.applyFabricDynamicRegistryMap(RegistryMapSerializer.fromNbt(nbt));
 
 			return true;
@@ -44,7 +45,7 @@ public class MixinLevelStorageAccess {
 		return false;
 	}
 
-	@Inject(method = "getDataTag(Z)Lcom/mojang/serialization/Dynamic;", at = @At("HEAD"))
+	@Inject(method = "getUnfixedDataTag(Z)Lcom/mojang/serialization/Dynamic;", at = @At("HEAD"))
 	public void terraformBiomeRemapper$readWorldProperties(CallbackInfoReturnable<WorldData> callbackInfo) {
 		try {
 			if (terraformBiomeRemapper$readIdMapFile(new File(new File(levelDirectory.path().toFile(), "data"), "fabricDynamicRegistry.dat"))) {

@@ -4,6 +4,7 @@ import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings;
 import com.terraformersmc.terraform.biomeremapper.impl.BiomeRemappings.RemappingRecord;
+import net.minecraft.util.filefix.FileFixerUpper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +33,7 @@ public class MixinDataFixers {
 	private static UnaryOperator<String> createRenamer(Map<String, String> replacements) { return null; }
 
 	@Inject(method = "addFixers", at = @At("TAIL"))
-	private static void terraformBiomeRemapper$injectDataFixers(DataFixerBuilder builder, CallbackInfo ci) {
+	private static void terraformBiomeRemapper$injectDataFixers(final DataFixerBuilder fixerUpper, final FileFixerUpper.Builder fileFixerUpper, CallbackInfo ci) {
 		final Hashtable<Integer, Schema> SCHEMA_CACHE = new Hashtable<>(2);
 
 		// This collects all the requested remappings into BIOME_REMAPPING_REGISTRY.
@@ -44,10 +45,10 @@ public class MixinDataFixers {
 			// We use a single schema for each targeted Minecraft data version.
 			Schema schema = SCHEMA_CACHE.computeIfAbsent(
 					remappingRecord.dataVersion(),
-					dataVersion -> builder.addSchema(dataVersion, SAME_NAMESPACED)
+					dataVersion -> fixerUpper.addSchema(dataVersion, SAME_NAMESPACED)
 			);
 			// Associate the requested schema with a freshly built fix for each remapping.
-			builder.addFixer(new NamespacedTypeRenameFix(
+			fixerUpper.addFixer(new NamespacedTypeRenameFix(
 					schema,
 					"Terraform biome remapper fix for " + remappingRecord.modId() + " at data version " + remappingRecord.dataVersion(),
 					References.BIOME,
