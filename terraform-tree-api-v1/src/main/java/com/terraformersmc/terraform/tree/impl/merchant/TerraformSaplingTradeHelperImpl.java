@@ -1,23 +1,15 @@
 package com.terraformersmc.terraform.tree.impl.merchant;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.VillagerTrade;
-import net.minecraft.world.item.trading.VillagerTrades;
 import net.minecraft.world.level.ItemLike;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static net.minecraft.world.item.trading.VillagerTrades.resourceKey;
 
+/**
+ * This class is no longer useful, as trades must now be registered via json data.
+ */
+@Deprecated(since = "17.0.0-alpha.1", forRemoval = true)
 public final class TerraformSaplingTradeHelperImpl {
 	public static final ResourceKey<VillagerTrade> WANDERING_TRADER_EMERALD_SPRUCE_SAPLING = resourceKey("wandering_trader/emerald_spruce_sapling");
 
@@ -26,6 +18,14 @@ public final class TerraformSaplingTradeHelperImpl {
 		return;
 	}
 
+	/**
+	 * This method is no longer useful, as trades must now be registered via json data.
+	 * <p/>
+	 * To raise visibility, an exception will be thrown if this method is called.
+	 *
+	 * @param saplings ignored
+	 */
+	@Deprecated(since = "17.0.0-alpha.1", forRemoval = true)
 	public static void registerWanderingTraderSaplingTrades(ItemLike... saplings) {
 /* TODO:  This feature is no longer useful, as trades are data.  Evaluate whether a datagen helper is useful.
 		TradeOfferHelper.registerWanderingTraderOffers(builder ->
@@ -45,5 +45,7 @@ public final class TerraformSaplingTradeHelperImpl {
 			return new MerchantOffer(new ItemCost(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
 		}
 */
+
+		throw new UnsupportedOperationException("registerWanderingTraderSaplingTrades has been removed from the API");
 	}
 }
