@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "MixinChunkHeightAndBiomeFix",
-    "MixinLevelStorageAccess",
-    "MixinDataFixers"
+    "MixinDataFixers",
+    "MixinLevelStorageAccess"
   ],
   "injectors": {
     "defaultRequire": 1

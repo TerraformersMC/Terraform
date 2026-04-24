@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.tree.impl.merchant;
 
+import net.minecraft.data.tags.KeyTagProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.ItemLike;
@@ -20,32 +21,40 @@ public final class TerraformSaplingTradeHelperImpl {
 
 	/**
 	 * This method is no longer useful, as trades must now be registered via json data.
-	 * <p/>
 	 * To raise visibility, an exception will be thrown if this method is called.
+	 * <p/>
+	 * This should instead be achieved via datagen, with a {@linkplain KeyTagProvider}<{@linkplain VillagerTrade}>.
+	 * The provider from Traverse for 26.1 is provided below as an example:
+	 *
+	 * <pre>{@code
+	 * @NullMarked
+	 * public class TraverseVillagerTradeKeyTagProvider extends KeyTagProvider<VillagerTrade> {
+	 *     protected TraverseVillagerTradeKeyTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+	 *         super(output, Registries.VILLAGER_TRADE, lookupProvider);
+	 *     }
+	 *
+	 *     @Override
+	 *     public void addTags(HolderLookup.Provider registries) {
+	 *         this.tag(VillagerTradeTags.WANDERING_TRADER_COMMON)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_FIR_LOG)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_FIR_SAPLING)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_BROWN_AUTUMNAL_SAPLING)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_ORANGE_AUTUMNAL_SAPLING)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_RED_AUTUMNAL_SAPLING)
+	 *             .add(TraverseVillagerTrades.WANDERING_TRADER_EMERALD_YELLOW_AUTUMNAL_SAPLING);
+	 *     }
+	 *
+	 *     @Override
+	 *     public String getName() {
+	 *         return "Traverse Villager Trade Tags";
+	 *     }
+	 * }
+	 * }</pre>
 	 *
 	 * @param saplings ignored
 	 */
 	@Deprecated(since = "17.0.0-alpha.1", forRemoval = true)
 	public static void registerWanderingTraderSaplingTrades(ItemLike... saplings) {
-/* TODO:  This feature is no longer useful, as trades are data.  Evaluate whether a datagen helper is useful.
-		TradeOfferHelper.registerWanderingTraderOffers(builder ->
-				builder.addOffersToPool(TradeOfferHelper.WanderingTraderOffersBuilder.SELL_COMMON_ITEMS_POOL,
-						Arrays.stream(saplings).map(SellSaplingFactory::new).collect(Collectors.toSet())));
-	}
-
-	private static class SellSaplingFactory implements VillagerTrades.ItemListing {
-		private final ItemStack sapling;
-
-		public SellSaplingFactory(ItemLike sapling) {
-			this.sapling = new ItemStack(sapling);
-		}
-
-		@Override
-		public @Nullable MerchantOffer getOffer(ServerLevel world, Entity entity, RandomSource random) {
-			return new MerchantOffer(new ItemCost(Items.EMERALD, 5), this.sapling, 8, 1, 0.05f);
-		}
-*/
-
 		throw new UnsupportedOperationException("registerWanderingTraderSaplingTrades has been removed from the API");
 	}
 }

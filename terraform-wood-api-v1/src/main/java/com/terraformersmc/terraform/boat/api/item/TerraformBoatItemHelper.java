@@ -42,7 +42,7 @@ public final class TerraformBoatItemHelper {
 	 * Creates and registers a {@linkplain BoatItem boat item} and associated
 	 * {@linkplain net.minecraft.world.entity.vehicle.boat.Boat boat entity} of the requested type
 	 * and with the default {@linkplain Item.Properties}.
-	 *
+	 * <p/>
 	 * This method should be called once for each boat type.  Both boat and raft may be registered
 	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
 	 * {@code id.withSuffix("_boat")} and {@code id.withPrefix("chest_raft/")}.
@@ -65,7 +65,7 @@ public final class TerraformBoatItemHelper {
 	 * Creates and registers a {@linkplain BoatItem boat item} and associated
 	 * {@linkplain net.minecraft.world.entity.vehicle.boat.Boat boat entity} of the requested type
 	 * and with the provided {@linkplain Item.Properties}.
-	 *
+	 * <p/>
 	 * This method should be called once for each boat type.  Both boat and raft may be registered
 	 * for the same wood type, if desired.  Created items and entities will have identifiers similar to
 	 * {@code id.withSuffix("_boat")} and {@code id.withPrefix("chest_raft/")}.
@@ -89,7 +89,7 @@ public final class TerraformBoatItemHelper {
 	 * Registers a vanilla {@link net.minecraft.core.dispenser.BoatDispenseItemBehavior boat dispenser behavior}
 	 * for the provided {@linkplain ItemLike item} and
 	 * {@linkplain net.minecraft.world.entity.vehicle.boat.Boat boat entity}.
-	 *
+	 * <p/>
 	 * This registration is performed automatically by the {@linkplain TerraformBoatItemHelper#registerBoatItem}
 	 * methods of this class.
 	 *
