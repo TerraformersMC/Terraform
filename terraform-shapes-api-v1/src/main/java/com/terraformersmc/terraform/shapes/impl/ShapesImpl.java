@@ -3,7 +3,7 @@ package com.terraformersmc.terraform.shapes.impl;
 import com.terraformersmc.terraform.shapes.api.Position;
 import com.terraformersmc.terraform.shapes.api.Shape;
 
-public class Shapes {
+public class ShapesImpl {
     public static Shape rectangle(double w, double d) {
         return Shape.of(
                 (pos) -> pos.getY() > 0 && pos.getY() <= 1,
@@ -28,7 +28,7 @@ public class Shapes {
         );
     }
 
-    public static Shape rectanglarPrism(double width, double height, double depth) {
+    public static Shape rectangularPrism(double width, double height, double depth) {
         return Shape.of(
                 (pos) -> pos.getX() > -width/2 && pos.getX() < width/2 && pos.getY() > -height/2 && pos.getY() < height/2 && pos.getZ() > -depth/2 && pos.getZ() < depth/2,
                 Position.of(width/2, height/2, depth/2),

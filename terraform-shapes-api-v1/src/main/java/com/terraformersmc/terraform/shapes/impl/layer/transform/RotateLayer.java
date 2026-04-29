@@ -15,10 +15,6 @@ public class RotateLayer implements Layer {
         this.rotation = rotation;
     }
 
-    public static RotateLayer of(Quaternion rotation) {
-        return new RotateLayer(rotation);
-    }
-
     @Override
     public Position modifyMax(Shape shape) {
         List<Position> translatedVertices = Position.vertices(shape.max(), shape.min()).stream().map((pos) -> pos.rotateBy(rotation)).toList();

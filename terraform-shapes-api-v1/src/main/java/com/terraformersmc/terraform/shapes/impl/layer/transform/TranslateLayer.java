@@ -10,10 +10,6 @@ public class TranslateLayer extends TransformationLayer {
         this.translation = translation;
     }
 
-    public static TranslateLayer of(Position translation) {
-        return new TranslateLayer(translation);
-    }
-
     @Override
     public Position transform(Position pos) {
         pos.setX(pos.getX() + translation.getX());

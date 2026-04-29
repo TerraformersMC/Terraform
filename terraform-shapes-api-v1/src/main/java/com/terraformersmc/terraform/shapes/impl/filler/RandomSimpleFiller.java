@@ -1,6 +1,6 @@
 package com.terraformersmc.terraform.shapes.impl.filler;
 
-import com.terraformersmc.terraform.shapes.api.Filler;
+import com.terraformersmc.terraform.shapes.api.filler.Filler;
 import com.terraformersmc.terraform.shapes.api.Position;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelWriter;
@@ -23,14 +23,6 @@ public class RandomSimpleFiller implements Filler {
 
     public RandomSimpleFiller(LevelWriter level, BlockState state, RandomSource random, float probability) {
         this(level, state, 3, random, probability);
-    }
-
-    public static RandomSimpleFiller of(LevelWriter level, BlockState state, int flags, RandomSource random, float probability) {
-        return new RandomSimpleFiller(level, state, flags, random, probability);
-    }
-
-	public static RandomSimpleFiller of(LevelWriter level, BlockState state, RandomSource random, float probability) {
-        return new RandomSimpleFiller(level, state, random, probability);
     }
 
 	@Override

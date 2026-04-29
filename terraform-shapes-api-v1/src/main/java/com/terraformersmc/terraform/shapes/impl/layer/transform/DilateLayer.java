@@ -11,10 +11,6 @@ public class DilateLayer extends TransformationLayer {
         this.dilation = dilation;
     }
 
-    public DilateLayer of(Position dilation) {
-        return new DilateLayer(dilation);
-    }
-
     @Override
     public Position transform(Position pos) {
         pos.setX(pos.getX() * this.dilation.getX());

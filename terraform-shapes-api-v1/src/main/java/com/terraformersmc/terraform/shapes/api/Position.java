@@ -83,16 +83,14 @@ public interface Position {
     }
 
     static Stream<Position> stream(Position start, Position end) {
-        List<Position> stream = new ArrayList<>();
-        IntStream.range((int) Math.floor(Double.min(start.getX(), end.getX())), (int) Math.ceil(Double.max(start.getX(), end.getX()))).forEach((x) -> {
-            IntStream.range((int) Math.floor(Double.min(start.getY(), end.getY())), (int) Math.ceil(Double.max(start.getY(), end.getY()))).forEach((y) -> {
-                IntStream.range((int) Math.floor(Double.min(start.getZ(), end.getZ())), (int) Math.ceil(Double.max(start.getZ(), end.getZ()))).forEach((z) -> {
-                    stream.add(Position.of(x, y, z));
-                });
-            });
-        });
+        List<Position> positions = new ArrayList<>();
 
-        return stream.stream();
+        IntStream.range((int) Math.floor(Double.min(start.getX(), end.getX())), (int) Math.ceil(Double.max(start.getX(), end.getX()))).forEach((x) ->
+			IntStream.range((int) Math.floor(Double.min(start.getY(), end.getY())), (int) Math.ceil(Double.max(start.getY(), end.getY()))).forEach((y) ->
+				IntStream.range((int) Math.floor(Double.min(start.getZ(), end.getZ())), (int) Math.ceil(Double.max(start.getZ(), end.getZ()))).forEach((z) ->
+					positions.add(Position.of(x, y, z)))));
+
+        return positions.stream();
     }
 
     static List<Position> vertices(Position start, Position end) {

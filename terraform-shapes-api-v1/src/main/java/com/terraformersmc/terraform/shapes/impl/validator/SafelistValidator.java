@@ -1,9 +1,11 @@
 package com.terraformersmc.terraform.shapes.impl.validator;
 
 import com.terraformersmc.terraform.shapes.api.Position;
-import com.terraformersmc.terraform.shapes.api.validator.AllMeetValidator;
+
 import java.util.Arrays;
 import java.util.List;
+
+import com.terraformersmc.terraform.shapes.api.validator.AllMeetValidator;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -18,14 +20,6 @@ public class SafelistValidator extends AllMeetValidator {
 
     public SafelistValidator(LevelSimulatedReader level, BlockState ...safeStates) {
         this(level, Arrays.asList(safeStates));
-    }
-
-    public static SafelistValidator of(LevelSimulatedReader level, List<BlockState> safeStates) {
-        return new SafelistValidator(level, safeStates);
-    }
-
-    public static SafelistValidator of(LevelSimulatedReader level, BlockState ...safeStates) {
-        return new SafelistValidator(level, safeStates);
     }
 
     @Override

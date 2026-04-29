@@ -18,14 +18,6 @@ public class AirValidator extends AllMeetValidator {
 		this.level = Either.right(level);
     }
 
-    public static AirValidator of(LevelReader level) {
-        return new AirValidator(level);
-    }
-
-    public static AirValidator of(LevelSimulatedReader level) {
-        return new AirValidator(level);
-    }
-
     @Override
     public boolean test(Position position) {
 		return level.map(

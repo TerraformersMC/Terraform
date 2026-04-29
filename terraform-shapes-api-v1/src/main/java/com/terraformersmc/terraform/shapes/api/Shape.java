@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.shapes.api;
 
+import com.terraformersmc.terraform.shapes.api.filler.Filler;
 import com.terraformersmc.terraform.shapes.api.layer.Layer;
 import com.terraformersmc.terraform.shapes.api.validator.Validator;
 

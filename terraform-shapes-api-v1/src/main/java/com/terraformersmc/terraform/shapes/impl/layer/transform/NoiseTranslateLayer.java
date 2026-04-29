@@ -15,10 +15,6 @@ public class NoiseTranslateLayer implements Layer {
         this.random = random;
     }
 
-	public static NoiseTranslateLayer of(double magnitude, RandomSource random) {
-		return new NoiseTranslateLayer(magnitude, random);
-	}
-
     @Override
     public Position modifyMax(Shape shape) {
         Position pos = shape.max();
