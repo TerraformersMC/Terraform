@@ -79,7 +79,8 @@ public class OpenSimplexNoise2S {
 	 * @return float 3D noise value, improved visual isotropy in (X, Z)
 	 */
 	public float sample(double x, double y, double z) {
-		return noise3_ImproveXZ(this.seed, x, y, z);
+		// The third coordinate must be the vertical ("special") one.
+		return noise3_ImproveXZ(this.seed, x, z, y);
 	}
 
 	/**
