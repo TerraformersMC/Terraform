@@ -7,6 +7,7 @@ import com.terraformersmc.terraform.shapes.impl.ShapesImpl;
  * Shapes can be transformed, rotated, and combined; x,y,z refer to initial orientation.
  * <p/>
  * <ul>
+ * <li>{@link #empty()}</li>
  * <li>{@link #rectangle(double, double)}</li>
  * <li>{@link #ellipse(double, double)}</li>
  * <li>{@link #ellipticalPrism(double, double, double)}</li>
@@ -20,6 +21,15 @@ import com.terraformersmc.terraform.shapes.impl.ShapesImpl;
  */
 @SuppressWarnings("unused")
 public final class Shapes {
+	/**
+	 * Create an empty Shape at (0,0,0).
+	 *
+	 * @return empty Shape
+	 */
+	public static Shape empty() {
+		return Shape.of((point) -> false, Position.of(0, 0, 0), Position.of(0, 0, 0));
+	}
+
 	/**
 	 * Create a single-block thick rectangular shape with the specified width and depth.
 	 *

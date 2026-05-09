@@ -189,7 +189,7 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @return OptionalInt of the previously calculated distance, if present
 	 */
 	public static OptionalInt getOptionalDistanceAt(BlockState state) {
-		if (state.is(BlockTags.LOGS)) {
+		if (state.is(BlockTags.PREVENTS_NEARBY_LEAF_DECAY)) {
 			return OptionalInt.of(0);
 		}
 
