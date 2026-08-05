@@ -113,7 +113,7 @@ subprojects {
 
 	publish {
 		onlyIf {
-			checkVersion(base.archivesName, version)
+			checkVersion(base.archivesName.get(), version)
 		}
 	}
 
