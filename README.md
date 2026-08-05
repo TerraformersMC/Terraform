@@ -8,7 +8,7 @@ For further information about each individual module see the README.md file in i
 
 To add a Terraform module as a dependency simply add the terraformers' maven as a repository for dependencies. This can be done as follows:
 
-```java
+```groovy
 repositories {
     maven {
       name = 'TerraformersMC'
@@ -19,9 +19,10 @@ repositories {
 
 Then add the corresponding Terraform module as a dependency. For example, the following line adds the wood api as a dependency.
 
-```java
+```groovy
 dependencies {
-    modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:1.0.1"
+    // If you are using mappings, f.e. prior to Minecraft 26.1, use `modImplementation` instead. 
+    implementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:1.0.1"
 }
 ```
 
