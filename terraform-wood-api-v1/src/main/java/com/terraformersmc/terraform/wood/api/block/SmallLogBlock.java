@@ -129,9 +129,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 	}
 
 	protected boolean shouldConnectTo(BlockState state, boolean solid, boolean leaves) {
-		Block block = state.getBlock();
-
-		return solid || (!leaves && block instanceof LeavesBlock) || block instanceof BareSmallLogBlock;
+		return solid || (!leaves && state.getBlock() instanceof LeavesBlock) || state.is(this);
 	}
 
 	@Override
@@ -140,7 +138,7 @@ public class SmallLogBlock extends BareSmallLogBlock {
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 
-		boolean leaves = state.getValue(HAS_LEAVES);
+		boolean leaves = state.getBlock() instanceof SmallLogBlock ? state.getValue(HAS_LEAVES) : false;
 
 		boolean up = fromDirection == Direction.UP && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.DOWN), leaves) || state.getValue(UP);
 		boolean down = fromDirection == Direction.DOWN && this.shouldConnectTo(neighbor, neighbor.isFaceSturdy(level, neighborPos, Direction.UP), leaves) || state.getValue(DOWN);

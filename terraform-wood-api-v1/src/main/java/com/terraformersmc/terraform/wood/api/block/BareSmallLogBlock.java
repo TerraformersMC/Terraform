@@ -168,9 +168,7 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	private boolean shouldConnectTo(BlockState state, boolean solid) {
-		Block block = state.getBlock();
-
-		return solid || block instanceof BareSmallLogBlock;
+		return solid || state.is(this);
 	}
 
 	@Override
@@ -181,7 +179,7 @@ public class BareSmallLogBlock extends Block implements SimpleWaterloggedBlock {
 			BlockPos offsetPos = pos.relative(direction);
 			BlockState offsetState = level.getBlockState(offsetPos);
 
-			if (offsetState.getBlock() instanceof BareSmallLogBlock) {
+			if (offsetState.is(state.getBlock())) {
 				level.setBlockAndUpdate(offsetPos, getNeighborUpdateState(
 					offsetState,
 					direction.getOpposite(),
