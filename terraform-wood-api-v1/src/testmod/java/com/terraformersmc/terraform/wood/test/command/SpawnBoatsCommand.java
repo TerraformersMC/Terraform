@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.monster.Shulker;
@@ -82,11 +83,11 @@ public final class SpawnBoatsCommand implements CommandRegistrationCallback {
 		level.addFreshEntity(chestRaft);
 
 		// Spawn passengers
-		addPassenger(level, new Goat(EntityType.GOAT, level), boat);
-		addPassenger(level, new Shulker(EntityType.SHULKER, level), chestBoat);
+		addPassenger(level, new Goat(EntityTypes.GOAT, level), boat);
+		addPassenger(level, new Shulker(EntityTypes.SHULKER, level), chestBoat);
 
-		addPassenger(level, new Goat(EntityType.GOAT, level), raft);
-		addPassenger(level, new Shulker(EntityType.SHULKER, level), chestRaft);
+		addPassenger(level, new Goat(EntityTypes.GOAT, level), raft);
+		addPassenger(level, new Shulker(EntityTypes.SHULKER, level), chestRaft);
 
 		return Command.SINGLE_SUCCESS;
 	}
