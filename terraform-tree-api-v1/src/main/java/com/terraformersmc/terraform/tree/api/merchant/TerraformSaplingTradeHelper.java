@@ -1,7 +1,6 @@
 package com.terraformersmc.terraform.tree.api.merchant;
 
 import com.terraformersmc.terraform.tree.impl.merchant.TerraformSaplingTradeHelperImpl;
-import net.minecraft.data.tags.KeyTagProvider;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.ItemLike;
 

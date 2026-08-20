@@ -65,7 +65,7 @@ public class TerraformGrassBlock extends GrassBlock {
 		} else if (aboveState.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int lightingAt = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightDampening());
+			int lightingAt = LightEngine.getLightDampeningInto(state, aboveState, Direction.UP, aboveState.getLightDampening());
 
 			return lightingAt < MAX_LIGHT_LEVEL;
 		}
