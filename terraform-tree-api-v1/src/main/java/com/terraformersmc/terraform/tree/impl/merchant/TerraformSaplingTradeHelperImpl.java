@@ -1,6 +1,5 @@
 package com.terraformersmc.terraform.tree.impl.merchant;
 
-import net.minecraft.data.tags.KeyTagProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.ItemLike;
