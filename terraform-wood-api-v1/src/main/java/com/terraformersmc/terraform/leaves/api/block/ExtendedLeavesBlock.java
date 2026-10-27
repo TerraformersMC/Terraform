@@ -1,8 +1,5 @@
 package com.terraformersmc.terraform.leaves.api.block;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.terraformersmc.terraform.wood.api.block.SmallLogBlock;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -13,7 +10,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,7 +18,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FallingParticlesLeavesBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -51,21 +49,7 @@ import net.minecraft.world.level.material.Fluids;
  * The DECAY_DISTANCE property used by LeavesBlock is complemented by our EXTENDED_DISTANCE property.
  */
 @SuppressWarnings({"unused", "OptionalUsedAsFieldOrParameterType"})
-public class ExtendedLeavesBlock extends LeavesBlock {
-	public static final MapCodec<ExtendedLeavesBlock> CODEC = RecordCodecBuilder.mapCodec(
-			(instance) -> instance.group(
-							ExtraCodecs.floatRange(0.0f, 1.0f).fieldOf("leaf_particle_chance")
-									.forGetter(arg -> arg.leafParticleChance),
-							ParticleTypes.CODEC.optionalFieldOf("leaf_particle")
-									.forGetter(arg -> arg.leafParticleOptions),
-							Codec.BOOL.fieldOf("opti")
-									.forGetter(arg -> arg.opti),
-							Codec.BOOL.fieldOf("transparent")
-									.forGetter(arg -> arg.transparent),
-							ExtendedLeavesBlock.propertiesCodec()
-					)
-					.apply(instance, ExtendedLeavesBlock::new));
-
+public class ExtendedLeavesBlock extends FallingParticlesLeavesBlock {
 	public static final int MAX_EXTENDED_DISTANCE = 7;
 	public static final int MAX_TOTAL_DISTANCE = DECAY_DISTANCE + MAX_EXTENDED_DISTANCE;
 	public static final IntegerProperty EXTENDED_DISTANCE = IntegerProperty.create("extended_distance", 0, MAX_EXTENDED_DISTANCE);
@@ -81,10 +65,11 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * @param leafParticleOptions Optional {@link ParticleOptions} to use instead of biome tinted falling leaf particles
 	 * @param opti Whether to enable the opti-leaves feature
 	 * @param transparent Whether to allow light to pass freely through the block
+	 * @param ambientLeavesBlockSoundPlayer The desired ambient leaves block sound player
 	 * @param properties The block properties
 	 */
-	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleOptions, boolean opti, boolean transparent, BlockBehaviour.Properties properties) {
-		super(leafParticleChance, properties);
+	public ExtendedLeavesBlock(float leafParticleChance, Optional<ParticleOptions> leafParticleOptions, boolean opti, boolean transparent, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, BlockBehaviour.Properties properties) {
+		super(leafParticleChance, ambientLeavesBlockSoundPlayer, properties);
 
 		this.leafParticleOptions = leafParticleOptions;
 		this.opti = opti;
@@ -106,14 +91,11 @@ public class ExtendedLeavesBlock extends LeavesBlock {
 	 * <li>enable light transparency</li>
 	 * </ul>
 	 *
+	 * @param ambientLeavesBlockSoundPlayer The desired ambient leaves block sound player
 	 * @param properties The block properties
 	 */
-	public ExtendedLeavesBlock(BlockBehaviour.Properties properties) {
-		this(0.01f, Optional.empty(), false, true, properties);
-	}
-
-	public MapCodec<? extends ExtendedLeavesBlock> codec() {
-		return CODEC;
+	public ExtendedLeavesBlock(AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, BlockBehaviour.Properties properties) {
+		this(0.01f, Optional.empty(), false, true, ambientLeavesBlockSoundPlayer, properties);
 	}
 
 	@Override

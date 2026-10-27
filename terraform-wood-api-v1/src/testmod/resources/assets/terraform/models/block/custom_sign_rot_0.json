@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_sign_rot_0",
+  "textures": {
+    "all": "terraform:block/custom_sign",
+    "particle": "terraform:block/custom_planks"
+  }
+}

@@ -7,6 +7,7 @@ import com.terraformersmc.terraform.wood.test.command.SpawnBoatsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -59,7 +60,7 @@ public class TerraformWoodTest implements ModInitializer {
 		CeilingHangingSignBlock hangingSign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_HANGING_SIGN_ID, properties -> new CeilingHangingSignBlock(customSignWoodType, properties), BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN).sound(SoundType.WOOL));
 		WallHangingSignBlock wallHangingSign = TerraformSignBlockHelper.registerSignBlock(CUSTOM_WALL_HANGING_SIGN_ID, properties -> new WallHangingSignBlock(customSignWoodType, properties), BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_WALL_HANGING_SIGN).sound(SoundType.SCULK_SENSOR).overrideLootTable(hangingSign.getLootTable()));
 
-		SignItem signItem = new SignItem(sign, wallSign, new Item.Properties().stacksTo(16).setId(ResourceKey.create(Registries.ITEM, CUSTOM_SIGN_ID)).useBlockDescriptionPrefix());
+		BlockItem signItem = new StandingAndWallBlockItem(sign, wallSign, Direction.DOWN, new Item.Properties().stacksTo(16).setId(ResourceKey.create(Registries.ITEM, CUSTOM_SIGN_ID)).useBlockDescriptionPrefix());
 		HangingSignItem hangingSignItem = new HangingSignItem(hangingSign, wallHangingSign, new Item.Properties().stacksTo(16).setId(ResourceKey.create(Registries.ITEM, CUSTOM_HANGING_SIGN_ID)).useBlockDescriptionPrefix());
 
 		// Register

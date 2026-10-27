@@ -1,5 +1,6 @@
 package com.terraformersmc.terraform.wood.api.block;
 
+import com.terraformersmc.terraform.wood.mixin.InvokerFallingParticlesLeavesBlock;
 import com.terraformersmc.terraform.wood.mixin.InvokerLeavesBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,9 +68,14 @@ public class SmallLogBlock extends BareSmallLogBlock {
 			BlockPos below = pos.below();
 			BlockState belowState = level.getBlockState(below);
 
+			// From LeavesBlock itself
 			InvokerLeavesBlock.callMakeDrippingWaterParticles(level, pos, random, belowState, below);
 			//noinspection ReferenceToMixin
-			((InvokerLeavesBlock) this.leaves).callMakeFallingLeavesParticles(level, pos, random, belowState, below);
+			((InvokerLeavesBlock) this.leaves).getAmbientLeavesBlockSoundPlayer().playAmbientLeavesSounds(level, pos, this, random);
+
+			// Moved into FallingParticlesLeavesBlock (which calls super first)
+			//noinspection ReferenceToMixin
+			((InvokerFallingParticlesLeavesBlock) this.leaves).callMakeFallingLeavesParticles(level, pos, random);
 		}
 	}
 

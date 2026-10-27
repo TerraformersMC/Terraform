@@ -1,19 +1,18 @@
 package com.terraformersmc.terraform.dirt.api.registry;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.context.UseOnContext;
+import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import com.mojang.datafixers.util.Pair;
 
-import com.terraformersmc.terraform.dirt.impl.registry.TillableBlockRegistryImpl;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 
 /**
  * Allows the addition of custom tillable block mappings. You probably don't need to use this directly if you're using
  * {@link TerraformDirtRegistry}.
+ *
+ * @deprecated Use Fabric's {@linkplain BlockTransformerHelper} instead.
  */
+@Deprecated(since = "18.0.0", forRemoval = true)
 @SuppressWarnings("unused")
 public final class TillableBlockRegistry {
 	@SuppressWarnings("UnnecessaryReturnStatement")
@@ -26,22 +25,13 @@ public final class TillableBlockRegistry {
 	 * <p/>
 	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
 	 *
-	 * @param block the block being tilled
-	 * @param pair the interaction between the blocks
-	 */
-	public static void add(Block block, Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair) {
-		TillableBlockRegistryImpl.add(block, pair);
-	}
-	
-	/**
-	 * Adds a custom tillable block mapping.
-	 * <p/>
-	 * Note that you don't need to call this yourself if you're already using {@link TerraformDirtRegistry}.
+	 * @deprecated Use Fabric's {@linkplain BlockTransformerHelper} instead.
 	 *
 	 * @param block the block being tilled
 	 * @param state the block to be replaced with
 	 */
+	@Deprecated(since = "18.0.0", forRemoval = true)
 	public static void add(Block block, BlockState state) {
-		TillableBlockRegistryImpl.add(block, Pair.of(HoeItem::onlyIfAirAbove, HoeItem.changeIntoState(state)));
+		BlockTransformerHelper.registerTilling(BlockPredicate.matchesBlocks(block), state);
 	}
 }
